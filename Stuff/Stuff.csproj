@@ -119,7 +119,6 @@
   <ItemGroup>
     <Content Include="Assets\ExpressionFunctions\BasicMath.xml" />
     <Content Include="Assets\ExpressionOperators\BasicMath.xml" />
-    <Content Include="Assets\Music\Data.xml" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
