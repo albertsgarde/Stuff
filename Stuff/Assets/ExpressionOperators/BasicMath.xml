@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<functions>
+  <operator>
+    <className>Stuff.StuffMath.Expressions.Operators.Add</className>
+    <symbol>+</symbol>
+    <priority>3</priority>
+  </operator>
+  <operator>
+    <className>Stuff.StuffMath.Expressions.Operators.Subtract</className>
+    <symbol>-</symbol>
+    <priority>3</priority>
+  </operator>
+  <operator>
+    <className>Stuff.StuffMath.Expressions.Operators.Multiply</className>
+    <symbol>*</symbol>
+    <priority>2</priority>
+  </operator>
+  <operator>
+    <className>Stuff.StuffMath.Expressions.Operators.Divide</className>
+    <symbol>/</symbol>
+    <priority>2</priority>
+  </operator>
+  <operator>
+    <className>Stuff.StuffMath.Expressions.Operators.Power</className>
+    <symbol>^</symbol>
+    <priority>1</priority>
+  </operator>
+</functions>

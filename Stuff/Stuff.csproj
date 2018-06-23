@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FC7759EE-727F-429E-9E84-E0DA7FA7FF32}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stuff</RootNamespace>
+    <AssemblyName>Stuff</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CenteredArray.cs" />
+    <Compile Include="ChargePoint.cs" />
+    <Compile Include="Chemistry.cs" />
+    <Compile Include="ContainerUtils.cs" />
+    <Compile Include="CrossReferencedDictionary.cs" />
+    <Compile Include="GaussRand.cs" />
+    <Compile Include="Hamming\Bits.cs" />
+    <Compile Include="Hamming\Data.cs" />
+    <Compile Include="Hamming\HammingCode.cs" />
+    <Compile Include="Hamming\Simulation.cs" />
+    <Compile Include="Latex.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Lottery.cs" />
+    <Compile Include="Misc.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rand.cs" />
+    <Compile Include="SettingsLoader.cs" />
+    <Compile Include="SettingsManager.cs" />
+    <Compile Include="Statistics\Data.cs" />
+    <Compile Include="Statistics\DataSet.cs" />
+    <Compile Include="Statistics\StatsUtils.cs" />
+    <Compile Include="Statistics\Value.cs" />
+    <Compile Include="StuffMath\BaseConverter.cs" />
+    <Compile Include="StuffMath\BasePhi1.cs" />
+    <Compile Include="StuffMath\BasePhi4.cs" />
+    <Compile Include="StuffMath\Basic.cs" />
+    <Compile Include="StuffMath\Circle.cs" />
+    <Compile Include="StuffMath\Complex.cs" />
+    <Compile Include="StuffMath\CubicFunction.cs" />
+    <Compile Include="StuffMath\CVector.cs" />
+    <Compile Include="StuffMath\Expressions\Expression.cs" />
+    <Compile Include="StuffMath\Expressions\ExpressionCompiler.cs" />
+    <Compile Include="StuffMath\Expressions\Function.cs" />
+    <Compile Include="StuffMath\Expressions\FunctionManager.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\BinomCoef.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Cosine.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Derivative.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Exp.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Factorial.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Ln.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Sine.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Sqrt.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Sum.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Tan.cs" />
+    <Compile Include="StuffMath\Expressions\Operator.cs" />
+    <Compile Include="StuffMath\Expressions\Operators\Add.cs" />
+    <Compile Include="StuffMath\Expressions\Operators\Divide.cs" />
+    <Compile Include="StuffMath\Expressions\Operators\Multiply.cs" />
+    <Compile Include="StuffMath\Expressions\Operators\Power.cs" />
+    <Compile Include="StuffMath\Expressions\Operators\Subtract.cs" />
+    <Compile Include="StuffMath\Expressions\Unit.cs" />
+    <Compile Include="StuffMath\Expressions\Value.cs" />
+    <Compile Include="StuffMath\Expressions\ValueExpression.cs" />
+    <Compile Include="StuffMath\Expressions\Variable.cs" />
+    <Compile Include="StuffMath\IPolynomial.cs" />
+    <Compile Include="StuffMath\LinearFunction.cs" />
+    <Compile Include="StuffMath\LinearParamater3D.cs" />
+    <Compile Include="StuffMath\LinearParameter.cs" />
+    <Compile Include="StuffMath\Location2D.cs" />
+    <Compile Include="StuffMath\Location2F.cs" />
+    <Compile Include="StuffMath\Location3D.cs" />
+    <Compile Include="StuffMath\Matrix.cs" />
+    <Compile Include="StuffMath\Matrix2D.cs" />
+    <Compile Include="StuffMath\MatrixRow.cs" />
+    <Compile Include="StuffMath\Plane.cs" />
+    <Compile Include="StuffMath\Polynomial.cs" />
+    <Compile Include="StuffMath\QuadraticFunction.cs" />
+    <Compile Include="StuffMath\Regression.cs" />
+    <Compile Include="StuffMath\Sphere.cs" />
+    <Compile Include="StuffMath\Vector.cs" />
+    <Compile Include="StuffMath\Vector2D.cs" />
+    <Compile Include="StuffMath\Vector2F.cs" />
+    <Compile Include="StuffMath\Vector3D.cs" />
+    <Compile Include="Threading\ThreadingUtil.cs" />
+    <Compile Include="XMLUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\ExpressionFunctions\BasicMath.xml" />
+    <Content Include="Assets\ExpressionOperators\BasicMath.xml" />
+    <Content Include="Assets\Music\Data.xml" />
+    <Content Include="Assets\TODO.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
