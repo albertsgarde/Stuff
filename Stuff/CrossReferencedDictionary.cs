@@ -30,6 +30,16 @@ namespace Stuff
             return mapper1.Count();
         }
 
+        public bool Contains(V1 v1)
+        {
+            return mapper1.ContainsKey(v1);
+        }
+
+        public bool Contains(V2 v2)
+        {
+            return mapper2.ContainsKey(v2);
+        }
+
         public V2 this[V1 key]
         {
             get
@@ -38,8 +48,7 @@ namespace Stuff
             }
             set
             {
-                mapper1[key] = value;
-                mapper2[value] = key;
+                Add(key, value);
             }
         }
 
@@ -51,9 +60,16 @@ namespace Stuff
             }
             set
             {
-                mapper2[key] = value;
-                mapper1[value] = key;
+                Add(value, key);
             }
+        }
+
+        private void Add(V1 v1, V2 v2)
+        {
+            mapper2.Remove(mapper1[v1]);
+            mapper1.Remove(mapper2[v2]);
+            mapper1[v1] = v2;
+            mapper2[v2] = v1;
         }
 
         public void Remove(V1 key)
