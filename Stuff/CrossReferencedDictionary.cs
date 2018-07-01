@@ -84,6 +84,22 @@ namespace Stuff
             mapper2.Remove(key);
         }
 
+        public Dictionary<V1, V2>.KeyCollection Keys1
+        {
+            get
+            {
+                return mapper1.Keys;
+            }
+        }
+
+        public Dictionary<V1, V2>.KeyCollection Keys2
+        {
+            get
+            {
+                return mapper2.Keys;
+            }
+        }
+
         public IEnumerator<KeyValuePair<V1, V2>> GetEnumerator()
         {
             return mapper1.GetEnumerator();
