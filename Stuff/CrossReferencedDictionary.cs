@@ -92,7 +92,7 @@ namespace Stuff
             }
         }
 
-        public Dictionary<V1, V2>.KeyCollection Keys2
+        public Dictionary<V2, V1>.KeyCollection Keys2
         {
             get
             {
