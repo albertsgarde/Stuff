@@ -181,5 +181,13 @@ namespace Stuff
             }
             return result.Substring(0, result.Length - 1) + "}";
         }
+
+        public static T[] UniformArray<T>(T value, int arrayLength)
+        {
+            var result = new T[arrayLength];
+            for (int i = 0; i < arrayLength; ++i)
+                result[i] = value;
+            return result;
+        }
     }
 }
