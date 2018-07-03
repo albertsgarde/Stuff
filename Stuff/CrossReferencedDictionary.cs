@@ -66,22 +66,28 @@ namespace Stuff
 
         private void Add(V1 v1, V2 v2)
         {
-            mapper2.Remove(mapper1[v1]);
-            mapper1.Remove(mapper2[v2]);
+            Remove(v1);
+            Remove(v2);
             mapper1[v1] = v2;
             mapper2[v2] = v1;
         }
 
         public void Remove(V1 key)
         {
-            mapper2.Remove(mapper1[key]);
-            mapper1.Remove(key);
+            if (Contains(key))
+            {
+                mapper2.Remove(mapper1[key]);
+                mapper1.Remove(key);
+            }
         }
 
         public void Remove(V2 key)
         {
-            mapper1.Remove(mapper2[key]);
-            mapper2.Remove(key);
+            if (Contains(key))
+            {
+                mapper1.Remove(mapper2[key]);
+                mapper2.Remove(key);
+            }
         }
 
         public Dictionary<V1, V2>.KeyCollection Keys1
