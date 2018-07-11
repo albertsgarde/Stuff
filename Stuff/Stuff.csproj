@@ -50,6 +50,7 @@
     <Compile Include="Hamming\Data.cs" />
     <Compile Include="Hamming\HammingCode.cs" />
     <Compile Include="Hamming\Simulation.cs" />
+    <Compile Include="ISaveLoadable.cs" />
     <Compile Include="Latex.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Lottery.cs" />

@@ -33,7 +33,7 @@ namespace Stuff
         /// </summary>
         /// <param name="predicate">The predicate to check against the child elements.</param>
         /// <returns>An IEnumerable containing all matching child elements.</returns>
-        public static IEnumerable<XElement> Find(this XElement element, Func<XElement, bool> predicate)
+        public static IEnumerable<XElement> Where(this XElement element, Func<XElement, bool> predicate)
         {
             foreach (XElement e in element.Elements())
             {
@@ -68,6 +68,11 @@ namespace Stuff
         {
             foreach (XElement subElement in element.Elements(name))
                 yield return subElement.Value;
+        }
+
+        public static void AddValue(this XElement element, XName name, object value)
+        {
+            element.Add(new XElement(name, value));
         }
 
         /// <summary>
