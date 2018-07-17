@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,6 +113,22 @@ namespace Stuff
                 element.Add(new XElement(name));
                 return element.Element(name);
             }
+        }
+        
+        /// <param name="recursive">If false, the method only searches files in the top directory.</param>
+        /// <returns>All top level xml elements in any files in the given directory that match the given predicate.</returns>
+        public static IEnumerable<XElement> FindElements(string path, Func<XElement, bool> predicate, bool recursive = true)
+        {
+            if (File.GetAttributes(path).HasFlag(FileAttributes.Directory))
+            {
+                var result = new List<XElement>();
+                foreach (string f in (from filePath in Directory.EnumerateFiles(path, "*.xml", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly) where
+                                            !filePath.Substring(filePath.LastIndexOf('/')).StartsWith("!") select filePath))
+                    result.AddRange(FindElements(f, predicate));
+                return result;
+            }
+            else
+                return XElement.Load(path).Where(predicate);
         }
     }
 }
