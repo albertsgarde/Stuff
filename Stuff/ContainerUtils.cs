@@ -151,17 +151,19 @@ namespace Stuff
         public static string AsString<T>(this IEnumerable<T> list)
         {
             if (list.Count() == 0)
-                return "[]";
-            string result = "[";
+                return "{}";
+            string result = "{";
             foreach (T value in list)
             {
                 result += value + ",";
             }
-            return result.Substring(0, result.Length - 1) + "]";
+            return result.Substring(0, result.Length - 1) + "}";
         }
 
         public static string AsString<T>(this T[] list)
         {
+            if (list.Length == 0)
+                return "{}";
             string result = "{";
             foreach (T value in list)
             {
