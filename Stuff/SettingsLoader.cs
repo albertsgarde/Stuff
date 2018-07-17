@@ -15,7 +15,7 @@ namespace Stuff
             SettingsManager result = new SettingsManager();
             try
             {
-                foreach (string f in (from filePath in Directory.EnumerateFiles(path, "*.txt", SearchOption.AllDirectories) where 
+                foreach (string f in (from filePath in Directory.EnumerateFiles(path, "*.txt", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly) where 
                                           !filePath.Substring(filePath.LastIndexOf('/')).StartsWith("!") select filePath))
                 {
                     StreamReader file = new StreamReader(f);
