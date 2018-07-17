@@ -7,9 +7,9 @@ namespace Stuff
 {
     public class Logger
     {
-        private string logDirPath;
+        private readonly string logDirPath;
 
-        private List<string> logs;
+        private readonly List<string> logs;
 
         public Logger(string logDirPath)
         {
