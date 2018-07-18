@@ -114,5 +114,17 @@ namespace Stuff
                 sorted.Add(item);
             }
         }
+
+        private const long DATE_TIME_TICKS_PER_MICRO = 10;
+
+        public static long Microseconds(this DateTime dt)
+        {
+            return dt.Ticks / DATE_TIME_TICKS_PER_MICRO;
+        }
+
+        public static long Milliseconds(this DateTime dt)
+        {
+            return dt.Ticks / TimeSpan.TicksPerMillisecond;
+        }
     }
 }
