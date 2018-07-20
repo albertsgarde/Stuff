@@ -98,7 +98,7 @@ namespace Stuff
             if (int.TryParse(GetString(category, key, index), out int result))
                 return result;
             else
-                throw new InvalidSettingFormat(category, key, index, GetString(category, key, index));
+                throw new InvalidSettingFormatException(category, key, index, GetString(category, key, index));
         }
 
         public IEnumerable<int> GetInts(string category, string key)
@@ -112,7 +112,7 @@ namespace Stuff
             if (long.TryParse(GetString(category, key, index), out long result))
                 return result;
             else
-                throw new InvalidSettingFormat(category, key, index, GetString(category, key, index));
+                throw new InvalidSettingFormatException(category, key, index, GetString(category, key, index));
         }
 
         public IEnumerable<long> GetLongs(string category, string key)
@@ -126,7 +126,7 @@ namespace Stuff
             if (float.TryParse(GetString(category, key, index), out float result))
                 return result;
             else
-                throw new InvalidSettingFormat(category, key, index, GetString(category, key, index));
+                throw new InvalidSettingFormatException(category, key, index, GetString(category, key, index));
         }
 
         public IEnumerable<float> GetFloats(string category, string key)
@@ -140,7 +140,7 @@ namespace Stuff
             if (double.TryParse(GetString(category, key, index), out double result))
                 return result;
             else
-                throw new InvalidSettingFormat(category, key, index, GetString(category, key, index));
+                throw new InvalidSettingFormatException(category, key, index, GetString(category, key, index));
         }
 
         public IEnumerable<double> GetDoubles(string category, string key)
@@ -154,7 +154,7 @@ namespace Stuff
             if (bool.TryParse(GetString(category, key, index), out bool result))
                 return result;
             else
-                throw new InvalidSettingFormat(category, key, index, GetString(category, key, index));
+                throw new InvalidSettingFormatException(category, key, index, GetString(category, key, index));
         }
 
         public IEnumerable<bool> GetBools(string category, string key)
