@@ -8,6 +8,11 @@ namespace Stuff.Exceptions
 {
     public class InvalidSettingFormat : SettingsException
     {
-        public InvalidSettingFormat(string category, string key, int index) : base(category, key, index) { }
+        public string Value { get; }
+
+        public InvalidSettingFormat(string category, string key, int index, string value) : base(category, key, index)
+        {
+            Value = value;
+        }
     }
 }
