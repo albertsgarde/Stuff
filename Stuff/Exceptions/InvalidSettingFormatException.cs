@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Stuff.Exceptions
 {
-    public class InvalidSettingFormat : SettingsException
+    public class InvalidSettingFormatException : SettingsException
     {
         public string Value { get; }
 
-        public InvalidSettingFormat(string category, string key, int index, string value) : base(category, key, index)
+        public InvalidSettingFormatException(string category, string key, int index, string value) : base(category, key, index)
         {
             Value = value;
         }
