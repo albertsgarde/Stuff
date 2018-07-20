@@ -15,7 +15,6 @@ namespace Stuff
             SettingsManager result = new SettingsManager();
             try
             {
-                Console.WriteLine(Path.GetFullPath(path));
                 foreach (string f in (from filePath in Directory.EnumerateFiles(path, "*.txt", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly) where 
                                           !filePath.Substring(filePath.LastIndexOf('/')).StartsWith("!") select filePath))
                 {
