@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.Exceptions;
 
 namespace Stuff
 {
@@ -75,20 +76,20 @@ namespace Stuff
         public string GetString(string category, string key, int index = 0)
         {
             if (!settings.ContainsKey(category))
-                throw new Exception("Category " + category + " doesn't exist.");
+                throw new CategoryNotFoundException(category, key);
             if (!settings[category].ContainsKey(key))
-                throw new Exception("Setting " + key + " in category " + category + " doesn't exist.");
+                throw new SettingsKeyNotFoundException(category, key);
             if (settings[category][key].Length <= index)
-                throw new Exception("Setting " + key + " in category " + category + " doesn't have an index of " + index + ". It only has " + settings[category][key].Length + ".");
+                throw new IndexNotFoundException(category, key, index);
             return settings[category][key][index];
         }
 
         public string[] GetStrings(string category, string key)
         {
             if (!settings.ContainsKey(category))
-                throw new Exception("Category " + category + " doesn't exist.");
+                throw new CategoryNotFoundException(category, key);
             if (!settings[category].ContainsKey(key))
-                throw new Exception("Setting " + key + " in category " + category + " doesn't exist.");
+                throw new SettingsKeyNotFoundException(category, key);
             return settings[category][key];
         }
 

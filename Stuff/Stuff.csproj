@@ -45,6 +45,10 @@
     <Compile Include="Chemistry.cs" />
     <Compile Include="ContainerUtils.cs" />
     <Compile Include="CrossReferencedDictionary.cs" />
+    <Compile Include="Exceptions\SettingsKeyNotFoundException.cs" />
+    <Compile Include="Exceptions\IndexNotFoundException.cs" />
+    <Compile Include="Exceptions\CategoryNotFoundException.cs" />
+    <Compile Include="Exceptions\SettingsException.cs" />
     <Compile Include="GaussRand.cs" />
     <Compile Include="Hamming\Bits.cs" />
     <Compile Include="Hamming\Data.cs" />
