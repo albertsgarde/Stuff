@@ -71,9 +71,18 @@ namespace Stuff
                 yield return subElement.Value;
         }
 
-        public static void AddValue(this XElement element, XName name, object value)
+        public static XElement AddValue(this XElement element, XName name, object value)
         {
-            element.Add(new XElement(name, value));
+            var newElement = new XElement(name, value);
+            element.Add(newElement);
+            return newElement;
+        }
+
+        public static XElement CreateElement(this XElement element, XName name)
+        {
+            var newElement = new XElement(name);
+            element.Add(newElement);
+            return newElement;
         }
 
         /// <summary>
@@ -114,7 +123,7 @@ namespace Stuff
                 return element.Element(name);
             }
         }
-        
+
         /// <param name="recursive">If false, the method only searches files in the top directory.</param>
         /// <returns>All top level xml elements in any files in the given directory that match the given predicate.</returns>
         public static IEnumerable<XElement> FindElements(string path, Func<XElement, bool> predicate, bool recursive = true)
