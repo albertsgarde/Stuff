@@ -57,9 +57,12 @@
     <Compile Include="Hamming\Simulation.cs" />
     <Compile Include="ISaveable.cs" />
     <Compile Include="Latex.cs" />
+    <Compile Include="LoaderTypes.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Lottery.cs" />
     <Compile Include="Misc.cs" />
+    <Compile Include="Parse.cs" />
+    <Compile Include="PathList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rand.cs" />
     <Compile Include="SettingsLoader.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="StuffMath\Vector2F.cs" />
     <Compile Include="StuffMath\Vector3D.cs" />
     <Compile Include="Threading\ThreadingUtil.cs" />
+    <Compile Include="TypeLoader.cs" />
     <Compile Include="XMLUtil.cs" />
   </ItemGroup>
   <ItemGroup>
