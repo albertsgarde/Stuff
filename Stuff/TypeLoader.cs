@@ -26,11 +26,11 @@ namespace Stuff
         ///     A "classPath" element, designating the location where the class is found.
         /// </summary>
         /// <param name="element">An XElement that holds information about the location of the class to be loaded and what name to give the type.</param>
-        public XMLTypeLoader(XElement element)
+        public XMLTypeLoader(XElement element, string assembly)
         {
             ClassPath = element.ElementValue("classPath");
             Name = element.ElementValue("name");
-            Instance = (T)Activator.CreateInstance(Type.GetType(ClassPath));
+            Instance = (T)Activator.CreateInstance(assembly, ClassPath).Unwrap();
         }
     }
 }

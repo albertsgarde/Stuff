@@ -9,25 +9,27 @@ namespace Stuff
 {
     public class LoaderTypes<T> : IEnumerable<XMLTypeLoader<T>>
     {
-        private readonly Dictionary<string, XMLTypeLoader<T>> moduleTypes;
+        private readonly Dictionary<string, XMLTypeLoader<T>> types;
 
-        public LoaderTypes(PathList paths, string elementName)
+        public LoaderTypes(PathList paths, string elementName, string assemblyName)
         {
-            foreach (var file in paths)
+            Console.WriteLine(paths.Files().AsString());
+            types = new Dictionary<string, XMLTypeLoader<T>>();
+            foreach (var file in paths.Files())
             {
                 foreach (var element in XMLUtil.FindElements(file, e => e.Name == elementName))
                 {
-                    var mt = new XMLTypeLoader<T>(element);
-                    moduleTypes[mt.Name] = mt;
+                    var mt = new XMLTypeLoader<T>(element, assemblyName);
+                    types[mt.Name] = mt;
                 }
             }
         }
 
-        public XMLTypeLoader<T> this[string typeName] => moduleTypes[typeName];
+        public XMLTypeLoader<T> this[string typeName] => types[typeName];
 
         public IEnumerator<XMLTypeLoader<T>> GetEnumerator()
         {
-            return moduleTypes.Values.GetEnumerator();
+            return types.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -43,6 +45,7 @@
     <Compile Include="CenteredArray.cs" />
     <Compile Include="ChargePoint.cs" />
     <Compile Include="Chemistry.cs" />
+    <Compile Include="CircularArray.cs" />
     <Compile Include="ContainerUtils.cs" />
     <Compile Include="CrossReferencedDictionary.cs" />
     <Compile Include="Exceptions\InvalidSettingFormatException.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="StuffMath\Polynomial.cs" />
     <Compile Include="StuffMath\QuadraticFunction.cs" />
     <Compile Include="StuffMath\Regression.cs" />
+    <Compile Include="StuffMath\Signal.cs" />
     <Compile Include="StuffMath\Sphere.cs" />
     <Compile Include="StuffMath\Vector.cs" />
     <Compile Include="StuffMath\Vector2D.cs" />
