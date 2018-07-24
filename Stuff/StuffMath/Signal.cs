@@ -27,11 +27,21 @@ namespace Stuff.StuffMath
             return new Signal(signal1.Zip(signal2, (s1, s2) => (s1, s2)).Select(next => next.s1 * next.s2));
         }
 
+        public Signal Scale(float gain)
+        {
+            return new Signal(this.Select(s => s * gain));
+        }
+
         public float Correlate(Signal signal)
         {
             if (signal.Length != Length)
                 throw new ArgumentException($"In order to correlate, the signals must have the same length. First signal length: {Length} Second signal length: {signal.Length}");
             return samples.Zip(signal, (s1, s2) => (s1, s2)).Sum(next => next.s1 * next.s2);
+        }
+
+        public bool IsOrthogonal(Signal signal)
+        {
+            return Correlate(signal) == 0;
         }
 
         public Signal Convolve(Signal signal)
