@@ -11,9 +11,18 @@ namespace Stuff.StuffMath
     /// </summary>
     public class Complex
     {
-        public double Real { get; private set; }
+        public double Real { get; }
 
-        public double Imaginary { get; private set; }
+        public double Imaginary { get; }
+
+        public double Length => Math.Sqrt(LengthSquared);
+
+        public double LengthSquared => Real * Real + Imaginary * Imaginary;
+
+        /// <summary>
+        /// The radians between -π and π.
+        /// </summary>
+        public double Argument => Imaginary < 0 ?  - Math.Acos(Real / Length) : Math.Acos(Real / Length);
 
         public static readonly Complex ONE = new Complex(1, 0);
 
@@ -29,22 +38,27 @@ namespace Stuff.StuffMath
 
         public static implicit operator Complex(double d)
         {
-            return new Complex(d, 0);
+            return (d, 0);
+        }
+
+        public static implicit operator Complex((double real, double imaginary) tuple)
+        {
+            return (tuple.real, tuple.imaginary);
         }
 
         public static Complex operator+(Complex c1, Complex c2)
         {
-            return new Complex(c1.Real + c2.Real, c1.Imaginary + c2.Imaginary);
+            return (c1.Real + c2.Real, c1.Imaginary + c2.Imaginary);
         }
 
         public static Complex operator +(Complex c, double d)
         {
-            return new Complex(c.Real + d, c.Imaginary);
+            return (c.Real + d, c.Imaginary);
         }
 
         public static Complex operator +(double d, Complex c)
         {
-            return new Complex(c.Real + d, c.Imaginary);
+            return (c.Real + d, c.Imaginary);
         }
 
         public static Complex operator +(Complex c)
@@ -145,7 +159,7 @@ namespace Stuff.StuffMath
         /// </summary>
         public Complex Ln()
         {
-            return new Complex(Math.Log(Absolute), Radians);
+            return new Complex(Math.Log(Length), Argument);
         }
 
         /// <summary>
@@ -169,7 +183,7 @@ namespace Stuff.StuffMath
         /// <returns>z^x where both are complex and z is this complex number.</returns>
         public Complex Power(Complex x)
         {
-            return (x * Math.Log(Real) + I * x * Radians).Exp();
+            return (x * Math.Log(Real) + I * x * Argument).Exp();
         }
 
         public Complex Conjugate()
@@ -180,33 +194,6 @@ namespace Stuff.StuffMath
         public Complex InnerProduct(Complex c)
         {
             return this * c.Conjugate();
-        }
-
-        public double Absolute
-        {
-            get
-            {
-                return Math.Sqrt(AbsoluteSquared);
-            }
-        }
-
-        public double AbsoluteSquared
-        {
-            get
-            {
-                return Real * Real + Imaginary * Imaginary;
-            }
-        }
-
-        /// <summary>
-        /// The radians between 0 and 2π.
-        /// </summary>
-        public double Radians
-        {
-            get
-            {
-                return Imaginary < 0 ? 2 * Math.PI - Math.Acos(Real / Absolute) : Math.Acos(Real / Absolute);
-            }
         }
 
         public override string ToString()
