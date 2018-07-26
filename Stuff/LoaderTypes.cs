@@ -13,7 +13,6 @@ namespace Stuff
 
         public LoaderTypes(PathList paths, string elementName, string assemblyName)
         {
-            Console.WriteLine(paths.Files().AsString());
             types = new Dictionary<string, XMLTypeLoader<T>>();
             foreach (var file in paths.Files())
             {
