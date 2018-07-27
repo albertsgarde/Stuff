@@ -37,11 +37,8 @@ namespace Stuff
 
         public void Log(string log, Exception e, bool timestamp = true)
         {
-            
-            Console.WriteLine(e.ToString());
-            string message = (timestamp ? TimeStamp() : "") + e.Message + Environment.NewLine + e.StackTrace.Indent("  ");
+            string message = (timestamp ? TimeStamp() : "") + e.ToString().Indent("  ") + Environment.NewLine + e.StackTrace.Indent("  ");
             Log(log, message, timestamp, true);
-            Console.WriteLine(message);
         }
 
         private string TimeStamp()
