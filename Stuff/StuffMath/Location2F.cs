@@ -128,6 +128,11 @@ namespace Stuff.StuffMath
             return "(" + X + ", " + Y + ")";
         }
 
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() + Y.GetHashCode();
+        }
+
         public override bool Equals(object loc)
         {
             if (loc is Location2F)
