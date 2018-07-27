@@ -56,7 +56,7 @@ namespace Stuff.StuffMath
             }
 
             // Return true if the fields match:
-            return a.Equals(b);
+            return a.X == b.X && a.Y == b.Y;
         }
 
         public static bool operator !=(Location2F a, Location2F b)
@@ -130,8 +130,10 @@ namespace Stuff.StuffMath
 
         public override bool Equals(object loc)
         {
-            Location2F locLoc;
-            return loc != null && ((locLoc = loc as Location2F) != null) && locLoc.X == X && locLoc.Y == Y;
+            if (loc is Location2F)
+                return ((Location2F)loc) == this;
+            else
+                return false;
         }
     }
 }

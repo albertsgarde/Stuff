@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class Location2D
+    public struct Location2D
     {
         public double X { get; private set; }
         public double Y { get; private set; }
@@ -56,7 +56,7 @@ namespace Stuff.StuffMath
             }
 
             // Return true if the fields match:
-            return a.Equals(b);
+            return a.X == b.X && a.Y == b.Y;
         }
 
         public static bool operator !=(Location2D a, Location2D b)
@@ -128,10 +128,17 @@ namespace Stuff.StuffMath
             return "(" + X + ", " + Y + ")";
         }
 
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() + Y.GetHashCode();
+        }
+
         public override bool Equals(object loc)
         {
-            Location2D locLoc;
-            return loc != null && ((locLoc = loc as Location2D) != null) && locLoc.X == X && locLoc.Y == Y;
+            if (loc is Location2D)
+                return ((Location2D)loc) == this;
+            else
+                return false;
         }
     }
 }
