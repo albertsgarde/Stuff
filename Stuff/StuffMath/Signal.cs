@@ -55,6 +55,17 @@ namespace Stuff.StuffMath
             return new Signal(result);
         }
 
+        /// <summary>
+        /// Normalizes the signal so the total value of all samples is the given totalValue.
+        /// </summary>
+        public Signal Normalize(float totalValue)
+        {
+            var curTotal = samples.Sum();
+            var factor = totalValue / curTotal;
+
+            return new Signal(samples.Select(s => s * factor));
+        }
+
         public IEnumerator<float> GetEnumerator()
         {
             return samples.GetEnumerator();
