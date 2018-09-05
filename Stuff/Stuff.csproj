@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Stuff</RootNamespace>
     <AssemblyName>Stuff</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -113,6 +114,21 @@
     <Compile Include="StuffMath\Location2D.cs" />
     <Compile Include="StuffMath\Location2F.cs" />
     <Compile Include="StuffMath\Location3D.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Expression.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\ExpressionCompiler.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\And.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Iff.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Implies.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\NAnd.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\NOr.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Not.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Or.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Variable.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\XOr.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\ValueExpression.cs" />
+    <Compile Include="StuffMath\Logic\InferenceRule.cs" />
+    <Compile Include="StuffMath\Logic\Logic.cs" />
+    <Compile Include="StuffMath\Logic\ValueTable.cs" />
     <Compile Include="StuffMath\Matrix.cs" />
     <Compile Include="StuffMath\Matrix2D.cs" />
     <Compile Include="StuffMath\MatrixRow.cs" />
