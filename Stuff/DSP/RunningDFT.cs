@@ -70,5 +70,11 @@ namespace Stuff.DSP
                 imaginary[k] += imaginaryList[k];
             }
         }
+
+        public void NewSamples(float[] samples)
+        {
+            foreach (var s in samples)
+                NewSample(s);
+        }
     }
 }
