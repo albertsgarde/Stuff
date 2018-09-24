@@ -65,6 +65,15 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Lottery.cs" />
     <Compile Include="Misc.cs" />
+    <Compile Include="Music\BPM.cs" />
+    <Compile Include="Music\Chord.cs" />
+    <Compile Include="Music\Interval.cs" />
+    <Compile Include="Music\Key.cs" />
+    <Compile Include="Music\Melody.cs" />
+    <Compile Include="Music\MusicData.cs" />
+    <Compile Include="Music\Note.cs" />
+    <Compile Include="Music\Scale.cs" />
+    <Compile Include="Music\Tone.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="PathList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
