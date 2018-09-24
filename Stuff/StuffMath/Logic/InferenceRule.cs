@@ -22,7 +22,7 @@ namespace Stuff.StuffMath.Logic
 
         public Expression PremiseExpression()
         {
-            return new And(Premises);
+            return Expression.And(Premises);
         }
 
         public Implies TotalExpression()
@@ -33,6 +33,11 @@ namespace Stuff.StuffMath.Logic
         public bool IsValid()
         {
             return TotalExpression().IsTautology();
+        }
+
+        public string ToLatex()
+        {
+            return $"\\frac{{{Premises.Aggregate("", (a,b)=>$"{a},{b.ToLatex()}").Substring(1)}}}{{{Conclusion.ToLatex()}}}";
         }
     }
 }

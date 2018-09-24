@@ -12,6 +12,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public Expression Right { get; }
 
+        public override double Priority => 2;
+
         public And(Expression left, Expression right)
         {
             Left = left;
@@ -26,25 +28,9 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
             Right = expressions[expressions.Length - 1];
         }
 
-        public And(IEnumerable<Expression> expressions)
-        {
-            var and = (And)expressions.Aggregate((a, b) => new And(a, b));
-            Left = and.Left;
-            Right = and.Right;
-        }
-
         public override bool Evaluate(Dictionary<string, bool> values = null)
         {
             return Left.Evaluate(values) && Right.Evaluate(values);
-        }
-
-        public override bool IsEqual(Expression exp)
-        {
-            if (exp is And and)
-                return and.Left.IsEqual(Left) && and.Right.IsEqual(Right) || and.Left.IsEqual(Right) && and.Right.IsEqual(Left);
-            if (exp is Not not && not.Arg is NAnd nand)
-                return nand.Left.IsEqual(Left) && nand.Right.IsEqual(Right) || nand.Left.IsEqual(Right) && nand.Right.IsEqual(Left);
-            return false;
         }
 
         public override Expression Reduce(Dictionary<string, bool> values = null)
@@ -65,8 +51,20 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
                 else
                     return false;
             }
+            else if (RightReduced.IsEqual(LeftReduced))
+                return RightReduced;
             else
                 return new And(LeftReduced, RightReduced);
+        }
+
+        public override Expression ToNormalForm()
+        {
+            return new And(Left.ToNormalForm(), Right.ToNormalForm());
+        }
+
+        public override Expression Negate()
+        {
+            return new Or(Left.Negate(), Right.Negate());
         }
 
         public override HashSet<string> ContainedVariables(HashSet<string> vars)
@@ -81,7 +79,12 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public override string ToString()
         {
-            return $"({Left.ToString()}*{Right.ToString()})";
+            return $"{(Left.Priority < Priority || Left is And ? Left.ToString() : $"({Left.ToString()})" )}*{(Right.Priority < Priority || Right is And ? Right.ToString() : $"({Right.ToString()})")}";
+        }
+
+        public override string ToLatex()
+        {
+            return $"{(Left.Priority < Priority || Left is And ? Left.ToLatex() : $"({Left.ToLatex()})")} \\land {(Right.Priority < Priority || Right is And ? Right.ToLatex() : $"({Right.ToLatex()})")}";
         }
     }
 }

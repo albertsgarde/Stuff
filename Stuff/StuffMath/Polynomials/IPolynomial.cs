@@ -37,8 +37,6 @@ namespace Stuff.StuffMath
         /// <returns>Returns a copy of the IPolynomial moved the specified amount to the right.</returns>
         IPolynomial MoveHoriz(double k);
 
-        IPolynomial Transform(Vector2D v);
-
         /// <returns>The polynomial as an instance of the generic Polynomial class.</returns>
         Polynomial AsPolynomial();
 

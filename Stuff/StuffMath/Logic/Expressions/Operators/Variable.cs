@@ -10,6 +10,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
     {
         private readonly string name;
 
+        public override double Priority => 0;
+
         public Variable(string name)
         {
             this.name = name;
@@ -23,20 +25,22 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
                 return values[name];
         }
 
-        public override bool IsEqual(Expression exp)
-        {
-            if (exp is Variable var)
-                return var.name == name;
-            else
-                return false;
-        }
-
         public override Expression Reduce(Dictionary<string, bool> values = null)
         {
             if (values == null || !values.ContainsKey(name))
                 return this;
             else
                 return values[name];
+        }
+
+        public override Expression ToNormalForm()
+        {
+            return this;
+        }
+
+        public override Expression Negate()
+        {
+            return new Not(this);
         }
 
         public override HashSet<string> ContainedVariables(HashSet<string> vars)
@@ -51,6 +55,11 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
         }
 
         public override string ToString()
+        {
+            return name;
+        }
+
+        public override string ToLatex()
         {
             return name;
         }

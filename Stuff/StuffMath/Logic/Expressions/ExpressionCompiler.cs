@@ -340,5 +340,10 @@ namespace Stuff.StuffMath.Logic.Expressions
             }
             throw new Exception("No matching bracket found.");
         }
+
+        public static Expression Compile(string exp)
+        {
+            return Compile(Tokenize(exp));
+        }
     }
 }

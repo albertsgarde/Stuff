@@ -10,6 +10,8 @@ namespace Stuff.StuffMath.Logic.Expressions
     {
         private readonly bool value;
 
+        public override double Priority => 0;
+
         public ValueExpression(bool value)
         {
             this.value = value;
@@ -30,19 +32,29 @@ namespace Stuff.StuffMath.Logic.Expressions
             return false;
         }
 
-        public override bool IsEqual(Expression exp)
-        {
-            return (exp is ValueExpression && ((ValueExpression)exp).value == value);
-        }
-
         public override Expression Reduce(Dictionary<string, bool> values = null)
         {
             return this;
         }
 
+        public override Expression ToNormalForm()
+        {
+            return this;
+        }
+
+        public override Expression Negate()
+        {
+            return !value;
+        }
+
         public override string ToString()
         {
             return value ? "1" : "0";
+        }
+
+        public override string ToLatex()
+        {
+            return value ? "\\top" : "\\bot";
         }
     }
 }

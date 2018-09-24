@@ -10,6 +10,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
     {
         public Expression Arg { get; }
 
+        public override double Priority => 1;
+
         public Not(Expression arg)
         {
             Arg = arg;
@@ -18,13 +20,6 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
         public override bool Evaluate(Dictionary<string, bool> values = null)
         {
             return !Arg.Evaluate(values);
-        }
-
-        public override bool IsEqual(Expression exp)
-        {
-            if (exp is Not not)
-                return not.Arg.IsEqual(Arg);
-            return false;
         }
 
         public override Expression Reduce(Dictionary<string, bool> values = null)
@@ -48,6 +43,16 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
                 return !argReduced;
         }
 
+        public override Expression ToNormalForm()
+        {
+            return Arg.Negate();
+        }
+
+        public override Expression Negate()
+        {
+            return Arg.ToNormalForm();
+        }
+
         public override HashSet<string> ContainedVariables(HashSet<string> vars)
         {
             return Arg.ContainedVariables(vars);
@@ -60,7 +65,12 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public override string ToString()
         {
-            return $"!{Arg.ToString()}";
+            return $"!{(Arg.Priority < Priority || Arg is Not ? Arg.ToString() : $"({Arg.ToString()})")}";
+        }
+
+        public override string ToLatex()
+        {
+            return $"\\neg {(Arg.Priority < Priority || Arg is Not ? Arg.ToLatex() : $"({Arg.ToLatex()})")}";
         }
     }
 }

@@ -12,6 +12,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public Expression Right { get; }
 
+        public override double Priority => 2;
+
         public NAnd(Expression left, Expression right)
         {
             Left = left;
@@ -21,15 +23,6 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
         public override bool Evaluate(Dictionary<string, bool> values = null)
         {
             return !(Left.Evaluate(values) && Right.Evaluate(values));
-        }
-
-        public override bool IsEqual(Expression exp)
-        {
-            if (exp is NAnd nand)
-                return nand.Left.IsEqual(Left) && nand.Right.IsEqual(Right) || nand.Left.IsEqual(Right) && nand.Right.IsEqual(Left);
-            if (exp is Not not && not.Arg is And and)
-                return and.Left.IsEqual(Left) && and.Right.IsEqual(Right) || and.Left.IsEqual(Right) && and.Right.IsEqual(Left);
-            return false;
         }
 
         public override Expression Reduce(Dictionary<string, bool> values = null)
@@ -50,8 +43,20 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
                 else
                     return true;
             }
+            else if (LeftReduced.IsEqual(RightReduced))
+                return !LeftReduced;
             else
                 return new NAnd(LeftReduced, RightReduced);
+        }
+
+        public override Expression ToNormalForm()
+        {
+            return new Or(Left.Negate(), Right.Negate());
+        }
+
+        public override Expression Negate()
+        {
+            return new And(Left.ToNormalForm(), Right.ToNormalForm());
         }
 
         public override HashSet<string> ContainedVariables(HashSet<string> vars)
@@ -66,7 +71,12 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public override string ToString()
         {
-            return $"({Left.ToString()}!*{Right.ToString()})";
+            return $"{(Left.Priority < Priority ? Left.ToString() : $"({Left.ToString()})")}!*{(Right.Priority < Priority ? Right.ToString() : $"({Right.ToString()})")}";
+        }
+
+        public override string ToLatex()
+        {
+            return $"{(Left.Priority < Priority ? Left.ToLatex() : $"({Left.ToLatex()})")} \\uparrow {(Right.Priority < Priority ? Right.ToLatex() : $"({Right.ToLatex()})")}";
         }
     }
 }

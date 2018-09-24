@@ -164,7 +164,7 @@ namespace Stuff
             {
                 result += value + ",";
             }
-            return result.Substring(0, result.Length - 1) + "]";
+            return result.TrimEnd(',') + "]";
         }
 
         public static string AsString<T>(this T[] list)
@@ -174,7 +174,7 @@ namespace Stuff
             {
                 result += value + ",";
             }
-            return result.Substring(0, result.Length - 1) + "}";
+            return result.TrimEnd(',') + "}";
         }
 
         public static string AsString<T>(LinkedListNode<T> start, LinkedListNode<T> end)
@@ -186,7 +186,7 @@ namespace Stuff
                 result += node.Value + ",";
                 node = node.Next;
             }
-            return result.Substring(0, result.Length - 1) + "}";
+            return result.TrimEnd(',') + "}";
         }
     }
 }

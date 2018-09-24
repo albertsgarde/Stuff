@@ -371,5 +371,11 @@ namespace Stuff.StuffMath.Expressions
             }
             throw new Exception("No matching bracket found.");
         }
+
+        public static Expression Compile(string exp)
+        {
+            var functions = new FunctionManager();
+            return Compile(Tokenize(exp), functions);
+        }
     }
 }

@@ -9,6 +9,8 @@ namespace Stuff.StuffMath.Logic.Expressions
 {
     public abstract class Expression
     {
+        public abstract double Priority { get; }
+
         public static implicit operator Expression(bool b)
         {
             return new ValueExpression(b);
@@ -36,15 +38,22 @@ namespace Stuff.StuffMath.Logic.Expressions
         /// Does not guarantee that the expression is in its most reduced form.
         /// </summary>
         public abstract Expression Reduce(Dictionary<string, bool> values = null);
-        
-        /// <summary>
-        /// Checks whether this expression is logically equal to the specified expression. 
-        /// Will not always return true if they are, but will never return true if they aren't.
-        /// Will mostly return far better results if both expressions are reduced first.
-        /// </summary>
-        /// <param name="exp">The expression to compare this expression to.</param>
-        /// <returns>Returns false if the expressions are unequal. Might return true if they are equal.</returns>
-        public abstract bool IsEqual(Expression exp);
+
+        public abstract Expression ToNormalForm();
+
+        public abstract Expression Negate();
+
+        /// <returns>True if this expression is logically equivalent to the given expression.</returns>
+        public bool IsEqual(Expression exp)
+        {
+            return new Iff(this, exp).IsTautology();
+        }
+
+        /// <returns>True if this expression is logically equivalent to the negation of given expression.</returns>
+        public bool IsNegation(Expression exp)
+        {
+            return new Iff(this, !exp).IsTautology();
+        }
 
         public abstract bool ContainsVariable(string variable);
 
@@ -136,6 +145,18 @@ namespace Stuff.StuffMath.Logic.Expressions
                 values[i] = false;
         }
 
+        public static Expression And(IEnumerable<Expression> expressions)
+        {
+            return expressions.Aggregate((a, b) => new And(a, b));
+        }
+
+        public static Expression Or(IEnumerable<Expression> expressions)
+        {
+            return expressions.Aggregate((a, b) => new Or(a, b));
+        }
+
         public abstract override string ToString();
+
+        public abstract string ToLatex();
     }
 }

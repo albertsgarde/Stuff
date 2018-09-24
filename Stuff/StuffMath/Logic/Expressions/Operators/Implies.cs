@@ -12,6 +12,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public Expression Right { get; }
 
+        public override double Priority => 4;
+
         public Implies(Expression left, Expression right)
         {
             Left = left;
@@ -21,13 +23,6 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
         public override bool Evaluate(Dictionary<string, bool> values = null)
         {
             return !Left.Evaluate(values) || Right.Evaluate(values);
-        }
-
-        public override bool IsEqual(Expression exp)
-        {
-            if (exp is Implies implies)
-                return implies.Left.IsEqual(Left) && implies.Right.IsEqual(Right);
-            return false;
         }
 
         public override Expression Reduce(Dictionary<string, bool> values = null)
@@ -48,8 +43,20 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
                 else
                     return !LeftReduced;
             }
+            else if (LeftReduced.IsEqual(RightReduced))
+                return true;
             else
                 return new Implies(LeftReduced, RightReduced);
+        }
+
+        public override Expression ToNormalForm()
+        {
+            return new Implies(Left.ToNormalForm(), Right.ToNormalForm());
+        }
+
+        public override Expression Negate()
+        {
+            return new And(Left.ToNormalForm(), Right.Negate());
         }
 
         public override HashSet<string> ContainedVariables(HashSet<string> vars)
@@ -64,7 +71,12 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 
         public override string ToString()
         {
-            return $"({Left.ToString()}>{Right.ToString()})";
+            return $"{(Left.Priority < Priority ? Left.ToString() : $"({Left.ToString()})")}>{(Right.Priority < Priority ? Right.ToString() : $"({Right.ToString()})")}";
+        }
+
+        public override string ToLatex()
+        {
+            return $"{(Left.Priority < Priority ? Left.ToLatex() : $"({Left.ToLatex()})")} \\implies {(Right.Priority < Priority ? Right.ToLatex() : $"({Right.ToLatex()})")}";
         }
     }
 }
