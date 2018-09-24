@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,6 +76,19 @@ namespace Stuff.DSP
         {
             foreach (var s in samples)
                 NewSample(s);
+        }
+
+        public float Fundamental()
+        {
+            var maxValue = Math.Max(real.Max(), imaginary.Max());
+            for (int k = 0; k < DFTSize; ++k)
+            {
+                if (real[k] == maxValue)
+                    return (float)k / (DFTSize * 2);
+                else if (imaginary[k] == maxValue)
+                    return (float)k / (DFTSize * 2);
+            }
+            throw new Exception("Not possible");
         }
     }
 }
