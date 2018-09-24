@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 using Stuff;
 using System.Collections;
 
-namespace Stuff.StuffMath
+namespace Stuff.StuffMath.Complex
 {
     /// <summary>
     /// A complex vector
     /// </summary>
-    public class CVector : IEnumerable<Complex>
+    public class CVector : IEnumerable<Complex2D>
     {
-        private readonly Complex[] vector;
+        private readonly Complex2D[] vector;
 
-        public CVector(params Complex[] vector)
+        public CVector(params Complex2D[] vector)
         {
             this.vector = vector;
         }
 
-        public Complex this[int i]
+        public Complex2D this[int i]
         {
             get
             {
@@ -84,34 +84,34 @@ namespace Stuff.StuffMath
         }
 
         /// <returns>The vector multiplied by the Complex.</returns>
-        public static CVector operator *(CVector vec, Complex c)
+        public static CVector operator *(CVector vec, Complex2D c)
         {
             return new CVector(vec.Select(x => x * c).ToArray());
         }
 
         /// <returns>The vector divided by the Complex.</returns>
-        public static CVector operator /(CVector vec, Complex c)
+        public static CVector operator /(CVector vec, Complex2D c)
         {
             return new CVector(vec.Select(x => x / c).ToArray());
         }
 
         /// <returns>The vector multiplied by the Complex.</returns>
-        public static CVector operator *(Complex c, CVector vec)
+        public static CVector operator *(Complex2D c, CVector vec)
         {
             return new CVector(vec.Select(x => x * c).ToArray());
         }
 
         /// <returns>The vector divided by the Complex.</returns>
-        public static CVector operator /(Complex c, CVector vec)
+        public static CVector operator /(Complex2D c, CVector vec)
         {
             return new CVector(vec.Select(x => x / c).ToArray());
         }
 
-        public Complex InnerProduct(CVector vec)
+        public Complex2D InnerProduct(CVector vec)
         {
             if (Size != vec.Size)
                 throw new ArgumentException("The vectors must have the same number of dimensions.");
-            Complex result = Complex.NULL;
+            Complex2D result = Complex2D.NULL;
             for (int i = 0; i < Size; i++)
                 result += vector[i] * vec[i].Conjugate();
             return result;
@@ -124,12 +124,12 @@ namespace Stuff.StuffMath
 
         public bool Orthogonal(CVector vec)
         {
-            return InnerProduct(vec) == Complex.NULL;
+            return InnerProduct(vec) == Complex2D.NULL;
         }
 
-        public IEnumerator<Complex> GetEnumerator()
+        public IEnumerator<Complex2D> GetEnumerator()
         {
-            foreach (Complex d in vector)
+            foreach (Complex2D d in vector)
                 yield return d;
         }
 

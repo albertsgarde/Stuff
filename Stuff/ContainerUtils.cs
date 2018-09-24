@@ -148,28 +148,33 @@ namespace Stuff
             return result;
         }
 
+        public static T[] Copy<T>(this T[] list)
+        {
+            var result = new T[list.Length];
+            list.CopyTo(result, 0);
+            return result;
+        }
+
         public static string AsString<T>(this IEnumerable<T> list)
         {
             if (list.Count() == 0)
-                return "{}";
-            string result = "{";
+                return "[]";
+            string result = "[";
             foreach (T value in list)
             {
                 result += value + ",";
             }
-            return result.Substring(0, result.Length - 1) + "}";
+            return result.TrimEnd(',') + "]";
         }
 
         public static string AsString<T>(this T[] list)
         {
-            if (list.Length == 0)
-                return "{}";
             string result = "{";
             foreach (T value in list)
             {
                 result += value + ",";
             }
-            return result.Substring(0, result.Length - 1) + "}";
+            return result.TrimEnd(',') + "}";
         }
 
         public static string AsString<T>(LinkedListNode<T> start, LinkedListNode<T> end)
@@ -181,15 +186,7 @@ namespace Stuff
                 result += node.Value + ",";
                 node = node.Next;
             }
-            return result.Substring(0, result.Length - 1) + "}";
-        }
-
-        public static T[] UniformArray<T>(T value, int arrayLength)
-        {
-            var result = new T[arrayLength];
-            for (int i = 0; i < arrayLength; ++i)
-                result[i] = value;
-            return result;
+            return result.TrimEnd(',') + "}";
         }
     }
 }

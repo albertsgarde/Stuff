@@ -4,21 +4,27 @@ namespace Stuff.StuffMath
 {
     public class Vector2D
     {
-        public double X { get; private set; }
+        public double X { get; }
 
-        public double Y { get; private set; }
+        public double Y { get; }
 
-        public double Radians { get; private set; }
+        public double Radians { get; }
 
-        private bool lengthFound;
+        public double Length { get;  }
 
-        private double length;
+        public Vector2D(double radians)
+        {
+            X = Math.Cos(radians);
+            Y = Math.Sin(radians);
+            Length = 1;
+            Radians = radians;
+        }
 
         public Vector2D(double x, double y)
         {
             X = x;
             Y = y;
-            lengthFound = false;
+            Length = Math.Sqrt(LengthSquared());
             Radians = y < 0 ? 2 * Math.PI - Math.Acos(x / Length) : Math.Acos(x / Length);
         }
 
@@ -30,8 +36,8 @@ namespace Stuff.StuffMath
         {
             X = vec.X / vec.Length * length;
             Y = vec.Y / vec.Length * length;
-            lengthFound = false;
-            Radians = Y < 0 ? 2 * Math.PI - Math.Acos(X / Length) : Math.Acos(X / Length);
+            Length = length;
+            Radians = vec.Radians;
         }
 
         /// <summary>
@@ -43,7 +49,7 @@ namespace Stuff.StuffMath
         {
             X = locB.X - locA.X;
             Y = locB.Y - locA.Y;
-            lengthFound = false;
+            Length = Math.Sqrt(LengthSquared());
             Radians = Y < 0 ? 2 * Math.PI - Math.Acos(X / Length) : Math.Acos(X / Length);
         }
 
@@ -51,24 +57,18 @@ namespace Stuff.StuffMath
         {
             X = coords.X;
             Y = coords.Y;
-            lengthFound = false;
+            Length = Math.Sqrt(LengthSquared());
             Radians = Y < 0 ? 2 * Math.PI - Math.Acos(X / Length) : Math.Acos(X / Length);
+        }
+
+        public static Vector2D AngularVector(double radians, double length)
+        {
+            return new Vector2D(radians) * length;
         }
 
         public double Degrees
         {
-            get
-            {
-                return Radians / (Math.PI / 180);
-            }
-        }
-
-        public double Length
-        {
-            get
-            {
-                return lengthFound ? length : length = Math.Sqrt(X * X + Y * Y);
-            }
+            get => Radians / (Math.PI / 180);
         }
 
         public double LengthSquared()
@@ -84,6 +84,11 @@ namespace Stuff.StuffMath
         public static Vector2D operator -(Vector2D vecA, Vector2D vecB)
         {
             return new Vector2D(vecA.X - vecB.X, vecA.Y - vecB.Y);
+        }
+
+        public static Vector2D operator -(Vector2D vec)
+        {
+            return new Vector2D(-vec.X, -vec.Y);
         }
 
         public static Vector2D operator * (Vector2D vec, double multiplier)
@@ -135,6 +140,10 @@ namespace Stuff.StuffMath
         {
             return !(a == b);
         }
+
+        public static Vector2D UnitX { get; } = new Vector2D(1, 0);
+
+        public static Vector2D UnitY { get; } = new Vector2D(0, 1);
 
         public bool IsParallel(Vector2D vec)
         {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.StuffMath.Complex;
 
 namespace Stuff.StuffMath
 {
@@ -90,16 +91,20 @@ namespace Stuff.StuffMath
             if (d < 0)
                 return new double[0];
             else if (d == 0)
-                return new double[] { (Math.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A)};
+                return new double[] { (Math.Sqrt(d) - B) / (2 * A)};
             else
-                return new double[] { (Math.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A), (-Math.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A) };
+                return new double[] { (Math.Sqrt(d) - B) / (2 * A), (-Math.Sqrt(d) - B) / (2 * A) };
         }
 
-        public Complex[] ComplexRoots()
+        public Complex2D[] Complex2DRoots()
         {
             double d = Math.Pow(B, 2) - 4 * A * C;
-            return new Complex[] { (Complex.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A), (-Complex.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A) };
+            return new Complex2D[] { (Complex2D.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A), (-Complex2D.Sqrt(Math.Pow(B, 2) - 4 * A * C) - B) / (2 * A) };
+        }
 
+        public Location2D TopPoint()
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()

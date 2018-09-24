@@ -127,7 +127,15 @@ namespace Stuff.StuffMath
             return this;
         }
 
-        public static IPolynomial Taylor(Expression exp, int degree, string variableName, double point = 0)
+        /// <summary>
+        /// The given expression may only contain one variable.
+        /// </summary>
+        /// <param name="exp"></param>
+        /// <param name="degree"></param>
+        /// <param name="variableName"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static IPolynomial Taylor(Expression exp, int degree, string variableName = "x", double point = 0)
         {
             Dictionary<int, double> result = new Dictionary<int, double>();
             Dictionary<string, double> vars = new Dictionary<string, double>();
@@ -165,11 +173,6 @@ namespace Stuff.StuffMath
             return result;
         }
 
-        public IPolynomial Transform(Vector2D v)
-        {
-            return MoveVertical(v.Y).MoveHoriz(v.X);
-        }
-
         public Expression ToExpression(string variableName)
         {
             return coefficients.Select(c => c.Value * new Power(new Variable(variableName), c.Key)).Aggregate((coef, result) => result + coef);
@@ -184,7 +187,7 @@ namespace Stuff.StuffMath
                     result += " " + (coef.Value > 0 ? "+ " + coef.Value : "- " + -coef.Value) + "x^" + coef.Key;
             }
 
-            return "y =" + (result.Length > 0 ? result.Substring(2) : " 0");
+            return (result.Length > 0 ? result.Substring(3) : " 0");
         }
     }
 }

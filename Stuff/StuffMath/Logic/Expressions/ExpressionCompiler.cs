@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Stuff.StuffMath.Logic.Expressions.Operators;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Xml.Linq;
-using Stuff;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Stuff.StuffMath.Expressions
+namespace Stuff.StuffMath.Logic.Expressions
 {
-    public static class ExpressionCompiler
+    public class ExpressionCompiler
     {
-        public enum TokenType { Value, Identifier, Operator, SBracket, EBracket, Comma };
+        public enum TokenType { Value, Identifier, Operator, SBracket, EBracket, Negation};
 
-        public static readonly string[] Operators = { "+", "-", "*", "/", "^" };
+        public static readonly string[] Operators = { "+", "*", ">", "=", "|", "&"};
 
         public class Token
         {
@@ -30,18 +31,14 @@ namespace Stuff.StuffMath.Expressions
                 return "{" + Type + ": " + Value + "}";
             }
         }
-        
+
         public static LinkedList<Token> Tokenize(string exp)
         {
             exp = new string(exp.Where(c => c != ' ' && c != ' ').ToArray());
 
             var result = new LinkedList<Token>();
 
-            string curNum = "";
-
             string curIdentifier = "";
-
-            bool hasDecimal = false;
 
             int brackets = 0;
 
@@ -51,7 +48,6 @@ namespace Stuff.StuffMath.Expressions
             {
                 if (curIdentifier.Length > 0)
                 {
-                    Debug.Assert(curNum.Length == 0, "curNum and curIdentifier should never be active simultaneously. Position: " + pos + " String: " + exp);
                     if (!char.IsLetter(c) && !char.IsNumber(c))
                     {
                         result.AddLast(new Token(TokenType.Identifier, curIdentifier));
@@ -60,35 +56,12 @@ namespace Stuff.StuffMath.Expressions
                     else
                         curIdentifier += c;
                 }
-                else if (curNum.Length > 0)
-                {
-                    if (char.IsNumber(c))
-                        curNum += c;
-                    else if (c == '.')
-                    {
-                        if (hasDecimal)
-                            throw new Exception("A number can only contain 1 decimal point.");
-                        else
-                        {
-                            curNum += '.';
-                            hasDecimal = true;
-                        }
-                    }
-                    else
-                    {
-                        if (char.IsLetter(c))
-                            throw new Exception("An identifier cannot start with a number, and a number may not be followed by an identifier. Position: " + pos + " String: " + exp);
-                        else if (c == '(')
-                            throw new Exception("A number cannot be followed by an opening bracket. Implicit multiplication is not possible. Position: " + pos + " String: " + exp);
-                        result.AddLast(new Token(TokenType.Value, curNum));
-                        curNum = "";
-                        hasDecimal = false;
-                    }
-                }
                 if (c == '(')
                 {
                     if (pos != 0 && result.Last().Type == TokenType.Value)
                         throw new Exception("Literals cannot be followed by an opening bracket. Implicit multiplication is not possible. Position: " + pos + " String: " + exp);
+                    if (pos != 0 && result.Last().Type == TokenType.Identifier)
+                        throw new Exception("Identifiers cannot be followed by an opening bracket. Position: " + pos + " String: " + exp);
                     result.AddLast(new Token(TokenType.SBracket, "" + c));
                     brackets++;
                 }
@@ -104,40 +77,26 @@ namespace Stuff.StuffMath.Expressions
                     if (brackets < 0)
                         throw new Exception("Closing bracket at " + pos + " has no matching opening bracket. String: " + exp);
                 }
-                else if (c == ',')
-                {
-                    if (brackets == 0)
-                        throw new Exception("Commas can only exist inside brackets. Position: " + pos + " String: " + exp);
-                    if (result.Last().Type == TokenType.Operator)
-                        throw new Exception("Expected expression, not comma. Position: " + pos + " String: " + exp);
-                    if (result.Last().Type == TokenType.SBracket)
-                        throw new Exception("Commas cannot follow a start bracket. only after an expression. Position: " + pos + " String: " + exp);
-                    if (result.Last().Type == TokenType.Comma)
-                        throw new Exception("Commas cannot follow other commas. Position: " + pos + " String: " + exp);
-
-                    result.AddLast(new Token(TokenType.Comma, "" + c));
-                }
                 else if (char.IsLetter(c))
                 {
                     if (curIdentifier.Length == 0)
                     {
-                        Debug.Assert(curNum.Length == 0, "The case of curNum being active should have been handled elsewhere. Position: " + pos + " String: " + exp);
                         if (pos != 0 && result.Last().Type == TokenType.EBracket)
                             throw new Exception("Closing brackets cannot be followed by an identifier; they must be followed by an operator. Position: " + pos + " String: " + exp);
                         curIdentifier += c;
                     }
                 }
-                else if (char.IsNumber(c) || c == '.')
+                else if (c == '1' || c == '0')
                 {
-                    if (curNum.Length == 0 && curIdentifier.Length == 0)
-                    {
-                        Debug.Assert(curIdentifier.Length == 0, "The case of curIdentifier being active should have been handled elsewhere. Position: " + pos + " String: " + exp);
-                        if (pos != 0 && result.Last().Type == TokenType.EBracket)
-                            throw new Exception("Closing brackets cannot be followed by a literal; they must be followed by an operator. Position: " + pos + " String: " + exp);
-                        curNum += c;
-                        if (c == '.')
-                            hasDecimal = true;
-                    }
+                    Debug.Assert(curIdentifier.Length == 0, "The case of curIdentifier being active should have been handled elsewhere. Position: " + pos + " String: " + exp);
+                    if (pos != 0 && result.Last().Type == TokenType.EBracket)
+                        throw new Exception("Closing brackets cannot be followed by a literal; they must be followed by an operator. Position: " + pos + " String: " + exp);
+                    result.AddLast(new Token(TokenType.Value, "" + c));
+                }
+                else if (c == '!')
+                {
+                    Debug.Assert(curIdentifier.Length == 0, "The case of curIdentifier being active should have been handled elsewhere. Position: " + pos + " String: " + exp);
+                    result.AddLast(new Token(TokenType.Negation, ""));
                 }
                 else if (Operators.Contains("" + c))
                 {
@@ -155,14 +114,8 @@ namespace Stuff.StuffMath.Expressions
             }
             if (curIdentifier.Length > 0)
             {
-                Debug.Assert(curNum.Length == 0, "curNum and curIdentifier should never be active simultaneously. Position: " + pos + " String: " + exp);
                 result.AddLast(new Token(TokenType.Identifier, curIdentifier));
                 curIdentifier = "";
-            }
-            else if (curNum.Length > 0)
-            {
-                result.AddLast(new Token(TokenType.Value, curNum));
-                curNum = "";
             }
 
             if (brackets != 0)
@@ -173,22 +126,24 @@ namespace Stuff.StuffMath.Expressions
             return result;
         }
 
-        public static Expression Compile(LinkedList<Token> tokens, FunctionManager functions)
+        public static Expression Compile(LinkedList<Token> tokens)
         {
-            return InternalCompile(tokens.First, tokens.Last, functions);
+            return InternalCompile(tokens.First, tokens.Last);
         }
 
-        private static Expression InternalCompile(LinkedListNode<Token> first, LinkedListNode<Token> last, FunctionManager functions, int level = 0)
+        private static Expression InternalCompile(LinkedListNode<Token> first, LinkedListNode<Token> last, int level = 0)
         {
             if (first.Value.Type == TokenType.SBracket && MatchingBracketForward(first) == last)
-                return InternalCompile(first.Next, last.Previous, functions, 0);
+                return InternalCompile(first.Next, last.Previous, 0);
+            else if (first.Value.Type == TokenType.Negation && first.Next.Value.Type == TokenType.SBracket && MatchingBracketForward(first.Next) == last)
+                return new Not(InternalCompile(first.Next.Next, last.Previous, 0));
             LinkedListNode<Token> token;
             int brackets = 0;
             switch (level)
             {
                 case 0:
                     Debug.Assert(level == 0);
-                    // Additions and subtractions
+                    // Equality
                     token = last;
                     while (token != first.Previous)
                     {
@@ -198,10 +153,13 @@ namespace Stuff.StuffMath.Expressions
                             brackets++;
                         else if (brackets == 0)
                         {
-                            if (token.Value.Value == "+")
-                                return functions.Operator("+").Create(InternalCompile(first, token.Previous, functions, level), InternalCompile(token.Next, last, functions, level));
-                            if (token.Value.Value == "-")
-                                return functions.Operator("-").Create(InternalCompile(first, token.Previous, functions, level), InternalCompile(token.Next, last, functions, level));
+                            if (token.Value.Value == "=")
+                            {
+                                if (token.Previous.Value.Type == TokenType.Negation)
+                                    return new XOr(InternalCompile(first, token.Previous.Previous, level), InternalCompile(token.Next, last, level));
+                                else
+                                    return new Iff(InternalCompile(first, token.Previous, level), InternalCompile(token.Next, last, level));
+                            }
                         }
                         else if (brackets <= 0)
                             throw new Exception("SumTingWong. Tokens: " + ContainerUtils.AsString(first, last));
@@ -212,7 +170,7 @@ namespace Stuff.StuffMath.Expressions
                     goto case 1;
                 case 1:
                     Debug.Assert(level == 1);
-                    // Multiplications and divisions
+                    // Implication
                     token = last;
                     while (token != first.Previous)
                     {
@@ -222,10 +180,12 @@ namespace Stuff.StuffMath.Expressions
                             brackets++;
                         else if (brackets == 0)
                         {
-                            if (token.Value.Value == "*")
-                                return functions.Operator("*").Create(InternalCompile(first, token.Previous, functions, level), InternalCompile(token.Next, last, functions, level));
-                            if (token.Value.Value == "/")
-                                return functions.Operator("/").Create(InternalCompile(first, token.Previous, functions, level), InternalCompile(token.Next, last, functions, level));
+                            if (token.Value.Value == ">")
+                            {
+                                if (token.Previous.Value.Type == TokenType.Negation)
+                                    throw new Exception("Implication operator cannot be negated. Tokens: " + ContainerUtils.AsString(first, last));
+                                return new Implies(InternalCompile(first, token.Previous, level), InternalCompile(token.Next, last, level));
+                            }
                         }
                         else if (brackets <= 0)
                             throw new Exception("SumTingWong. Tokens: " + ContainerUtils.AsString(first, last));
@@ -237,7 +197,7 @@ namespace Stuff.StuffMath.Expressions
                     goto case 2;
                 case 2:
                     Debug.Assert(level == 2);
-                    // Powers
+                    // Or
                     token = last;
                     while (token != first.Previous)
                     {
@@ -247,8 +207,13 @@ namespace Stuff.StuffMath.Expressions
                             brackets++;
                         else if (brackets == 0)
                         {
-                            if (token.Value.Value == "^")
-                                return functions.Operator("^").Create(InternalCompile(first, token.Previous, functions, level), InternalCompile(token.Next, last, functions, level));
+                            if (token.Value.Value == "+" || token.Value.Value == "|")
+                            {
+                                if (token.Previous.Value.Type == TokenType.Negation)
+                                    return new NOr(InternalCompile(first, token.Previous.Previous, level), InternalCompile(token.Next, last, level));
+                                else
+                                    return new Or(InternalCompile(first, token.Previous, level), InternalCompile(token.Next, last, level));
+                            }
                         }
                         else if (brackets <= 0)
                             throw new Exception("SumTingWong. Tokens: " + ContainerUtils.AsString(first, last));
@@ -260,7 +225,7 @@ namespace Stuff.StuffMath.Expressions
                     goto case 3;
                 case 3:
                     Debug.Assert(level == 3);
-                    // Functions & variables
+                    // And
                     token = last;
                     while (token != first.Previous)
                     {
@@ -270,12 +235,12 @@ namespace Stuff.StuffMath.Expressions
                             brackets++;
                         else if (brackets == 0)
                         {
-                            if (token.Value.Type == TokenType.Identifier)
+                            if (token.Value.Value == "*" || token.Value.Value == "&")
                             {
-                                if (token.Next != null && token.Next.Value.Type == TokenType.SBracket)
-                                    return functions.Function(token.Value.Value).Create(FunctionArgumentsCompile(token.Next.Next, MatchingBracketForward(token.Next), functions));
+                                if (token.Previous.Value.Type == TokenType.Negation)
+                                    return new NAnd(InternalCompile(first, token.Previous.Previous, level), InternalCompile(token.Next, last, level));
                                 else
-                                    return new Variable(token.Value.Value);
+                                    return new And(InternalCompile(first, token.Previous, level), InternalCompile(token.Next, last, level));
                             }
                         }
                         else if (brackets <= 0)
@@ -288,6 +253,34 @@ namespace Stuff.StuffMath.Expressions
                     goto case 4;
                 case 4:
                     Debug.Assert(level == 4);
+                    // Variables
+                    token = last;
+                    while (token != first.Previous)
+                    {
+                        if (token.Value.Type == TokenType.SBracket)
+                            brackets--;
+                        else if (token.Value.Type == TokenType.EBracket)
+                            brackets++;
+                        else if (brackets == 0)
+                        {
+                            if (token.Value.Type == TokenType.Identifier)
+                            {
+                                if (token != first && token.Previous.Value.Type == TokenType.Negation)
+                                    return new Not(new Variable(token.Value.Value));
+                                else
+                                    return new Variable(token.Value.Value);
+                            }
+                        }
+                        else if (brackets <= 0)
+                            throw new Exception("SumTingWong. Tokens: " + ContainerUtils.AsString(first, last));
+                        token = token.Previous;
+                    }
+                    if (brackets != 0)
+                        throw new Exception("Unbalanced brackets");
+                    level++;
+                    goto case 5;
+                case 5:
+                    Debug.Assert(level == 5);
                     // Literals
                     token = last;
                     while (token != first.Previous)
@@ -299,7 +292,7 @@ namespace Stuff.StuffMath.Expressions
                         else if (brackets == 0)
                         {
                             if (token.Value.Type == TokenType.Value)
-                                return new ValueExpression(double.Parse(token.Value.Value));
+                                return new ValueExpression(token.Value.Value == "1");
                         }
                         else if (brackets <= 0)
                             throw new Exception("SumTingWong. Tokens: " + ContainerUtils.AsString(first, last));
@@ -310,32 +303,8 @@ namespace Stuff.StuffMath.Expressions
                     //level++;
                     goto default;
                 default:
-                    throw new Exception();
+                    throw new Exception("SumTingWong. Tokens: " + ContainerUtils.AsString(first, last));
             }
-        }
-
-        private static Expression[] FunctionArgumentsCompile(LinkedListNode<Token> first, LinkedListNode<Token> last, FunctionManager functions)
-        {
-            LinkedListNode<Token> prevComma = first; // Actually just after the previous comma.
-            LinkedListNode<Token> token = first;
-            List<Expression> exps = new List<Expression>();
-            int brackets = 0;
-            while (token != last)
-            {
-                if (token.Value.Type == TokenType.SBracket)
-                    brackets--;
-                else if (token.Value.Type == TokenType.EBracket)
-                    brackets++;
-                else if (brackets == 0 && token.Value.Type == TokenType.Comma)
-                {
-                    exps.Add(InternalCompile(prevComma, token.Previous, functions));
-                    prevComma = token.Next;
-                }
-                token = token.Next;
-            }
-            Debug.Assert(brackets == 0);
-            exps.Add(InternalCompile(prevComma, last.Previous, functions));
-            return exps.ToArray();
         }
 
         private static LinkedListNode<Token> MatchingBracketForward(LinkedListNode<Token> sBracket)
@@ -374,8 +343,7 @@ namespace Stuff.StuffMath.Expressions
 
         public static Expression Compile(string exp)
         {
-            var functions = new FunctionManager();
-            return Compile(Tokenize(exp), functions);
+            return Compile(Tokenize(exp));
         }
     }
 }

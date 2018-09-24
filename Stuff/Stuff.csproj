@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +50,8 @@
     <Compile Include="CircularArray.cs" />
     <Compile Include="ContainerUtils.cs" />
     <Compile Include="CrossReferencedDictionary.cs" />
+    <Compile Include="DSP\Fourier.cs" />
+    <Compile Include="DSP\RunningDFT.cs" />
     <Compile Include="Exceptions\InvalidSettingFormatException.cs" />
     <Compile Include="Exceptions\SettingsKeyNotFoundException.cs" />
     <Compile Include="Exceptions\IndexNotFoundException.cs" />
@@ -89,9 +92,13 @@
     <Compile Include="StuffMath\BasePhi4.cs" />
     <Compile Include="StuffMath\Basic.cs" />
     <Compile Include="StuffMath\Circle.cs" />
-    <Compile Include="StuffMath\Complex.cs" />
+    <Compile Include="StuffMath\Complex\Complex.cs" />
+    <Compile Include="StuffMath\Complex\CPolynomial.cs" />
+    <Compile Include="StuffMath\Complex\CQuadraticFunction.cs" />
+    <Compile Include="StuffMath\Complex\Extensions.cs" />
+    <Compile Include="StuffMath\Complex\ICPolynomial.cs" />
     <Compile Include="StuffMath\CubicFunction.cs" />
-    <Compile Include="StuffMath\CVector.cs" />
+    <Compile Include="StuffMath\Complex\CVector.cs" />
     <Compile Include="StuffMath\Expressions\Expression.cs" />
     <Compile Include="StuffMath\Expressions\ExpressionCompiler.cs" />
     <Compile Include="StuffMath\Expressions\Function.cs" />
@@ -116,21 +123,37 @@
     <Compile Include="StuffMath\Expressions\Value.cs" />
     <Compile Include="StuffMath\Expressions\ValueExpression.cs" />
     <Compile Include="StuffMath\Expressions\Variable.cs" />
-    <Compile Include="StuffMath\IPolynomial.cs" />
-    <Compile Include="StuffMath\LinearFunction.cs" />
+    <Compile Include="StuffMath\Extensions.cs" />
+    <Compile Include="StuffMath\Polynomials\IPolynomial.cs" />
+    <Compile Include="StuffMath\Polynomials\LinearFunction.cs" />
     <Compile Include="StuffMath\LinearParamater3D.cs" />
     <Compile Include="StuffMath\LinearParameter.cs" />
     <Compile Include="StuffMath\Location2D.cs" />
     <Compile Include="StuffMath\Location2F.cs" />
     <Compile Include="StuffMath\Location3D.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Expression.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\ExpressionCompiler.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\And.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Iff.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Implies.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\NAnd.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\NOr.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Not.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Or.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\Variable.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Operators\XOr.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\ValueExpression.cs" />
+    <Compile Include="StuffMath\Logic\InferenceRule.cs" />
+    <Compile Include="StuffMath\Logic\Logic.cs" />
+    <Compile Include="StuffMath\Logic\ValueTable.cs" />
     <Compile Include="StuffMath\Matrix.cs" />
     <Compile Include="StuffMath\Matrix2D.cs" />
     <Compile Include="StuffMath\MatrixRow.cs" />
     <Compile Include="StuffMath\Plane.cs" />
-    <Compile Include="StuffMath\Polynomial.cs" />
-    <Compile Include="StuffMath\QuadraticFunction.cs" />
+    <Compile Include="StuffMath\Polynomials\Polynomial.cs" />
+    <Compile Include="StuffMath\Polynomials\QuadraticFunction.cs" />
     <Compile Include="StuffMath\Regression.cs" />
-    <Compile Include="StuffMath\Signal.cs" />
+    <Compile Include="DSP\Signal.cs" />
     <Compile Include="StuffMath\Sphere.cs" />
     <Compile Include="StuffMath\Vector.cs" />
     <Compile Include="StuffMath\Vector2D.cs" />
@@ -141,8 +164,12 @@
     <Compile Include="XMLUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\ExpressionFunctions\BasicMath.xml" />
-    <Content Include="Assets\ExpressionOperators\BasicMath.xml" />
+    <Content Include="Assets\ExpressionFunctions\BasicMath.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\ExpressionOperators\BasicMath.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
