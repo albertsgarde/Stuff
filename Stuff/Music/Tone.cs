@@ -102,6 +102,12 @@ namespace SynthLib.Music
             ToneNumber = (octave + 1) * 12 + Interval.NumberToHalfTones(Letter) + Modifier;
         }
 
+        public static Tone ToneFromFrequency(float frequency)
+        {
+            var toneNumber = 69 + (int)Math.Round(Math.Log(frequency / 440d) / Math.Log(Math.Pow(2, -12)));
+            return new Tone(toneNumber);
+        }
+
         public double Frequency
         {
             get
