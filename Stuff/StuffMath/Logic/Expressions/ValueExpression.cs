@@ -8,6 +8,8 @@ namespace Stuff.StuffMath.Logic.Expressions
 {
     public class ValueExpression : Expression
     {
+        public override string Name => "Value";
+
         private readonly bool value;
 
         public override double Priority => 0;
@@ -45,6 +47,17 @@ namespace Stuff.StuffMath.Logic.Expressions
         public override Expression Negate()
         {
             return !value;
+        }
+
+        protected override bool InternalTableau(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, bool value)
+        {
+            if (value != this.value)
+                return false;
+
+            if (expressions.Count == 0)
+                return true;
+            else
+                return InternalTableauNextExp(expressions, values);
         }
 
         public override string ToString()

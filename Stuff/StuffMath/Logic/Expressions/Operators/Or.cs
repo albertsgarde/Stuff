@@ -8,6 +8,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 {
     public class Or : Expression
     {
+        public override string Name => "Or";
+
         public Expression Left { get; }
 
         public Expression Right { get; }
@@ -67,6 +69,21 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
         public override bool ContainsVariable(string variable)
         {
             return Left.ContainsVariable(variable) || Right.ContainsVariable(variable);
+        }
+
+        protected override bool InternalTableau(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, bool value)
+        {
+            if (value)
+            {
+                if (!InternalTableauNextExp(expressions, values, (Left, true)))
+                    return InternalTableauNextExp(expressions, values, (Right, true));
+                else
+                    return true;
+            }
+            else
+            {
+                return InternalTableauNextExp(expressions, values, (Left, false), (Right, false));
+            }
         }
 
         public override string ToString()

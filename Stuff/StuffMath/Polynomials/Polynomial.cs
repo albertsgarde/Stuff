@@ -138,14 +138,16 @@ namespace Stuff.StuffMath
         public static IPolynomial Taylor(Expression exp, int degree, string variableName = "x", double point = 0)
         {
             Dictionary<int, double> result = new Dictionary<int, double>();
-            Dictionary<string, double> vars = new Dictionary<string, double>();
-            vars[variableName] = point;
+            Dictionary<string, double> vars = new Dictionary<string, double>
+            {
+                [variableName] = point
+            };
 
             result[0] = exp.Evaluate(vars);
             long factorial = 1;
             for (int i = 1; i <= degree; i++)
                 result[i] = (exp = exp.Differentiate(variableName)).Evaluate(vars) / (factorial *= i);
-            return new Polynomial(result).MoveHoriz(point);
+            return new Polynomial(result);
         }
 
         public IPolynomial MoveVertical(double k)

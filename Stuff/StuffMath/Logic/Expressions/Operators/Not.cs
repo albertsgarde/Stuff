@@ -8,6 +8,8 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
 {
     public class Not : Expression
     {
+        public override string Name => "Not";
+
         public Expression Arg { get; }
 
         public override double Priority => 1;
@@ -61,6 +63,11 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
         public override bool ContainsVariable(string variable)
         {
             return Arg.ContainsVariable(variable);
+        }
+
+        protected override bool InternalTableau(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, bool value)
+        {
+            return InternalTableauNextExp(expressions, values, (Arg, !value));
         }
 
         public override string ToString()

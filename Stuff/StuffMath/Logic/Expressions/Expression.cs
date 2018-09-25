@@ -11,6 +11,8 @@ namespace Stuff.StuffMath.Logic.Expressions
     {
         public abstract double Priority { get; }
 
+        public abstract string Name { get; }
+
         public static implicit operator Expression(bool b)
         {
             return new ValueExpression(b);
@@ -65,6 +67,7 @@ namespace Stuff.StuffMath.Logic.Expressions
 
         public abstract HashSet<string> ContainedVariables(HashSet<string> vars);
 
+        /*
         public bool IsTautology()
         {
             var vars = ContainedVariables().ToArray();
@@ -83,6 +86,11 @@ namespace Stuff.StuffMath.Logic.Expressions
                     return false;
             }
             return true;
+        }
+        */
+        public bool IsTautology()
+        {
+            return !Tableau(false);
         }
 
         public bool IsContradiction()
@@ -143,6 +151,22 @@ namespace Stuff.StuffMath.Logic.Expressions
             values[i] = true;
             while (++i < values.Length)
                 values[i] = false;
+        }
+
+        public bool Tableau(bool value)
+        {
+            return InternalTableau(new List<(Expression exp, bool value)>(), new Dictionary<string, bool>(), value);
+        }
+
+        protected abstract bool InternalTableau(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, bool value);
+
+        protected static bool InternalTableauNextExp(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, params (Expression exp, bool value)[] addExpressions)
+        {
+            var newExpressions = expressions.ToList();
+            newExpressions.AddRange(addExpressions);
+            var nextExp = newExpressions.Last();
+            newExpressions.Remove(nextExp);
+            return nextExp.exp.InternalTableau(newExpressions, values, nextExp.value);
         }
 
         public static Expression And(IEnumerable<Expression> expressions)

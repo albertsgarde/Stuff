@@ -124,6 +124,8 @@
     <Compile Include="StuffMath\Expressions\ValueExpression.cs" />
     <Compile Include="StuffMath\Expressions\Variable.cs" />
     <Compile Include="StuffMath\Extensions.cs" />
+    <Compile Include="StuffMath\Logic\Expressions\Tableau\Node.cs" />
+    <Compile Include="StuffMath\LookupSine.cs" />
     <Compile Include="StuffMath\Polynomials\IPolynomial.cs" />
     <Compile Include="StuffMath\Polynomials\LinearFunction.cs" />
     <Compile Include="StuffMath\LinearParamater3D.cs" />
@@ -170,7 +172,9 @@
     <Content Include="Assets\ExpressionOperators\BasicMath.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Logic\Tableau\Operators.xml" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

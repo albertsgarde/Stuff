@@ -140,6 +140,14 @@ namespace Stuff
             return result;
         }
 
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dict)
+        {
+            var result = new Dictionary<TKey, TValue>();
+            foreach (var element in dict)
+                result[element.Key] = element.Value;
+            return result;
+        }
+
         public static List<T> Copy<T>(this List<T> list)
         {
             var result = new List<T>(list.Count);
