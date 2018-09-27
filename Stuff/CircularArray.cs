@@ -34,6 +34,12 @@ namespace Stuff
             return value;
         }
 
+        public void Add(params T[] values)
+        {
+            for (int i = 0; i < values.Length; ++i)
+                Add(values[i]);
+        }
+
         /// <summary>
         /// Moves the last element to the front.
         /// </summary>
