@@ -78,7 +78,7 @@ namespace SynthLib.Music
         {
             try
             {
-                Letter = Letters.IndexOf(name[0]) + 1;
+                Letter = Letters.FirstIndexOf(name[0]) + 1;
             }
             catch
             {

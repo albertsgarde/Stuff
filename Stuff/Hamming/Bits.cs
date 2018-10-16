@@ -123,10 +123,6 @@ namespace Stuff.Hamming
             return new Vector(bits.Select(x => x ? 1d : 0d).ToArray());
         }
 
-        public static Bits operator*(Matrix matrix, Bits bits)
-        {
-            return new Bits((matrix * bits.ToVector()) % 2);
-        }
 
         public override string ToString()
         {

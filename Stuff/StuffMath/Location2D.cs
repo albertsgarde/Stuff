@@ -103,7 +103,7 @@ namespace Stuff.StuffMath
             return lf.PointX(0) + lf.DirectionVector().Project((new Vector2D(this, lf.PointX(0))));
         }
 
-        public Location2D ProjectToLine(LinearParameter lp)
+        public Location2D ProjectToLine(LinearParameter2D lp)
         {
             return lp.Point(0) + lp.DirectionVector().Project((new Vector2D(this, lp.Point(0))));
         }

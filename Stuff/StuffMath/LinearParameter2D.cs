@@ -6,31 +6,31 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class LinearParameter
+    public class LinearParameter2D
     {
         public Vector2D A { get; private set; }
 
         public Vector2D B { get; private set; }
 
-        public LinearParameter(double xA, double xB, double yA, double yB)
+        public LinearParameter2D(double xA, double xB, double yA, double yB)
         {
             A = new Vector2D(xA, yA);
             B = new Vector2D(xB, yB);
         }
 
-        public LinearParameter(Vector2D b, Vector2D a)
+        public LinearParameter2D(Vector2D b, Vector2D a)
         {
             A = a;
             B = b;
         }
 
-        public LinearParameter(Location2D loc1, Location2D loc2)
+        public LinearParameter2D(Location2D loc1, Location2D loc2)
         {
             B = new Vector2D(loc1);
             A = new Vector2D(loc1, loc2);
         }
 
-        public bool CollidesWith(LinearParameter param)
+        public bool CollidesWith(LinearParameter2D param)
         {
             double t = (param.A.X * (B.Y - param.B.Y) - param.A.Y * (B.Y - param.B.X)) / (A.X * param.A.Y - param.A.X * A.Y);
             double s = (A.X * (B.Y - param.B.Y) - A.Y * (B.X - param.B.X)) / (A.X * param.A.Y - param.A.X * A.Y);
@@ -81,7 +81,7 @@ namespace Stuff.StuffMath
             return new LinearFunction(B, A.OrthogonalVector());
         }
 
-        public static implicit operator LinearFunction(LinearParameter lp)
+        public static implicit operator LinearFunction(LinearParameter2D lp)
         {
             return lp.LinearFunction();
         }

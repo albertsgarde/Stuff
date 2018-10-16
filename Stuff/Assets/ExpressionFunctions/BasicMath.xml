@@ -9,6 +9,13 @@
   </function>
   <function>
     <args>1</args>
+    <className>Stuff.StuffMath.Expressions.Functions.Cosh</className>
+    <aliases>
+      <alias>cosh</alias>
+    </aliases>
+  </function>
+  <function>
+    <args>1</args>
     <className>Stuff.StuffMath.Expressions.Functions.Exp</className>
     <aliases>
       <alias>exp</alias>
@@ -26,6 +33,13 @@
     <className>Stuff.StuffMath.Expressions.Functions.Sine</className>
     <aliases>
       <alias>sin</alias>
+    </aliases>
+  </function>
+  <function>
+    <args>1</args>
+    <className>Stuff.StuffMath.Expressions.Functions.Sinh</className>
+    <aliases>
+      <alias>sinh</alias>
     </aliases>
   </function>
   <function>

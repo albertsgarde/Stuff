@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Stuff.StuffMath.Logic.Expressions.Operators;
+using Stuff.StuffMath.Logic.Expressions.Tableau;
 
 namespace Stuff.StuffMath.Logic.Expressions
 {
@@ -152,6 +153,15 @@ namespace Stuff.StuffMath.Logic.Expressions
             while (++i < values.Length)
                 values[i] = false;
         }
+
+        /*public Node NodeTableau(bool value)
+        {
+            return InternalNodeTableau(new List<(Expression exp, bool value)>(), new Dictionary<string, bool>(), value);
+        }*/
+
+        //public abstract Node InternalNodeTableau(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, bool value);
+
+        //public abstract IReadOnlyList<Node> ChildrenNodes(bool value);
 
         public bool Tableau(bool value)
         {

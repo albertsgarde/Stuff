@@ -16,11 +16,21 @@ namespace Stuff
             return result;
         }
 
-        public static int IndexOf<TSource>(this IEnumerable<TSource> list, TSource value)
+        public static int FirstIndexOf<TSource>(this IEnumerable<TSource> list, TSource value)
         {
             for (int i = 0; i < list.Count(); i++)
             {
                 if (list.ElementAt(i).Equals(value))
+                    return i;
+            }
+            throw new Exception("value not in IEnumerable");
+        }
+
+        public static int FirstIndexOf<TSource>(this IEnumerable<TSource> list, Func<TSource, bool> selector)
+        {
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (selector.Invoke(list.ElementAt(i)))
                     return i;
             }
             throw new Exception("value not in IEnumerable");
@@ -132,7 +142,7 @@ namespace Stuff
             return list;
         }
 
-        public static Dictionary<TKey, TValue> Copy<TKey, TValue>(this Dictionary<TKey, TValue> dict)
+        public static Dictionary<TKey, TValue> Copy<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dict)
         {
             var result = new Dictionary<TKey, TValue>();
             foreach (var element in dict)
@@ -140,7 +150,7 @@ namespace Stuff
             return result;
         }
 
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> dict)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> dict)
         {
             var result = new Dictionary<TKey, TValue>();
             foreach (var element in dict)
@@ -148,9 +158,9 @@ namespace Stuff
             return result;
         }
 
-        public static List<T> Copy<T>(this List<T> list)
+        public static List<T> Copy<T>(this IEnumerable<T> list)
         {
-            var result = new List<T>(list.Count);
+            var result = new List<T>(list.Count());
             foreach (var t in list)
                 result.Add(t);
             return result;
@@ -161,6 +171,16 @@ namespace Stuff
             var result = new T[list.Length];
             list.CopyTo(result, 0);
             return result;
+        }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> list1, IEnumerable<T> list2)
+        {
+            foreach(var e in list2)
+            {
+                if (!list1.Contains(e))
+                    return false;
+            }
+            return true;
         }
 
         public static string AsString<T>(this IEnumerable<T> list)

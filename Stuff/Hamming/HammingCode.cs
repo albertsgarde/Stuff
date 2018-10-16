@@ -130,7 +130,7 @@ namespace Stuff.Hamming
         /// <param name="code"></param>
         /// <param name="p"></param>
         /// <returns>The chance of getting a specific code when a specific word is given and the probability of error per bit in the code is p.</returns>
-        public static double ResultChance(Bits word, Bits code, params double[] p)
+        /*public static double ResultChance(Bits word, Bits code, params double[] p)
         {
             Bits correctCode = MatrixHammingCode.WordToCode(word);
             if (code.Length != correctCode.Length)
@@ -146,7 +146,7 @@ namespace Stuff.Hamming
                     totalProb *= code[i] == correctCode[i] ? 1 - p[i] : p[i];
                 return totalProb;
             }
-        }
+        }*/
 
         public static double SpecificCodeProbability(Bits code, params double[] p)
         {
@@ -154,18 +154,18 @@ namespace Stuff.Hamming
             for (int i = 0; i < 16; i++)
             {
                 var bits = new Bits(i >= 8, i % 8 >= 4, i % 4 >= 2, i % 2 >= 1);
-                result += ResultChance(bits, code, p);
+                //result += ResultChance(bits, code, p);
             }
             return result / 16;
         }
 
-        public static double WordWhenCode(Bits code, Bits word, params double[] p)
+        /*public static double WordWhenCode(Bits code, Bits word, params double[] p)
         {
             return ResultChance(word, code, p) * 1/16 / SpecificCodeProbability(code, p) ;
-        }
+        }*/
     }
 
-    public static class MatrixHammingCode
+    /*public static class MatrixHammingCode
     {
         public static Matrix CodeGeneratorMatrix74
         {
@@ -261,5 +261,5 @@ namespace Stuff.Hamming
 
             Console.ReadLine();
         }
-    }
+    }*/
 }

@@ -55,10 +55,7 @@ namespace Stuff.StuffMath.Expressions.Operators
 
         public override Expression Differentiate(string variable)
         {
-            if (right.Evaluate() != double.NaN)
-                return new Multiply(new Multiply (new Power(left, right.Evaluate() - 1), new ValueExpression(right.Evaluate())), left.Differentiate(variable));
-            else
-                return (left.Differentiate(variable)*right/left + new Ln(left)*right.Differentiate(variable))*this;
+            return new Multiply(new Multiply (new Power(left, right.Evaluate() - 1), new ValueExpression(right.Evaluate())), left.Differentiate(variable));
         }
 
         public override Expression Reduce(Dictionary<string, double> values = null)
@@ -69,10 +66,15 @@ namespace Stuff.StuffMath.Expressions.Operators
                 return new ValueExpression(Math.Pow(leftReduced.Evaluate(), rightReduced.Evaluate()));
             else if (leftReduced is Power)
                 return new Power(((Power)leftReduced).Left, (rightReduced * ((Power)leftReduced).Right).Reduce());
-            else if (rightReduced is ValueExpression && ((ValueExpression)rightReduced).Evaluate(values) == 1)
-                 return leftReduced;
-            else
-                return new Power(leftReduced, rightReduced);
+            else if (rightReduced is ValueExpression exponent)
+            {
+                if (exponent.Evaluate(values) == 1)
+                    return leftReduced;
+                else if (exponent.Evaluate(values) == 0)
+                    return 1;
+            }
+            return new Power(leftReduced, rightReduced);
+
         }
 
         public override bool IsEqual(Expression exp)

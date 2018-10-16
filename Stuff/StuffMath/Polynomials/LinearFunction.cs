@@ -236,12 +236,12 @@ namespace Stuff.StuffMath
         
         /// <param name="x">The x-coordinate of the LinearParameter's b vector.</param>
         /// <returns>A LinearParamater that is equivalent to this LinearFunction.</returns>
-        public LinearParameter LinearParameter(double x = 0)
+        public LinearParameter2D LinearParameter(double x = 0)
         {
-            return new LinearParameter(DirectionVector(), new Vector2D(x, Y(x)));
+            return new LinearParameter2D(DirectionVector(), new Vector2D(x, Y(x)));
         }
 
-        public static implicit operator LinearParameter(LinearFunction lf)
+        public static implicit operator LinearParameter2D(LinearFunction lf)
         {
             return lf.LinearParameter();
         }

@@ -20,7 +20,7 @@ namespace Stuff.Hamming
             rand = new Random(seed);
         }
 
-        public void ThreadRun()
+        /*public void ThreadRun()
         {
             var time = DateTime.Now;
             double p = data.P;
@@ -45,6 +45,6 @@ namespace Stuff.Hamming
             //Console.WriteLine(new Data.DataBatch(repeats, failures));
             data.AddBatch(new Data.DataBatch(repeats, failures));
             data.AddTime(DateTime.Now - time);
-        }
+        }*/
     }
 }

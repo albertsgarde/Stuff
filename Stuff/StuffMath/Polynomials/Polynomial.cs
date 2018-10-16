@@ -146,7 +146,7 @@ namespace Stuff.StuffMath
             result[0] = exp.Evaluate(vars);
             long factorial = 1;
             for (int i = 1; i <= degree; i++)
-                result[i] = (exp = exp.Differentiate(variableName)).Evaluate(vars) / (factorial *= i);
+                result[i] = (exp = exp.Differentiate(variableName).Reduce()).Evaluate(vars) / (factorial *= i);
             return new Polynomial(result);
         }
 
@@ -186,7 +186,14 @@ namespace Stuff.StuffMath
             foreach (var coef in coefficients.OrderByDescending(coef => coef.Key))
             {
                 if (coef.Value != 0)
-                    result += " " + (coef.Value > 0 ? "+ " + coef.Value : "- " + -coef.Value) + "x^" + coef.Key;
+                {
+                    if (coef.Key == 0)
+                        result += " + " + coef.Value;
+                    else if (coef.Key == 1)
+                        result += " + " + (coef.Value == 1 ? "" : "" + coef.Value) + "x";
+                    else
+                        result += " + " + (coef.Value == 1 ? "" : "" + coef.Value) + "x^" + coef.Key;
+                }
             }
 
             return (result.Length > 0 ? result.Substring(3) : " 0");

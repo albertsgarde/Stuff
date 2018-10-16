@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.StuffMath.Logic.Expressions.Tableau;
 
 namespace Stuff.StuffMath.Logic.Expressions.Operators
 {
@@ -89,6 +90,46 @@ namespace Stuff.StuffMath.Logic.Expressions.Operators
                     return InternalTableauNextExp(expressions, values, (Right, false));
                 else
                     return true;
+            }
+        }
+
+        public Node InternalNodeTableau(IReadOnlyList<(Expression exp, bool value)> expressions, IReadOnlyDictionary<string, bool> values, bool value)
+        {
+            if (value)
+            {
+
+
+
+
+
+
+                //var children = expressions.Last().exp.ChildrenNodes(expressions.Last().value);
+            }
+            throw new NotImplementedException();
+        }
+
+        public IReadOnlyList<Node> ChildrenNodes(bool value)
+        {
+            throw new NotImplementedException();
+            if (value)
+            {
+                var childExps = new List<(Expression exp, bool value)>()
+                {
+                    (Left, true),
+                    (Right, true)
+                };
+                //return new List<Node>()
+                //{
+                //    new Node(childExps)
+                //};
+            }
+            else
+            {
+                return new List<Node>()
+                {
+                    new Node(Left, false),
+                    new Node(Right, false)
+                };
             }
         }
 

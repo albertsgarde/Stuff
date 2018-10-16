@@ -111,10 +111,6 @@ namespace Stuff.StuffMath
             return new Vector2D(vec.X / divisor, vec.Y / divisor);
         }
 
-        public static Vector2D operator *(Matrix2D m, Vector2D vec)
-        {
-            return vec.ApplyMatrix(m);
-        }
 
         //add this code to class ThreeDPoint as defined previously
         //
@@ -240,10 +236,6 @@ namespace Stuff.StuffMath
             return new Vector2D(length * X / Length, length / Length * Y);
         }
 
-        public Vector2D ApplyMatrix(Matrix2D m)
-        {
-            return X * m.BasisVectorX + Y * m.BasisVectorY;
-        }
 
         public Location2D Location()
         {

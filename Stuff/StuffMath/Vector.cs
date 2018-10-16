@@ -16,6 +16,18 @@ namespace Stuff.StuffMath
             this.vector = vector;
         }
 
+        public Vector(IEnumerable<double> vector) : this(vector.ToArray())
+        {
+
+        }
+
+        public Vector(LEMatrix.MatrixRow mr)
+        {
+            vector = new double[mr.Length];
+            for (int i = 0; i < mr.Length; ++i)
+                vector[i] = mr[i];
+        }
+
         public double this[int i]
         {
             get
@@ -146,6 +158,11 @@ namespace Stuff.StuffMath
         public bool Equals(Vector vec)
         {
             return this.Zip(vec, (x, y) => x == y).Count(x => !x) == 0;
+        }
+
+        public LEMatrix.MatrixRow ToMatrixRow()
+        {
+            return new LEMatrix.MatrixRow(this);
         }
 
         public override string ToString()
