@@ -52,6 +52,7 @@
     <Compile Include="CrossReferencedDictionary.cs" />
     <Compile Include="DSP\Fourier.cs" />
     <Compile Include="DSP\RunningDFT.cs" />
+    <Compile Include="DSP\RunningFrequencyAnalyzer.cs" />
     <Compile Include="Exceptions\InvalidSettingFormatException.cs" />
     <Compile Include="Exceptions\SettingsKeyNotFoundException.cs" />
     <Compile Include="Exceptions\IndexNotFoundException.cs" />
