@@ -88,6 +88,13 @@
     <Compile Include="Statistics\DataSet.cs" />
     <Compile Include="Statistics\StatsUtils.cs" />
     <Compile Include="Statistics\Value.cs" />
+    <Compile Include="StuffMath\Abacus\AbacusInstance.cs" />
+    <Compile Include="StuffMath\Abacus\AbacusMachine.cs" />
+    <Compile Include="StuffMath\Abacus\AbacusMachineState.cs" />
+    <Compile Include="StuffMath\Abacus\AbacusCompiler.cs" />
+    <Compile Include="StuffMath\Abacus\EntryParseException.cs" />
+    <Compile Include="StuffMath\Abacus\INodeList.cs" />
+    <Compile Include="StuffMath\Abacus\Node.cs" />
     <Compile Include="StuffMath\BaseConverter.cs" />
     <Compile Include="StuffMath\BasePhi1.cs" />
     <Compile Include="StuffMath\BasePhi4.cs" />
@@ -161,6 +168,14 @@
     <Compile Include="StuffMath\Regression.cs" />
     <Compile Include="DSP\Signal.cs" />
     <Compile Include="StuffMath\Sphere.cs" />
+    <Compile Include="StuffMath\Structures\IField.cs" />
+    <Compile Include="StuffMath\Structures\Integer.cs" />
+    <Compile Include="StuffMath\Structures\IRing.cs" />
+    <Compile Include="StuffMath\Structures\IVectorSpace.cs" />
+    <Compile Include="StuffMath\Structures\Rational.cs" />
+    <Compile Include="StuffMath\Structures\Real.cs" />
+    <Compile Include="StuffMath\Turing\Instance.cs" />
+    <Compile Include="StuffMath\Turing\TuringMachine.cs" />
     <Compile Include="StuffMath\Vector.cs" />
     <Compile Include="StuffMath\Vector2D.cs" />
     <Compile Include="StuffMath\Vector2F.cs" />
@@ -170,6 +185,10 @@
     <Compile Include="XMLUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Abacus\Functions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Assets\ExpressionFunctions\BasicMath.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

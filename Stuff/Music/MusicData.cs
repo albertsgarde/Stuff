@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Stuff;
 using System.Xml.Linq;
 
-namespace SynthLib.Music
+namespace Stuff.Music
 {
     public class MusicData
     {

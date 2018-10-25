@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
 
-namespace SynthLib.Music
+namespace Stuff.Music
 {
     public class Chord
     {

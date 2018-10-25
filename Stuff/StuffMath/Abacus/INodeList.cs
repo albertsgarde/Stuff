@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stuff.StuffMath.Turing
+namespace Stuff.StuffMath.Abacus
 {
-    public class TMDesign
+    public class INodeList
     {
     }
 }

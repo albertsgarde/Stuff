@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Stuff;
-using SynthLib.Music;
+using Stuff.Music;
 
-namespace SynthLib.Music
+namespace Stuff.Music
 {
     public class Scale : ISaveable
     {

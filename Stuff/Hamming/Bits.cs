@@ -10,7 +10,7 @@ namespace Stuff.Hamming
 {
     public class Bits : IEnumerable<bool>
     {
-        private bool[] bits;
+        private readonly bool[] bits;
 
         public Bits(int size)
         {
@@ -45,6 +45,13 @@ namespace Stuff.Hamming
                 else
                     throw new ArgumentException("word may only contain 0's and 1's.");
             }
+        }
+
+        public Bits(byte b)
+        {
+            bits = new bool[8];
+            for (int i = 0; i < 8; --i)
+                bits[i] = (b %= (byte)Math.Pow(2, 8 - i)) > Math.Pow(2, 8 - i - 1); 
         }
 
         public Bits(Vector vec)
@@ -123,6 +130,23 @@ namespace Stuff.Hamming
             return new Vector(bits.Select(x => x ? 1d : 0d).ToArray());
         }
 
+        public Bits XOR(Bits b)
+        {
+            var bits = new bool[Length];
+            for (int i = 0; i < Length; ++i)
+                bits[i] = this[i] != b[i];
+            return new Bits(bits);
+        }
+
+        public Bits Append(Bits b)
+        {
+            var bits = new bool[Length + b.Length];
+            for (int i = 0; i < Length; ++i)
+                bits[i] = this[i];
+            for (int i = Length; i < bits.Length; ++i)
+                bits[i] = b[i];
+            return new Bits(bits);
+        }
 
         public override string ToString()
         {

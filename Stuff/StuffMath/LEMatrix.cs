@@ -11,10 +11,26 @@ namespace Stuff.StuffMath
     {
         public IReadOnlyList<MatrixRow> Rows { get; }
 
+        public IReadOnlyList<Vector> Columns
+        {
+            get
+            {
+                var result = new double[N][];
+                for (int i = 0; i < N; ++i)
+                    result[i] = new double[M];
+                for (int j = 0; j < M; ++j)
+                {
+                    for (int i = 0; i < N; ++i)
+                        result[i][j] = Rows[j][i];
+                }
+                return result.Select(v => new Vector(v)).ToList();
+            }
+        }
+
         public int M => Rows.Count;
 
         public int N { get; }
-        
+
         public class MatrixRow : IEnumerable<double>
         {
             public IReadOnlyList<double> Data { get; }
@@ -128,6 +144,10 @@ namespace Stuff.StuffMath
             Rows = result;
         }
 
+        public LEMatrix(IEnumerable<Vector> columns) : this(columns.ToArray())
+        {
+        }
+
         public LEMatrix(IEnumerable<double> values, int rows)
         {
             if (values.Count() % rows != 0)
@@ -160,6 +180,41 @@ namespace Stuff.StuffMath
             return new Vector(result);
         }
 
+        public IEnumerable<double> Values()
+        {
+            for (int j = 0; j < M; ++j)
+            {
+                for (int i = 0; i < N; ++i)
+                    yield return this[j][i];
+            }
+        }
+
+        public static bool operator ==(LEMatrix m1, LEMatrix m2)
+        {
+            if (m1.N != m2.N || m1.M != m2.M)
+                return false;
+            for (int j = 0; j < m1.M; ++j)
+            {
+                for (int i = 0; i < m1.N; ++i)
+                    if (m1[j][i] != m2[j][i])
+                        return false;
+            }
+            return true;
+        }
+
+        public static bool operator !=(LEMatrix m1, LEMatrix m2)
+        {
+            if (m1.N != m2.N || m1.M != m2.M)
+                return true;
+            for (int j = 0; j < m1.M; ++j)
+            {
+                for (int i = 0; i < m1.N; ++i)
+                    if (m1[j][i] != m2[j][i])
+                        return true;
+            }
+            return false;
+        }
+
         public static LEMatrix operator+(LEMatrix m1, LEMatrix m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
@@ -175,7 +230,35 @@ namespace Stuff.StuffMath
             return new LEMatrix(result);
         }
 
+        public static LEMatrix operator -(LEMatrix m1, LEMatrix m2)
+        {
+            if (m1.M != m2.M || m1.N != m2.N)
+                throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
+            var result = new MatrixRow[m1.M];
+            for (int j = 0; j < m1.M; ++j)
+            {
+                var row = new double[m1.N];
+                for (int i = 0; i < m1.N; ++i)
+                    row[i] = m1[j][i] - m2[j][i];
+                result[j] = new MatrixRow(row);
+            }
+            return new LEMatrix(result);
+        }
+
         public static LEMatrix operator *(LEMatrix m, double d)
+        {
+            var result = new MatrixRow[m.M];
+            for (int j = 0; j < m.M; ++j)
+            {
+                var row = new double[m.N];
+                for (int i = 0; i < m.N; ++i)
+                    row[i] = m[j][i] * d;
+                result[j] = new MatrixRow(row);
+            }
+            return new LEMatrix(result);
+        }
+
+        public static LEMatrix operator *(double d, LEMatrix m)
         {
             var result = new MatrixRow[m.M];
             for (int j = 0; j < m.M; ++j)
@@ -218,7 +301,7 @@ namespace Stuff.StuffMath
             return N == M;
         }
 
-        public LEMatrix UnitMatrix(int dim)
+        public static LEMatrix UnitMatrix(int dim)
         {
             var result = new MatrixRow[dim];
             for (int j = 0; j < dim; ++j)
@@ -352,13 +435,17 @@ namespace Stuff.StuffMath
                         result = result.ScaleRow(m, 1 / result[m][n]);
                     }
                 }
+                //Run through all rows above and set to zero.
+                for (int j = 0; j < m; ++j)
+                {
+                    if (result[j][n] != 0)
+                        result = result.AddScaledRow(m, -result[j][n], j);
+                }
                 //Run through all rows below and set to zero.
                 for (int j = m + 1; j < M; ++j)
                 {
                     if (result[j][n] != 0)
-                    {
                         result = result.AddScaledRow(m, -result[j][n], j);
-                    }
                 }
                 ++m;
             }
@@ -406,6 +493,29 @@ namespace Stuff.StuffMath
             return result;
         }
 
+        public LEMatrix Join(LEMatrix m)
+        {
+            return new LEMatrix(Columns.Concat(m.Columns));
+        }
+
+        public (LEMatrix left, LEMatrix right) Split(int column)
+        {
+            var columns = Columns;
+            return (new LEMatrix(columns.Take(column)), new LEMatrix(columns.Skip(column)));
+        }
+
+        public LEMatrix Inverse()
+        {
+            if (!IsSquare())
+                throw new ArgumentException("Only square matrices can be inverted.");
+            var t1 = Join(UnitMatrix(N));
+            var t2 = t1.ToTrap();
+            var (left, right) = t2.Split(N);
+            if (left != UnitMatrix(N))
+                throw new ArgumentException("Only regular matrices can be inverted.");
+            return right;
+        }
+
         public LinearEquationSystem ToLinearEquationSystem()
         {
             return new LinearEquationSystem(Rows.Select(r => r.ToLinearEquation()));
@@ -425,6 +535,29 @@ namespace Stuff.StuffMath
                 result += Environment.NewLine;
             }
             return result;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is LEMatrix m)
+            {
+                return this == m;
+            }
+            else if (obj is Vector v)
+            {
+                return Equals(new LEMatrix(v));
+            }
+            else if (obj is MatrixRow r)
+            {
+                return Equals(new LEMatrix(r));
+            }
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, Values());
         }
     }
 }

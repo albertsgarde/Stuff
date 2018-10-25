@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SynthLib.Music
+namespace Stuff.Music
 {
     /// <summary>
     /// Does not yet have full support for augmented and diminished intervals.

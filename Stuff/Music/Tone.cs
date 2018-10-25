@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Stuff;
 
-namespace SynthLib.Music
+namespace Stuff.Music
 {
     public class Tone
     {
@@ -104,7 +104,7 @@ namespace SynthLib.Music
 
         public static Tone ToneFromFrequency(float frequency)
         {
-            var toneNumber = 69 + (int)Math.Round(Math.Log(frequency / 440d) / Math.Log(Math.Pow(2, -12)));
+            var toneNumber = 69 + (int)Math.Round(Math.Log(frequency / 440d) / Math.Log(Math.Pow(2, 1d / 12)));
             return new Tone(toneNumber);
         }
 

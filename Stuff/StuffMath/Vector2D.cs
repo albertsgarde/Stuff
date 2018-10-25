@@ -1,8 +1,9 @@
 ﻿using System;
+using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector2D
+    public class Vector2D : IVectorSpace<Vector2D, Real>
     {
         public double X { get; }
 
@@ -106,11 +107,6 @@ namespace Stuff.StuffMath
             return new Vector2D(vec.X * multiplier, vec.Y * multiplier);
         }
 
-        public static Vector2D operator /(double divisor, Vector2D vec)
-        {
-            return new Vector2D(vec.X / divisor, vec.Y / divisor);
-        }
-
 
         //add this code to class ThreeDPoint as defined previously
         //
@@ -140,6 +136,10 @@ namespace Stuff.StuffMath
         public static Vector2D UnitX { get; } = new Vector2D(1, 0);
 
         public static Vector2D UnitY { get; } = new Vector2D(0, 1);
+
+        public Vector2D ZERO => throw new NotImplementedException();
+
+        public Real ONE => throw new NotImplementedException();
 
         public bool IsParallel(Vector2D vec)
         {
@@ -258,6 +258,11 @@ namespace Stuff.StuffMath
             return vec != null && ((vecVec = vec as Vector2D) != null) && Misc.DoubleEquals(Length, vecVec.Length) && Misc.DoubleEquals(Radians, vecVec.Radians);
         }
 
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, X, Y);
+        }
+
         public string ToLatex()
         {
             return "\\begin{ pmatrix}" + X + "\\\\" + Y + "\\end{ pmatrix}";
@@ -266,6 +271,26 @@ namespace Stuff.StuffMath
         public override string ToString()
         {
             return "(" + X + "," + Y + ")";
+        }
+
+        public Vector2D Add(Vector2D t)
+        {
+            return this + t;
+        }
+
+        public Vector2D AdditiveInverse()
+        {
+            return -this;
+        }
+
+        public Vector2D Multiply(Real s)
+        {
+            return this * (double)s;
+        }
+
+        public bool EqualTo(Vector2D t)
+        {
+            return X == t.X && Y == t.Y;
         }
     }
 }

@@ -19,23 +19,11 @@ namespace Stuff
         /// </summary>
         private T[] right;
 
-        public int Length { get; private set; }
+        public int Length { get; }
 
-        public int Start
-        {
-            get
-            {
-                return -left.Length;
-            }
-        }
+        public int Start => -left.Length;
 
-        public int End
-        {
-            get
-            {
-                return right.Length;
-            }
-        }
+        public int End => right.Length;
 
         public CenteredArray(int length)
         {

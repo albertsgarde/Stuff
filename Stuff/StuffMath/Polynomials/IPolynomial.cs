@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {

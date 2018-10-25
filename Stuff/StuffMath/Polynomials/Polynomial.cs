@@ -1,5 +1,6 @@
 ﻿using Stuff.StuffMath.Expressions;
 using Stuff.StuffMath.Expressions.Operators;
+using Stuff.StuffMath.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace Stuff.StuffMath
     public class Polynomial : IPolynomial
     {
         private readonly Dictionary<int, double> coefficients;
+
+        public IPolynomial ZERO => throw new NotImplementedException();
+
+        public Real ONE => throw new NotImplementedException();
 
         /// <summary>
         /// Creates a new Polynomial with all coefficients set to 0.

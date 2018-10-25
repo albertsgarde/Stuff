@@ -150,7 +150,9 @@ namespace Stuff
             return result;
         }
 
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> dict)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IDictionary<TKey, TValue> dict) => dict.ToDictionary(k => k.Key, v => v.Value);
+
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> dict)
         {
             var result = new Dictionary<TKey, TValue>();
             foreach (var element in dict)
@@ -171,6 +173,16 @@ namespace Stuff
             var result = new T[list.Length];
             list.CopyTo(result, 0);
             return result;
+        }
+
+        public static bool Contains<T>(this IEnumerable<T> list, Func<T, bool> selector)
+        {
+            foreach(var t in list)
+            {
+                if (selector.Invoke(t))
+                    return true;
+            }
+            return false;
         }
 
         public static bool ContainsAll<T>(this IEnumerable<T> list1, IEnumerable<T> list2)

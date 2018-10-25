@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Stuff
 {
@@ -125,6 +126,27 @@ namespace Stuff
         public static long Milliseconds(this DateTime dt)
         {
             return dt.Ticks / TimeSpan.TicksPerMillisecond;
+        }
+
+        public static int HashCode(int start, int multiConstant, IEnumerable<object> objects)
+        {
+            unchecked
+            {
+                int hash = start;
+                foreach (object obj in objects)
+                    hash = hash * multiConstant + obj.GetHashCode();
+                return hash;
+            }
+        }
+
+        public static int HashCode(int start, int multiConstant, params object[] objects)
+        {
+            return HashCode(start, multiConstant, objects);
+        }
+
+        public static string RemoveWhiteSpace(this string s)
+        {
+            return Regex.Replace(s, @"\s+", "");
         }
     }
 }

@@ -18,6 +18,14 @@ namespace Stuff.StuffMath
 
         private double length;
 
+        public Vector3D()
+        {
+            X = 0;
+            Y = 0;
+            Z = 0;
+            length = 0;
+        }
+
         public Vector3D(double x, double y, double z)
         {
             X = x;
@@ -65,7 +73,10 @@ namespace Stuff.StuffMath
                 if (lengthFound)
                     return length;
                 else
-                    return length = Math.Sqrt(X*X+Y*Y+Z*Z);
+                {
+                    lengthFound = true;
+                    return length = Math.Sqrt(X * X + Y * Y + Z * Z);
+                }
             }
         }
 
@@ -85,6 +96,11 @@ namespace Stuff.StuffMath
         }
 
         public static Vector3D operator *(Vector3D vec, double multiplier)
+        {
+            return new Vector3D(vec.X * multiplier, vec.Y * multiplier, vec.Z * multiplier);
+        }
+
+        public static Vector3D operator *(double multiplier, Vector3D vec)
         {
             return new Vector3D(vec.X * multiplier, vec.Y * multiplier, vec.Z * multiplier);
         }
