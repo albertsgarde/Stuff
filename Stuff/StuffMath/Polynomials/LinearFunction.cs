@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Stuff.StuffMath.Expressions;
+using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
@@ -23,6 +25,14 @@ namespace Stuff.StuffMath
         /// ax+by+c=0
         /// </summary>
         public double C { get; private set; }
+
+        public int Degree => 1;
+
+        public IPolynomial ZERO => new LinearFunction(0, 0);
+
+        public Real ONE => 1;
+
+        public double this[int exponent] => throw new NotImplementedException();
 
         /// <summary>
         /// ax+by+c=0
@@ -275,6 +285,47 @@ namespace Stuff.StuffMath
                 text += C + " ";
             }
             return text + "= 0";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is IPolynomial p && AsPolynomial() == p;
+        }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, A, B, C);
+        }
+
+        public IEnumerator<double> GetEnumerator()
+        {
+            yield return C / B * -1;
+            yield return A / B * -1;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IPolynomial Add(IPolynomial t)
+        {
+            return AsPolynomial() + t.AsPolynomial();
+        }
+
+        public IPolynomial AdditiveInverse()
+        {
+            return new LinearFunction(-A, -B, -C);
+        }
+
+        public IPolynomial Multiply(Real s)
+        {
+            return new LinearFunction(A * (double)s, B * (double)s, C * (double)s);
+        }
+
+        public bool EqualTo(IPolynomial t)
+        {
+            return Equals(t);
         }
     }
 }

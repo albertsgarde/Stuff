@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stuff.StuffMath.Turing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -67,6 +68,11 @@ namespace Stuff.StuffMath.Abacus
                 return endNode;
             else
                 return node + nodeNumStart - 1;
+        }
+
+        public TuringMachine ToTuringMachine()
+        {
+
         }
 
         public string AsString()

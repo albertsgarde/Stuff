@@ -8,8 +8,10 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public interface IPolynomial
+    public interface IPolynomial : IEnumerable<double>, IVectorSpace<IPolynomial, Real>
     {
+        int Degree { get; }
+
         /// <param name="x">The point at which to calculate the value.</param>
         /// <returns>Returns the polynomials value at the specified point.</returns>
         double Y(double x);
@@ -31,6 +33,11 @@ namespace Stuff.StuffMath
         /// <param name="exponent">The exponent whose coefficient is to be returned.</param>
         /// <returns>The coefficient of the specified exponent.</returns>
         double Coefficient(int exponent);
+
+        double this[int exponent]
+        {
+            get;
+        }
 
         /// <returns>Returns a copy of the IPolynomial moved the specified amount amount up. (added the amount to the constant)</returns>
         IPolynomial MoveVertical(double k);

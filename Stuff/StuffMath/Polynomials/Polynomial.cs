@@ -2,6 +2,7 @@
 using Stuff.StuffMath.Expressions.Operators;
 using Stuff.StuffMath.Structures;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,11 @@ namespace Stuff.StuffMath
     {
         private readonly Dictionary<int, double> coefficients;
 
-        public IPolynomial ZERO => throw new NotImplementedException();
+        public IPolynomial ZERO => new Polynomial();
 
-        public Real ONE => throw new NotImplementedException();
+        public Real ONE => 1;
+
+        public int Degree => coefficients.Keys.Max();
 
         /// <summary>
         /// Creates a new Polynomial with all coefficients set to 0.
@@ -90,6 +93,26 @@ namespace Stuff.StuffMath
             return new Polynomial(result);
         }
 
+        public static Polynomial operator -(Polynomial pol)
+        {
+            return new Polynomial(pol.coefficients.Select(kv => new KeyValuePair<int, double>(kv.Key, -kv.Value)).ToArray());
+        }
+
+        public static Polynomial operator *(Polynomial pol, double d)
+        {
+            return new Polynomial(pol.coefficients.Select(kv => new KeyValuePair<int, double>(kv.Key, kv.Value * d)).ToArray());
+        }
+
+        public static bool operator ==(Polynomial pol1, IPolynomial pol2)
+        {
+            return pol1.Equals(pol2);
+        }
+
+        public static bool operator !=(Polynomial pol1, IPolynomial pol2)
+        {
+            return !pol1.Equals(pol2);
+        }
+
         public double Y(double x)
         {
             return coefficients.Sum(coef => Math.Pow(x, coef.Key) * coef.Value);
@@ -126,6 +149,8 @@ namespace Stuff.StuffMath
         {
             return coefficients.ContainsKey(exponent) ? coefficients[exponent] : 0;
         }
+
+        public double this[int exponent] => Coefficient(exponent);
 
         public Polynomial AsPolynomial()
         {
@@ -202,6 +227,56 @@ namespace Stuff.StuffMath
             }
 
             return (result.Length > 0 ? result.Substring(3) : " 0");
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is IPolynomial p)
+            {
+                for (int i = 0; i < Math.Max(Degree, p.Degree); ++i)
+                {
+                    if (this[i] != p[i])
+                        return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, coefficients.Select(kv => kv.Key * 3 + kv.Value * 5));
+        }
+
+        public IPolynomial Add(IPolynomial t)
+        {
+            return this + t.AsPolynomial();
+        }
+
+        public IPolynomial AdditiveInverse()
+        {
+            return -this;
+        }
+
+        public IPolynomial Multiply(Real s)
+        {
+            return this * (double)s;
+        }
+
+        public bool EqualTo(IPolynomial t)
+        {
+            return Equals(t);
+        }
+
+        public IEnumerator<double> GetEnumerator()
+        {
+            for (int i = 0; i < coefficients.Keys.Max(); ++i)
+                yield return coefficients.ContainsKey(i) ? coefficients[i] : 0;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

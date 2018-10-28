@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector : IEnumerable<double>
+    public class Vector : IEnumerable<double>, IVectorSpace<Vector, Real>
     {
         private readonly double[] vector;
 
@@ -69,6 +70,10 @@ namespace Stuff.StuffMath
             }
         }
 
+        public Vector ZERO => throw new NotImplementedException();
+
+        public Real ONE => throw new NotImplementedException();
+
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
@@ -89,6 +94,15 @@ namespace Stuff.StuffMath
             if (vecA.Size != vecB.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
             return new Vector(vecA.Zip(vecB, (x, y) => x - y).ToArray());
+        }
+
+        /// <summary>
+        /// The vectors must have the same number of dimensions.
+        /// </summary>
+        /// <returns>The right hand subtracted from the left hand.</returns>
+        public static Vector operator -(Vector vec)
+        {
+            return new Vector(vec.Select(d => -d).ToArray());
         }
 
         /// <returns>The vector multiplied by the double.</returns>
@@ -171,6 +185,26 @@ namespace Stuff.StuffMath
             foreach (var d in vector)
                 result += d + ", ";
             return result.Substring(0, result.Length - 2) + ")";
+        }
+
+        public Vector Add(Vector t)
+        {
+            return this + t;
+        }
+
+        public Vector AdditiveInverse()
+        {
+            return -this;
+        }
+
+        public Vector Multiply(Real s)
+        {
+            return this * (double)s;
+        }
+
+        public bool EqualTo(Vector t)
+        {
+            return this == t;
         }
     }
 }

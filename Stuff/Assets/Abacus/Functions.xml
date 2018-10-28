@@ -113,6 +113,10 @@
       +:1:0;
     </code>
   </function>
+  <!--<function>
+    <name>lessThan</name>
+    <description>1 -> 3 if [1] less than [2]. 0 -> 3 otherwise.</description>
+  </function>-->
   <function>
     <name>%</name>
     <code>

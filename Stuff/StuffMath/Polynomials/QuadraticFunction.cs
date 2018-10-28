@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Stuff.StuffMath.Complex;
+using Stuff.StuffMath.Structures;
+using System.Collections;
 
 namespace Stuff.StuffMath
 {
@@ -17,11 +19,31 @@ namespace Stuff.StuffMath
 
         public double C { get; private set; }
 
+        public int Degree => 2;
+
+        public IPolynomial ZERO => NULL;
+
+        private static readonly QuadraticFunction NULL = new QuadraticFunction(0, 0, 0);
+
+        public Real ONE => 1;
+
+        public double this[int exponent] => throw new NotImplementedException();
+
         public QuadraticFunction(double a, double b, double c)
         {
             A = a;
             B = b;
             C = c;
+        }
+
+        public static bool operator ==(QuadraticFunction qf1, QuadraticFunction qf2)
+        {
+            return qf1.A == qf2.A && qf1.B == qf2.B && qf1.C == qf2.C;
+        }
+
+        public static bool operator !=(QuadraticFunction qf1, QuadraticFunction qf2)
+        {
+            return qf1.A != qf2.A || qf1.B != qf2.B || qf1.C != qf2.C;
         }
 
         public double Y(double x)
@@ -110,6 +132,48 @@ namespace Stuff.StuffMath
         public override string ToString()
         {
             return "y = " + A + "x^2 " + (B >= 0 ? "+ " + B : "- " + B * -1) + "x " + (C >= 0 ? "+ " + C : "- " + C * -1); 
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is IPolynomial p && AsPolynomial() == p;
+        }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, A, B, C);
+        }
+
+        public IEnumerator<double> GetEnumerator()
+        {
+            yield return C;
+            yield return B;
+            yield return A;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IPolynomial Add(IPolynomial t)
+        {
+            return AsPolynomial() + t.AsPolynomial();
+        }
+
+        public IPolynomial AdditiveInverse()
+        {
+            return new QuadraticFunction(-A, -B, -C);
+        }
+
+        public IPolynomial Multiply(Real s)
+        {
+            return new QuadraticFunction(A * (double)s, B * (double)s, C * (double)s);
+        }
+
+        public bool EqualTo(IPolynomial t)
+        {
+            return Equals(t);
         }
     }
 }

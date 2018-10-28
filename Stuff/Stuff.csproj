@@ -169,6 +169,7 @@
     <Compile Include="DSP\Signal.cs" />
     <Compile Include="StuffMath\Sphere.cs" />
     <Compile Include="StuffMath\Structures\IField.cs" />
+    <Compile Include="StuffMath\Structures\IGroup.cs" />
     <Compile Include="StuffMath\Structures\Integer.cs" />
     <Compile Include="StuffMath\Structures\IRing.cs" />
     <Compile Include="StuffMath\Structures\IVectorSpace.cs" />
@@ -201,8 +202,6 @@
     <Content Include="Assets\Logic\Tableau\Operators.xml" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CodeBreak\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
