@@ -105,7 +105,7 @@
     <Compile Include="StuffMath\Complex\CQuadraticFunction.cs" />
     <Compile Include="StuffMath\Complex\Extensions.cs" />
     <Compile Include="StuffMath\Complex\ICPolynomial.cs" />
-    <Compile Include="StuffMath\CubicFunction.cs" />
+    <Compile Include="StuffMath\Polynomials\CubicFunction.cs" />
     <Compile Include="StuffMath\Complex\CVector.cs" />
     <Compile Include="StuffMath\Expressions\Expression.cs" />
     <Compile Include="StuffMath\Expressions\ExpressionCompiler.cs" />

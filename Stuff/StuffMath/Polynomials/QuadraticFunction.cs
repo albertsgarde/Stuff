@@ -27,7 +27,7 @@ namespace Stuff.StuffMath
 
         public Real ONE => 1;
 
-        public double this[int exponent] => throw new NotImplementedException();
+        public double this[int exponent] => Coefficient(exponent);
 
         public QuadraticFunction(double a, double b, double c)
         {

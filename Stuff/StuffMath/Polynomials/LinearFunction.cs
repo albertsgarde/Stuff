@@ -32,7 +32,7 @@ namespace Stuff.StuffMath
 
         public Real ONE => 1;
 
-        public double this[int exponent] => throw new NotImplementedException();
+        public double this[int exponent] => Coefficient(exponent);
 
         /// <summary>
         /// ax+by+c=0
@@ -153,7 +153,7 @@ namespace Stuff.StuffMath
             return (A * a + C) / B * -1 * (b - a) + (A * (b-a) + C) / B * (b - a) * -0.5;
         }
 
-        public  double Coefficient(int exponent)
+        public double Coefficient(int exponent)
         {
             switch(exponent)
             {

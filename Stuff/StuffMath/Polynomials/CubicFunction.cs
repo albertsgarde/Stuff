@@ -1,6 +1,8 @@
 ﻿using Stuff.StuffMath.Expressions;
 using Stuff.StuffMath.Expressions.Operators;
+using Stuff.StuffMath.Structures;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +19,16 @@ namespace Stuff.StuffMath
         public double C { get; private set; }
 
         public double D { get; private set; }
+
+        public int Degree => 3;
+
+        public IPolynomial ZERO => NULL;
+
+        private static readonly CubicFunction NULL = new CubicFunction(0, 0, 0, 0);
+
+        public Real ONE => 1;
+
+        public double this[int exponent] => Coefficient(exponent);
 
         public CubicFunction(double a, double b, double c, double d)
         {
@@ -91,7 +103,50 @@ namespace Stuff.StuffMath
 
         public override string ToString()
         {
-            return "y = " + A + "x^3 " + (B >= 0 ? "+ " + B : "- " + B * -1) + "x^2 " + (C >= 0 ? "+ " + C : "- " + C * -1) + "x " + (D >= 0 ? "+ " + D : "- " + D * -1); 
+            return "y = " + A + "x^3 " + (B >= 0 ? "+ " + B : "- " + B * -1) + "x^2 " + (C >= 0 ? "+ " + C : "- " + C * -1) + "x " + (D >= 0 ? "+ " + D : "- " + D * -1);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is IPolynomial p && AsPolynomial() == p;
+        }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, A, B, C, D);
+        }
+
+        public IEnumerator<double> GetEnumerator()
+        {
+            yield return D;
+            yield return C;
+            yield return B;
+            yield return A;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IPolynomial Add(IPolynomial t)
+        {
+            return AsPolynomial().Add(t);
+        }
+
+        public IPolynomial AdditiveInverse()
+        {
+            return new CubicFunction(-A, -B, -C, -D);
+        }
+
+        public IPolynomial Multiply(Real s)
+        {
+            return new CubicFunction(A * (double)s, B * (double)s, C * (double)s, D * (double)s);
+        }
+
+        public bool EqualTo(IPolynomial t)
+        {
+            return AsPolynomial().EqualTo(t);
         }
     }
 }
