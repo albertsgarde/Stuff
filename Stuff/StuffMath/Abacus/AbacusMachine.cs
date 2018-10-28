@@ -70,9 +70,106 @@ namespace Stuff.StuffMath.Abacus
                 return node + nodeNumStart - 1;
         }
 
-        public TuringMachine ToTuringMachine()
+        private List<State> AddToTuring(int reg, int startNode)
         {
+            var result = new List<State>();
+            var node = startNode;
 
+            for (int i = 0; i < reg - 1; ++i)
+            {
+                result.Add(new State((TMAction.Right, node + 1), (TMAction.Right, node)));
+                node++;
+            }
+
+            for (int i = 0; i < Registers - reg; ++i)
+            {
+                result.Add(new State((TMAction.Print, node + 1), (TMAction.Right, node)));
+                node++;
+                result.Add(new State((TMAction.Halt, -1), (TMAction.Right, node + 1)));
+                node++;
+                result.Add(new State((TMAction.Right, node + 1), (TMAction.Erase, node)));
+                node++;
+            }
+
+            result.Add(new State((TMAction.Print, node + 1), (TMAction.Right, node)));
+            node++;
+
+            for (int i = 0; i < Registers - 1; ++i)
+            {
+                result.Add(new State((TMAction.Left, node + 1), (TMAction.Left, node)));
+                node++;
+            }
+
+            result.Add(new State((TMAction.Right, node + 1/* TODO: Replace with addNodes target node */), (TMAction.Left, node)));
+            node++;
+            return result;
+        }
+
+        private List<State> SubtractToTuring(int reg, int startNode)
+        {
+            var result = new List<State>();
+            var node = startNode;
+
+            for (int i = 0; i < reg - 1; ++i)
+            {
+                result.Add(new State((TMAction.Right, node + 1), (TMAction.Right, node)));
+                node++;
+            }
+
+            result.Add(new State((TMAction.Halt, -1), (TMAction.Right, node + 1)));
+            node++;
+            var ifNodeNum = node;
+            //If node
+            node++;
+            var zNodes = new List<State>();
+            var zeroNodeNum = node;
+            
+            for (int i = 0; i < reg - 1; ++i)
+            {
+                zNodes.Add(new State((TMAction.Left, node + 1), (TMAction.Left, node)));
+                node++;
+            }
+
+            zNodes.Add(new State((TMAction.Right, node + 1/* TODO: Replace with subtractNodes e-target node */), (TMAction.Left, node)));
+            node++;
+
+            var oNodes = new List<State>();
+            var oneNodeNum = node;
+
+            for (int i = 0; i < Registers - reg - 1; ++i)
+            {
+                oNodes.Add(new State((TMAction.Right, node + 1), (TMAction.Right, node)));
+                node++;
+            }
+
+            oNodes.Add(new State((TMAction.Left, node + 1), (TMAction.Right, node)));
+            node++;
+
+            for (int i = 0; i < Registers - reg; ++i)
+            {
+                oNodes.Add(new State((TMAction.Left, node + 1), (TMAction.Erase, node)));
+                node++;
+                oNodes.Add(new State((TMAction.Print, node + 1), (TMAction.Left, node)));
+                node++;
+                oNodes.Add(new State((TMAction.Halt, -1), (TMAction.Left, node + 1)));
+                node++;
+            }
+
+            oNodes.Add(new State((TMAction.Left, node + 1), (TMAction.Erase, node)));
+            node++;
+
+            for (int i = 0; i < reg - 1; ++i)
+            {
+                oNodes.Add(new State((TMAction.Left, node + 1), (TMAction.Left, node)));
+                node++;
+            }
+
+            oNodes.Add(new State((TMAction.Right, node + 1/* TODO: Replace with subtractNodes target node */), (TMAction.Left, node)));
+
+            result.Add(new State((TMAction.Left, zeroNodeNum), (TMAction.Right, oneNodeNum)));
+            result.Concat(zNodes);
+            result.Concat(oNodes);
+            return result;
         }
 
         public string AsString()
