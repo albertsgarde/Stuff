@@ -53,7 +53,7 @@ namespace Stuff.StuffMath
 
         public  IPolynomial Differentiate()
         {
-            return new LinearFunction(A * 2, B);
+            return new LineEquation(A * 2, B);
         }
 
         public IPolynomial Integrate()
@@ -83,7 +83,12 @@ namespace Stuff.StuffMath
 
         public Polynomial AsPolynomial()
         {
-            return new Polynomial(new KeyValuePair<int, double>(2, A), new KeyValuePair<int, double>(1, B), new KeyValuePair<int, double>(0, C));
+            return new Polynomial((2, A), (1, B), (0, C));
+        }
+
+        public Vector ToVector()
+        {
+            return new Vector(C, B, A);
         }
 
         public IPolynomial MoveVertical(double k)

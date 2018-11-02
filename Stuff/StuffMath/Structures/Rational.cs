@@ -26,7 +26,10 @@ namespace Stuff.StuffMath.Structures
         public Rational(Integer numerator, Integer denominator)
         {
             Numerator = numerator;
+            if (denominator == 0)
+                throw new ArgumentException("Denominator cannot be 0.");
             Denominator = denominator;
+            Reduce();
         }
 
         public static explicit operator double(Rational r)
@@ -72,6 +75,8 @@ namespace Stuff.StuffMath.Structures
 
         public Rational MultiplicativeInverse()
         {
+            if (Numerator == 0)
+                throw new InvalidOperationException("0 has no mulitplicative inverse");
             return new Rational(Denominator, Numerator);
         }
 

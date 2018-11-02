@@ -28,15 +28,22 @@ namespace Stuff.StuffMath
             coefficients = new Dictionary<int, double>();
         }
 
-        public Polynomial(params KeyValuePair<int, double>[] coefs)
+        public Polynomial(params (int exponent, double coef)[] coefs)
         {
             coefficients = new Dictionary<int, double>();
             foreach (var coef in coefs)
             {
-                if (coef.Key < 0)
+                if (coef.exponent < 0)
                     throw new Exception("Polynomials cannot contain exponents below 0.");
-                coefficients[coef.Key] = coef.Value;
+                coefficients[coef.exponent] = coef.coef;
             }
+        }
+
+        public Polynomial(params double[] coefs)
+        {
+            coefficients = new Dictionary<int, double>();
+            for (int i = 0; i < coefs.Length; ++i)
+                coefficients[i] = coefs[i];
         }
 
         public Polynomial(Dictionary<int, double> coefs)
@@ -75,6 +82,13 @@ namespace Stuff.StuffMath
             coefficients[int.Parse(part.Substring(part.IndexOf('^') + 1))] = double.Parse(part.Substring(0, part.IndexOf('x')));
         }
 
+        public Polynomial(Vector v)
+        {
+            coefficients = new Dictionary<int, double>();
+            for (int i = 0; i < v.Size; ++i)
+                coefficients[i] = v[i];
+        }
+
         public static Polynomial operator+(Polynomial pol1, Polynomial pol2)
         {
             var result = new Dictionary<int, double>();
@@ -95,12 +109,12 @@ namespace Stuff.StuffMath
 
         public static Polynomial operator -(Polynomial pol)
         {
-            return new Polynomial(pol.coefficients.Select(kv => new KeyValuePair<int, double>(kv.Key, -kv.Value)).ToArray());
+            return new Polynomial(pol.coefficients.Select(kv => (kv.Key, -kv.Value)).ToArray());
         }
 
         public static Polynomial operator *(Polynomial pol, double d)
         {
-            return new Polynomial(pol.coefficients.Select(kv => new KeyValuePair<int, double>(kv.Key, kv.Value * d)).ToArray());
+            return new Polynomial(pol.coefficients.Select(kv => (kv.Key, kv.Value * d)).ToArray());
         }
 
         public static bool operator ==(Polynomial pol1, IPolynomial pol2)
@@ -129,6 +143,24 @@ namespace Stuff.StuffMath
             return new Polynomial(result);
         }
 
+        public static LEMatrix DifferentiationMatrix(int degree)
+        {
+            var result = new LEMatrix.MatrixRow[degree];
+            for (int j = 0; j < result.Length; ++j)
+            {
+                var row = new double[degree + 1];
+                for (int i = 0; i < row.Length; ++i)
+                {
+                    if (i - j == 1)
+                        row[i] = i;
+                    else
+                        row[i] = 0;
+                }
+                result[j] = new LEMatrix.MatrixRow(row);
+            }
+            return new LEMatrix(result);
+        }
+
         public IPolynomial Integrate()
         {
             var result = new Dictionary<int, double>();
@@ -152,9 +184,19 @@ namespace Stuff.StuffMath
 
         public double this[int exponent] => Coefficient(exponent);
 
-        public Polynomial AsPolynomial()
+        public Polynomial AsPolynomial() => this;
+
+        public Vector ToVector()
         {
-            return this;
+            var result = new double[Degree + 1];
+            for (int i = 0; i <= Degree; ++i)
+            {
+                if (coefficients.ContainsKey(i))
+                    result[i] = coefficients[i];
+                else
+                    result[i] = 0;
+            }
+            return new Vector(result);
         }
 
         /// <summary>

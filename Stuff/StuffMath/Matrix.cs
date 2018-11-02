@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stuff.StuffMath.Structures;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,23 +8,23 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class LEMatrix
+    public class Matrix<F> : IVectorSpace<Matrix<F>, F> where F : IField<F>
     {
-        public IReadOnlyList<MatrixRow> Rows { get; }
+        public IReadOnlyList<MatrixRow<F>> Rows { get; }
 
-        public IReadOnlyList<LEVector> Columns
+        public IReadOnlyList<Vector<F>> Columns
         {
             get
             {
-                var result = new double[N][];
+                var result = new F[N][];
                 for (int i = 0; i < N; ++i)
-                    result[i] = new double[M];
+                    result[i] = new F[M];
                 for (int j = 0; j < M; ++j)
                 {
                     for (int i = 0; i < N; ++i)
                         result[i][j] = Rows[j][i];
                 }
-                return result.Select(v => new LEVector(v)).ToList();
+                return result.Select(v => new Vector<F>(v)).ToList();
             }
         }
 
@@ -31,82 +32,7 @@ namespace Stuff.StuffMath
 
         public int N { get; }
 
-        public class MatrixRow : IEnumerable<double>
-        {
-            public IReadOnlyList<double> Data { get; }
-
-            public int Length => Data.Count;
-
-            public MatrixRow(params double[] data)
-            {
-                Data = data.Copy();
-            }
-
-            public MatrixRow(int length, double value = 0)
-            {
-                var data = new double[length];
-                for (int i = 0; i < length; ++i)
-                    data[i] = value;
-                Data = data;
-            }
-
-            public MatrixRow(LEVector v)
-            {
-                Data = v.ToArray();
-            }
-
-            public double this[int index] => Data[index];
-
-            public MatrixRow Scale(double scalar)
-            {
-                var result = new double[Length];
-                for (int i = 0; i < Length; ++i)
-                    result[i] = Data[i] * scalar;
-                return new MatrixRow(result);
-            }
-
-            public MatrixRow Add(MatrixRow mr)
-            {
-                if (Length != mr.Length)
-                    throw new ArgumentException("In order to add two rows, they must have the same length.");
-                var result = new double[Length];
-                for (int i = 0; i < Length; ++i)
-                    result[i] = Data[i] + mr[i];
-                return new MatrixRow(result);
-            }
-
-            public LEVector ToLEVector()
-            {
-                return new LEVector(this);
-            }
-
-            public LinearEquation ToLinearEquation()
-            {
-                return new LinearEquation(Data.Last(), Data.Take(Data.Count - 1));
-            }
-
-            public IEnumerator<double> GetEnumerator()
-            {
-                return Data.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            public override string ToString()
-            {
-                var result = "[";
-                for (int i = 0; i < Length - 1; ++i)
-                {
-                    result += Data[i] + ",";
-                }
-                return result + Data[Length - 1] + "]";
-            }
-        }
-
-        public LEMatrix(params MatrixRow[] rows)
+        public Matrix(params MatrixRow[] rows)
         {
             N = rows.First().Length;
             for (int i = 1; i < rows.Length; ++i)
@@ -117,12 +43,12 @@ namespace Stuff.StuffMath
             Rows = rows.Copy();
         }
 
-        public LEMatrix(IEnumerable<MatrixRow> rows) : this(rows.ToArray())
+        public Matrix(IEnumerable<MatrixRow> rows) : this(rows.ToArray())
         {
 
         }
 
-        public LEMatrix(params LEVector[] columns)
+        public Matrix(params Vector<F>[] columns)
         {
             N = columns.Length;
 
@@ -136,7 +62,7 @@ namespace Stuff.StuffMath
             var result = new MatrixRow[columns.First().Size];
             for (int j = 0; j < height; ++j)
             {
-                var row = new double[N];
+                var row = new F[N];
                 for (int i = 0; i < N; ++i)
                     row[i] = columns[i][j];
                 result[j] = new MatrixRow(row);
@@ -144,11 +70,11 @@ namespace Stuff.StuffMath
             Rows = result;
         }
 
-        public LEMatrix(IEnumerable<LEVector> columns) : this(columns.ToArray())
+        public Matrix(IEnumerable<Vector<F>> columns) : this(columns.ToArray())
         {
         }
 
-        public LEMatrix(IEnumerable<double> values, int rows)
+        public Matrix(IEnumerable<F> values, int rows)
         {
             if (values.Count() % rows != 0)
                 throw new ArgumentException($"The number of values({values.Count()}) must be divisible by the number of rows({rows}).");
@@ -157,7 +83,7 @@ namespace Stuff.StuffMath
 
             int j = -1;
             int i = 0;
-            var row = new double[N];
+            var row = new F[N];
             foreach (var value in values)
             {
                 row[i] = value;
@@ -172,15 +98,15 @@ namespace Stuff.StuffMath
 
         public MatrixRow this[int row] => Rows[row];
 
-        public LEVector Column(int column)
+        public Vector<F> Column(int column)
         {
-            var result = new double[M];
+            var result = new F[M];
             for (int j = 0; j < M; ++j)
                 result[j] = Rows[j][column];
-            return new LEVector(result);
+            return new Vector<F>(result);
         }
 
-        public IEnumerable<double> Values()
+        public IEnumerable<F> Values()
         {
             for (int j = 0; j < M; ++j)
             {
@@ -189,7 +115,7 @@ namespace Stuff.StuffMath
             }
         }
 
-        public static bool operator ==(LEMatrix m1, LEMatrix m2)
+        public static bool operator ==(Matrix m1, Matrix m2)
         {
             if (m1.N != m2.N || m1.M != m2.M)
                 return false;
@@ -202,7 +128,7 @@ namespace Stuff.StuffMath
             return true;
         }
 
-        public static bool operator !=(LEMatrix m1, LEMatrix m2)
+        public static bool operator !=(Matrix m1, Matrix m2)
         {
             if (m1.N != m2.N || m1.M != m2.M)
                 return true;
@@ -215,85 +141,85 @@ namespace Stuff.StuffMath
             return false;
         }
 
-        public static LEMatrix operator+(LEMatrix m1, LEMatrix m2)
+        public static Matrix operator+(Matrix m1, Matrix m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
                 throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
             var result = new MatrixRow[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
-                var row = new double[m1.N];
+                var row = new F[m1.N];
                 for (int i = 0; i < m1.N; ++i)
                     row[i] = m1[j][i] + m2[j][i];
                 result[j] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public static LEMatrix operator -(LEMatrix m1, LEMatrix m2)
+        public static Matrix operator -(Matrix m1, Matrix m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
                 throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
             var result = new MatrixRow[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
-                var row = new double[m1.N];
+                var row = new F[m1.N];
                 for (int i = 0; i < m1.N; ++i)
                     row[i] = m1[j][i] - m2[j][i];
                 result[j] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public static LEMatrix operator *(LEMatrix m, double d)
+        public static Matrix operator *(Matrix m, F d)
         {
             var result = new MatrixRow[m.M];
             for (int j = 0; j < m.M; ++j)
             {
-                var row = new double[m.N];
+                var row = new F[m.N];
                 for (int i = 0; i < m.N; ++i)
                     row[i] = m[j][i] * d;
                 result[j] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public static LEMatrix operator *(double d, LEMatrix m)
+        public static Matrix operator *(F d, Matrix m)
         {
             var result = new MatrixRow[m.M];
             for (int j = 0; j < m.M; ++j)
             {
-                var row = new double[m.N];
+                var row = new F[m.N];
                 for (int i = 0; i < m.N; ++i)
                     row[i] = m[j][i] * d;
                 result[j] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public static LEVector operator *(LEMatrix m, LEVector v)
+        public static Vector<F> operator *(Matrix m, Vector<F> v)
         {
             if (m.N != v.Count())
                 throw new ArgumentException("The vector must have m.N size.");
-            var result = new double[m.M];
+            var result = new F[m.M];
             for (int j = 0; j < m.M; ++j)
-                result[j] = m[j].ToLEVector().DotSum(v);
-            return new LEVector(result);
+                result[j] = m[j].ToVector<F>().DotSum(v);
+            return new Vector<F>(result);
         }
 
-        public static LEMatrix operator*(LEMatrix m1, LEMatrix m2)
+        public static Matrix operator*(Matrix m1, Matrix m2)
         {
             if (m1.N != m2.M)
                 throw new ArgumentException("m1.N must equal m2.N.");
             var result = new MatrixRow[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
-                var row = new double[m2.N];
+                var row = new F[m2.N];
                 for (int i = 0; i < m2.N; ++i)
-                    row[i] = m1[j].ToLEVector().DotSum(m2.Column(i));
+                    row[i] = m1[j].ToVector<F>().DotSum(m2.Column(i));
                 result[j] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
         public bool IsSquare()
@@ -301,20 +227,20 @@ namespace Stuff.StuffMath
             return N == M;
         }
 
-        public static LEMatrix UnitMatrix(int dim)
+        public static Matrix UnitMatrix(int dim)
         {
             var result = new MatrixRow[dim];
             for (int j = 0; j < dim; ++j)
             {
-                var row = new double[dim];
+                var row = new F[dim];
                 for (int i = 0; i < dim; ++i)
                     row[i] = i == j ? 1 : 0;
                 result[j] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public LEMatrix SwapRows(int row1, int row2)
+        public Matrix SwapRows(int row1, int row2)
         {
             var result = new List<MatrixRow>(M);
             for (int i = 0; i < M; ++i)
@@ -326,10 +252,10 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public LEMatrix ScaleRow(int row, double scalar)
+        public Matrix ScaleRow(int row, F scalar)
         {
             var result = new List<MatrixRow>(M);
             for (int i = 0; i < M; ++i)
@@ -339,10 +265,10 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public LEMatrix AddScaledRow(int source, double scalar, int dest)
+        public Matrix AddScaledRow(int source, F scalar, int dest)
         {
             var result = new List<MatrixRow>(M);
             for (int i = 0; i < M; ++i)
@@ -352,22 +278,22 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public LEMatrix Transpose()
+        public Matrix Transpose()
         {
             var result = new MatrixRow[N];
             for (int i = 0; i < N; ++i)
             {
-                var row = new double[M];
+                var row = new F[M];
                 for (int j = 0; j < M; ++j)
                 {
                     row[j] = this[j][i];
                 }
                 result[i] = new MatrixRow(row);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
         public bool IsTrap() // Optimize?
@@ -412,7 +338,7 @@ namespace Stuff.StuffMath
             return true;
         }
 
-        public LEMatrix ToTrap() // Optimize?
+        public Matrix ToTrap() // Optimize?
         {
             // TEST!
             var result = this;
@@ -453,32 +379,32 @@ namespace Stuff.StuffMath
             return result;
         }
 
-        public LEMatrix RemoveRow(int m)
+        public Matrix RemoveRow(int m)
         {
             var result = new MatrixRow[M - 1];
             for (int j = 0; j < M - 1; ++j)
             {
                 result[j] = j < m ? this[j] : this[j + 1];
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public LEMatrix RemoveColumn(int n)
+        public Matrix RemoveColumn(int n)
         {
-            var result = new LEVector[N - 1];
+            var result = new Vector<F>[N - 1];
             for (int i = 0; i < N - 1; ++i)
             {
                 result[i] = i < n ? Column(i) : Column(i+1);
             }
-            return new LEMatrix(result);
+            return new Matrix(result);
         }
 
-        public LEMatrix MinorMatrix(int m, int n)
+        public Matrix MinorMatrix(int m, int n)
         {
             return RemoveColumn(n).RemoveRow(m);
         }
 
-        public double Determinant()
+        public F Determinant()
         {
             var matrix = this;
             var result = 1d;
@@ -494,18 +420,18 @@ namespace Stuff.StuffMath
             return result;
         }
 
-        public LEMatrix Join(LEMatrix m)
+        public Matrix Join(Matrix m)
         {
-            return new LEMatrix(Columns.Concat(m.Columns));
+            return new Matrix(Columns.Concat(m.Columns));
         }
 
-        public (LEMatrix left, LEMatrix right) Split(int column)
+        public (Matrix left, Matrix right) Split(int column)
         {
             var columns = Columns;
-            return (new LEMatrix(columns.Take(column)), new LEMatrix(columns.Skip(column)));
+            return (new Matrix(columns.Take(column)), new Matrix(columns.Skip(column)));
         }
 
-        public LEMatrix Inverse()
+        public Matrix Inverse()
         {
             if (!IsSquare())
                 throw new ArgumentException("Only square matrices can be inverted.");
@@ -540,17 +466,17 @@ namespace Stuff.StuffMath
 
         public override bool Equals(object obj)
         {
-            if (obj is LEMatrix m)
+            if (obj is Matrix m)
             {
                 return this == m;
             }
-            else if (obj is LEVector v)
+            else if (obj is Vector<F> v)
             {
-                return Equals(new LEMatrix(v));
+                return Equals(new Matrix(v));
             }
             else if (obj is MatrixRow r)
             {
-                return Equals(new LEMatrix(r));
+                return Equals(new Matrix(r));
             }
             else
                 return false;

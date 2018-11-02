@@ -146,9 +146,10 @@ namespace Stuff.StuffMath
                 return GCD(b, Mod(a,b));
         }
 
+        /// <returns>a mod b.</returns>
         public static int Mod(int a, int b)
         {
-            return a - b * (int)Math.Floor((double)a / (double)b);
+            return a - b * (int)Math.Floor((double)a / b);
         }
     }
 }

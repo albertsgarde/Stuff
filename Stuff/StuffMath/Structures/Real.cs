@@ -50,6 +50,8 @@ namespace Stuff.StuffMath.Structures
 
         public Real MultiplicativeInverse()
         {
+            if (Value == 0)
+                throw new InvalidOperationException("0 has no mulitplicative inverse");
             return new Real(1d / Value);
         }
 

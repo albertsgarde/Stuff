@@ -61,7 +61,7 @@ namespace Stuff.StuffMath
             return xay / x2a;
         }
 
-        public static LinearFunction LinearRegression(IEnumerable<KeyValuePair<double, double>> data)
+        public static LineEquation LinearRegression(IEnumerable<KeyValuePair<double, double>> data)
         {
             double xSum = data.Sum(dataPoint => dataPoint.Key);
             double ySum = data.Sum(dataPoint => dataPoint.Value);
@@ -69,7 +69,7 @@ namespace Stuff.StuffMath
             double xySum = data.Sum(dataPoint => dataPoint.Key * dataPoint.Value);
             double b = (-(xySum * xSum - xxSum * ySum)) / (xSum * xSum + xxSum);
             double a = (xySum - b * xSum)/xxSum;
-            return new LinearFunction(a, b); // y=ax+b
+            return new LineEquation(a, b); // y=ax+b
         }
 
         public static QuadraticFunction QuadraticRegression(IEnumerable<KeyValuePair<double, double>> data)

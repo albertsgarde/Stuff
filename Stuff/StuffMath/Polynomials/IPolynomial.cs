@@ -52,4 +52,9 @@ namespace Stuff.StuffMath
 
         string ToString();
     }
+
+    public static class PolynomialExtensions
+    {
+        public static LEMatrix DifferentiationMatrix(this IPolynomial p) => Polynomial.DifferentiationMatrix(p.Degree);
+    }
 }

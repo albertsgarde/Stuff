@@ -10,42 +10,30 @@ namespace Stuff.StuffMath.Structures
     /// A mathematical vector space.
     /// </summary>
     /// <typeparam name="T">The vectorspace.</typeparam>
-    /// <typeparam name="S">The field by which scalar multiplication is defined.</typeparam>
-    public interface IVectorSpace<T, S> where S : IField<S>
+    /// <typeparam name="F">The field by which scalar multiplication is defined.</typeparam>
+    public interface IVectorSpace<T, F> : IGroup<T> where F : IField<F>
     {
-        T Add(T t);
-
-        T AdditiveInverse();
-
-        T Multiply(S s);
-
-        /// <summary>
-        /// This vector space's additive identity. Should be constant across all instances.
-        /// </summary>
-        T ZERO
-        {
-            get;
-        }
+        T Multiply(F s);
         
         /// <summary>
         /// This vector space's field's multiplicative identity. Should be constant across all instances.
         /// </summary>
-        S ONE
+        F ONE
         {
             get;
         }
 
-        bool EqualTo(T t);
+        Vector<F> ToVector();
     }
 
     public static class VectorSpaceExtensions
     {
-        public static T Subtract<T, S>(this T t1, T t2) where S : IField<S> where T : IVectorSpace<T, S>
+        public static T Subtract<T, F>(this T t1, T t2) where F : IField<F> where T : IVectorSpace<T, F>
         {
             return t1.Add(t2.AdditiveInverse());
         }
 
-        public static T Divide<T, S>(this T t, S s) where S : IField<S> where T : IVectorSpace<T, S>
+        public static T Divide<T, F>(this T t, F s) where F : IField<F> where T : IVectorSpace<T, F>
         {
             return t.Multiply(s.MultiplicativeInverse());
         }

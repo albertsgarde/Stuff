@@ -86,19 +86,19 @@ namespace Stuff.StuffMath
         /// </summary>
         /// <param name="lf"></param>
         /// <returns></returns>
-        public Vector2D VectorToLine(LinearFunction lf)
+        public Vector2D VectorToLine(LineEquation lf)
         {
             return new Vector2D(lf.PointOnLine(), this).Project(lf.OrthogonalVector());
         }
 
-        public double DistanceTo(LinearFunction lf)
+        public double DistanceTo(LineEquation lf)
         {
             double valueAtCoord = lf.A * X + lf.B * Y + lf.C;
             valueAtCoord = Math.Abs(valueAtCoord);
             return valueAtCoord / (Math.Sqrt(lf.A * lf.A + lf.B * lf.B));
         }
 
-        public Location2D ProjectToLine(LinearFunction lf)
+        public Location2D ProjectToLine(LineEquation lf)
         {
             return lf.PointX(0) + lf.DirectionVector().Project((new Vector2D(this, lf.PointX(0))));
         }

@@ -12,26 +12,26 @@ namespace Stuff.StuffMath
     {
         public Vector Constant { get; }
 
-        public IReadOnlyDictionary<string, Vector> Coefficients { get; }
+        public IReadOnlyList<Vector> Coefficients { get; }
         
-        public ParametricEquation(Vector constant, IReadOnlyDictionary<string, Vector> coefs)
+        public ParametricEquation(Vector constant, IReadOnlyList<Vector> coefs)
         {
             Constant = constant;
             Coefficients = coefs.Copy();
             foreach (var coef in Coefficients)
             {
-                if (coef.Value.Size != Constant.Size)
-                    throw new ArgumentException($"All coeffiecient vectors must have the same size (dimensionality) as the constant vector. The vector for {coef.Key} has the size {coef.Value.Size}, while the constant vector has size {Constant.Size}");
+                if (coef.Size != Constant.Size)
+                    throw new ArgumentException($"All coeffiecient vectors must have the same size (dimensionality) as the constant vector. The vector {coef} has the size {coef.Size}, while the constant vector has size {Constant.Size}");
             }
         }
 
-        public Vector Value(IReadOnlyDictionary<string, double> values)
+        public Vector Value(IReadOnlyList<double> values)
         {
-            if (!values.Keys.ContainsAll(Coefficients.Keys))
+            if (values.Count != Coefficients.Count)
                 throw new ArgumentException("Values must be provided for all variables.");
             var total = Constant;
-            foreach (var coef in Coefficients)
-                total += coef.Value * values[coef.Key];
+            for (int i = 0; i < values.Count; ++i)
+                total += values[i] * Coefficients[i];
             return total;
         }
     }

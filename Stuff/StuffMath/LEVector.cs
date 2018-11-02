@@ -8,28 +8,28 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector<F> : IEnumerable<F>, IVectorSpace<Vector<F>, F> where F : IField<F>
+    public class LEVector : IEnumerable<double>, IVectorSpace<LEVector, FDouble>
     {
-        private readonly F[] vector;
+        private readonly double[] vector;
 
-        public Vector(params F[] vector)
+        public LEVector(params double[] vector)
         {
             this.vector = vector;
         }
 
-        public Vector(IEnumerable<F> vector) : this(vector.ToArray())
+        public LEVector(IEnumerable<double> vector) : this(vector.ToArray())
         {
 
         }
 
-        public Vector(MatrixRow<F> mr)
+        public LEVector(LEMatrix.MatrixRow mr)
         {
-            vector = new F[mr.Length];
+            vector = new double[mr.Length];
             for (int i = 0; i < mr.Length; ++i)
                 vector[i] = mr[i];
         }
 
-        public F this[int i]
+        public double this[int i]
         {
             get
             {
@@ -47,78 +47,95 @@ namespace Stuff.StuffMath
                 return vector.Length;
             }
         }
+
+        /// <summary>
+        /// The geometric length of the vector.
+        /// </summary>
+        public double Length
+        {
+            get
+            {
+                return Math.Sqrt(vector.Aggregate((total, x) => total + Math.Pow(x, 2)));
+            }
+        }
         
         /// <summary>
         /// The squared geometric length of the vector.
         /// </summary>
-        public F LengthSquared
+        public double LengthSquared
         {
             get
             {
-                return vector.Aggregate((total, x) => total.Add(x.Multiply(x));
+                return vector.Aggregate((total, x) => total + Math.Pow(x, 2));
             }
         }
 
-        public Vector<F> ZERO => throw new NotImplementedException();
+        public LEVector ZERO => new LEVector(ContainerUtils.UniformArray(0d, Size));
 
-        public Real ONE => throw new NotImplementedException();
+        public FDouble ONE => new FDouble(1);
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
         /// <returns>The total of the two vectors.</returns>
-        public static Vector<F> operator +(Vector<F> vecA, Vector<F> vecB)
+        public static LEVector operator +(LEVector vecA, LEVector vecB)
         {
             if (vecA.Size != vecB.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            return new Vector<F>(vecA.Zip(vecB, (x, y) => x.Add(y)).ToArray());
+            return new LEVector(vecA.Zip(vecB, (x, y) => x + y).ToArray());
         }
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
         /// <returns>The right hand subtracted from the left hand.</returns>
-        public static Vector<F> operator -(Vector<F> vecA, Vector<F> vecB)
+        public static LEVector operator -(LEVector vecA, LEVector vecB)
         {
             if (vecA.Size != vecB.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            return new Vector<F>(vecA.Zip(vecB, (x, y) => x.Subtract(y)).ToArray());
+            return new LEVector(vecA.Zip(vecB, (x, y) => x - y).ToArray());
         }
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
         /// <returns>The right hand subtracted from the left hand.</returns>
-        public static Vector<F> operator -(Vector<F> vec)
+        public static LEVector operator -(LEVector vec)
         {
-            return new Vector<F>(vec.Select(d => d.AdditiveInverse()).ToArray());
+            return new LEVector(vec.Select(d => -d).ToArray());
         }
 
-        /// <returns>The vector multiplied by the F.</returns>
-        public static Vector<F> operator *(Vector<F> vec, F d)
+        /// <returns>The vector multiplied by the double.</returns>
+        public static LEVector operator *(LEVector vec, double d)
         {
-            return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
+            return new LEVector(vec.Select(x => x * d).ToArray());
         }
 
-        /// <returns>The vector divided by the F.</returns>
-        public static Vector<F> operator /(Vector<F> vec, F d)
+        /// <returns>The vector divided by the double.</returns>
+        public static LEVector operator /(LEVector vec, double d)
         {
-            return vec.Divide(d);
+            return new LEVector(vec.Select(x => x / d).ToArray());
         }
 
-        /// <returns>The vector multiplied by the F.</returns>
-        public static Vector<F> operator *(F d, Vector<F> vec)
+        /// <returns>The vector multiplied by the double.</returns>
+        public static LEVector operator *(double d, LEVector vec)
         {
-            return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
+            return new LEVector(vec.Select(x => x * d).ToArray());
         }
 
-        public Vector<F> ToVector() => this;
+        /// <returns>The modulus is applied to every element.</returns>
+        public static LEVector operator %(LEVector vec, double d)
+        {
+            return new LEVector(vec.Select(x => x % d).ToArray());
+        }
 
-        public F DotSum(Vector<F> vec)
+        public LEVector ToLEVector() => this;
+
+        public double DotSum(LEVector vec)
         {
             if (Size != vec.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            return this.Zip(vec, (x, y) => x.Multiply(y)).Sum();
+            return this.Zip(vec, (x, y) => x * y).Sum();
         }
 
         /// <summary>
@@ -126,20 +143,20 @@ namespace Stuff.StuffMath
         /// </summary>
         /// <param name="vec"></param>
         /// <returns></returns>
-        public Vector<F> Project(Vector<F> vec)
+        public LEVector Project(LEVector vec)
         {
             throw new Exception("Doesn't work");
             return vec * (DotSum(vec) / vec.LengthSquared);
         }
 
-        public F ProjectionLength(Vector<F> vec)
+        public double ProjectionLength(LEVector vec)
         {
             return Basic.Norm(DotSum(vec) / vec.Length);
         }
 
-        public IEnumerator<F> GetEnumerator()
+        public IEnumerator<double> GetEnumerator()
         {
-            foreach (F d in vector)
+            foreach (double d in vector)
                 yield return d;
         }
 
@@ -148,14 +165,14 @@ namespace Stuff.StuffMath
             return GetEnumerator();
         }
 
-        public bool Equals(Vector<F><F> vec)
+        public bool Equals(LEVector vec)
         {
             return this.Zip(vec, (x, y) => x == y).Count(x => !x) == 0;
         }
 
-        public Matrix.MatrixRow<F> ToMatrixRow<F>()
+        public LEMatrix.MatrixRow ToMatrixRow()
         {
-            return new Matrix.MatrixRow<F>(this);
+            return new LEMatrix.MatrixRow(this);
         }
 
         public override string ToString()
@@ -166,22 +183,22 @@ namespace Stuff.StuffMath
             return result.Substring(0, result.Length - 2) + ")";
         }
 
-        public Vector<F> Add(Vector<F> t)
+        public LEVector Add(LEVector t)
         {
             return this + t;
         }
 
-        public Vector<F> AdditiveInverse()
+        public LEVector AdditiveInverse()
         {
             return -this;
         }
 
-        public Vector<F> Multiply(Real s)
+        public LEVector Multiply(FDouble s)
         {
-            return this * (F)s;
+            return this * s;
         }
 
-        public bool EqualTo(Vector<F> t)
+        public bool EqualTo(LEVector t)
         {
             return this == t;
         }

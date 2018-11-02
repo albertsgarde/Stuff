@@ -105,6 +105,8 @@
     <Compile Include="StuffMath\Complex\CQuadraticFunction.cs" />
     <Compile Include="StuffMath\Complex\Extensions.cs" />
     <Compile Include="StuffMath\Complex\ICPolynomial.cs" />
+    <Compile Include="StuffMath\Matrix.cs" />
+    <Compile Include="StuffMath\MatrixRow.cs" />
     <Compile Include="StuffMath\Polynomials\CubicFunction.cs" />
     <Compile Include="StuffMath\Complex\CVector.cs" />
     <Compile Include="StuffMath\Expressions\Expression.cs" />
@@ -141,7 +143,7 @@
     <Compile Include="StuffMath\LEMatrix.cs" />
     <Compile Include="StuffMath\ParametricEquation.cs" />
     <Compile Include="StuffMath\Polynomials\IPolynomial.cs" />
-    <Compile Include="StuffMath\Polynomials\LinearFunction.cs" />
+    <Compile Include="StuffMath\Polynomials\LineEquation.cs" />
     <Compile Include="StuffMath\LinearParamater3D.cs" />
     <Compile Include="StuffMath\LinearParameter2D.cs" />
     <Compile Include="StuffMath\Location2D.cs" />
@@ -173,10 +175,14 @@
     <Compile Include="StuffMath\Structures\Integer.cs" />
     <Compile Include="StuffMath\Structures\IRing.cs" />
     <Compile Include="StuffMath\Structures\IVectorSpace.cs" />
+    <Compile Include="StuffMath\Structures\ModInt.cs" />
+    <Compile Include="StuffMath\Structures\PModInt.cs" />
     <Compile Include="StuffMath\Structures\Rational.cs" />
+    <Compile Include="StuffMath\Structures\FDouble.cs" />
     <Compile Include="StuffMath\Structures\Real.cs" />
     <Compile Include="StuffMath\Turing\Instance.cs" />
     <Compile Include="StuffMath\Turing\TuringMachine.cs" />
+    <Compile Include="StuffMath\LEVector.cs" />
     <Compile Include="StuffMath\Vector.cs" />
     <Compile Include="StuffMath\Vector2D.cs" />
     <Compile Include="StuffMath\Vector2F.cs" />

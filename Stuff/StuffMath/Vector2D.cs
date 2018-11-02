@@ -62,6 +62,8 @@ namespace Stuff.StuffMath
             Radians = Y < 0 ? 2 * Math.PI - Math.Acos(X / Length) : Math.Acos(X / Length);
         }
 
+        public Vector ToVector() => new Vector(X, Y);
+
         public static Vector2D AngularVector(double radians, double length)
         {
             return new Vector2D(radians) * length;
@@ -131,6 +133,11 @@ namespace Stuff.StuffMath
         public static bool operator !=(Vector2D a, Vector2D b)
         {
             return !(a == b);
+        }
+
+        public static implicit operator Vector(Vector2D v)
+        {
+            return new Vector(v.X, v.Y);
         }
 
         public static Vector2D UnitX { get; } = new Vector2D(1, 0);

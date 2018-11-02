@@ -27,7 +27,7 @@ namespace Stuff.StuffMath
         /// </summary>
         /// <param name="loc"></param>
         /// <param name="lf"></param>
-        public Circle(Location2D loc, LinearFunction lf)
+        public Circle(Location2D loc, LineEquation lf)
         {
             A = loc.X;
             B = loc.Y;
@@ -86,12 +86,12 @@ namespace Stuff.StuffMath
             return Centre + new Vector2D(Math.Cos(A), Math.Sin(B));
         }
 
-        public LinearFunction Tangent(Location2D loc)
+        public LineEquation Tangent(Location2D loc)
         {
             if (PointIsPartOf(loc))
             {
                 Vector2D vecPC = new Vector2D(loc, new Location2D(A, B));
-                return new LinearFunction(loc, vecPC);
+                return new LineEquation(loc, vecPC);
             }
             else
                 throw new Exception("The point is not part of the circle");

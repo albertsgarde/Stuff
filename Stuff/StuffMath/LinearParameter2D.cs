@@ -76,12 +76,12 @@ namespace Stuff.StuffMath
             return A.OrthogonalVector();
         }
 
-        public LinearFunction LinearFunction()
+        public LineEquation LinearFunction()
         {
-            return new LinearFunction(B, A.OrthogonalVector());
+            return new LineEquation(B, A.OrthogonalVector());
         }
 
-        public static implicit operator LinearFunction(LinearParameter2D lp)
+        public static implicit operator LineEquation(LinearParameter2D lp)
         {
             return lp.LinearFunction();
         }

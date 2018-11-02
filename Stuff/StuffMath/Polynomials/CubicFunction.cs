@@ -50,7 +50,7 @@ namespace Stuff.StuffMath
         
         public IPolynomial Integrate()
         {
-            return new Polynomial(new KeyValuePair<int, double>(4, A / 4), new KeyValuePair<int, double>(3, B / 3), new KeyValuePair<int, double>(2, C / 2), new KeyValuePair<int, double>(1, D), new KeyValuePair<int, double>(0, double.NaN));
+            return new Polynomial((4, A / 4), (3, B / 3), (2, C / 2), (1, D), (0, 0));
         }
 
         public double Integrate(double a, double b)
@@ -75,10 +75,9 @@ namespace Stuff.StuffMath
             }
         }
 
-        public Polynomial AsPolynomial()
-        {
-            return new Polynomial(new KeyValuePair<int, double>(3, A), new KeyValuePair<int, double>(2, B), new KeyValuePair<int, double>(1, C), new KeyValuePair<int, double>(0, D));
-        }
+        public Polynomial AsPolynomial() => new Polynomial(D, C, B, A);
+
+        public Vector ToVector() => new Vector(D, C, B, A);
 
         public IPolynomial MoveVertical(double k)
         {

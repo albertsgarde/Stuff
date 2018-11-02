@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.StuffMath.Structures;
 
 namespace Stuff
 {
@@ -227,6 +228,14 @@ namespace Stuff
                 node = node.Next;
             }
             return result.TrimEnd(',') + "}";
+        }
+
+        public static T[] UniformArray<T>(T t, int length)
+        {
+            var result = new T[length];
+            for (int i = 0; i < length; ++i)
+                result[i] = t;
+            return result;
         }
     }
 }

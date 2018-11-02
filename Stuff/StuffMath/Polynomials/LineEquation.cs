@@ -9,7 +9,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class LinearFunction : IPolynomial
+    public class LineEquation : IPolynomial
     {
         /// <summary>
         /// ax+by+c=0
@@ -28,7 +28,7 @@ namespace Stuff.StuffMath
 
         public int Degree => 1;
 
-        public IPolynomial ZERO => new LinearFunction(0, 0);
+        public IPolynomial ZERO => new LineEquation(0, 0);
 
         public Real ONE => 1;
 
@@ -40,7 +40,7 @@ namespace Stuff.StuffMath
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <param name="c"></param>
-        public LinearFunction(double a, double b, double c)
+        public LineEquation(double a, double b, double c)
         {
             A = a;
             B = b;
@@ -52,7 +52,7 @@ namespace Stuff.StuffMath
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
-        public LinearFunction(double a, double b)
+        public LineEquation(double a, double b)
         {
             A = a;
             B = -1;
@@ -64,7 +64,7 @@ namespace Stuff.StuffMath
         /// </summary>
         /// <param name="loc1"></param>
         /// <param name="loc2"></param>
-        public LinearFunction(Location2D loc1, Location2D loc2)
+        public LineEquation(Location2D loc1, Location2D loc2)
         {
             Vector2D vector = new Vector2D(loc1, loc2);
             A = vector.Y;
@@ -72,7 +72,7 @@ namespace Stuff.StuffMath
             C = -(A * loc1.X + B * loc1.Y);
         }
 
-        public LinearFunction(Location2D coordinate, Vector2D orthogonalVector)
+        public LineEquation(Location2D coordinate, Vector2D orthogonalVector)
         {
             A = -orthogonalVector.X / orthogonalVector.Y;
             B = -1;
@@ -84,7 +84,7 @@ namespace Stuff.StuffMath
             */
         }
 
-        public LinearFunction(Location2D coordinate, double slope)
+        public LineEquation(Location2D coordinate, double slope)
         {
             double a = slope;
             double b = coordinate.Y - (coordinate.X * slope);
@@ -93,29 +93,29 @@ namespace Stuff.StuffMath
             C = b;
         }
 
-        public static LinearFunction operator *(LinearFunction l, double d)
+        public static LineEquation operator *(LineEquation l, double d)
         {
-            return new LinearFunction(l.A * d, l.B * d, l.C *d);
+            return new LineEquation(l.A * d, l.B * d, l.C *d);
         }
 
-        public static LinearFunction operator /(LinearFunction l, double d)
+        public static LineEquation operator /(LineEquation l, double d)
         {
-            return new LinearFunction(l.A / d, l.B / d, l.C / d);
+            return new LineEquation(l.A / d, l.B / d, l.C / d);
         }
 
-        public static LinearFunction operator -(LinearFunction l, LinearFunction lf)
+        public static LineEquation operator -(LineEquation l, LineEquation lf)
         {
-            return new LinearFunction(l.A - lf.A, l.B - lf.B, l.C - lf.C);
+            return new LineEquation(l.A - lf.A, l.B - lf.B, l.C - lf.C);
         }
 
-        public static LinearFunction operator +(LinearFunction l, LinearFunction lf)
+        public static LineEquation operator +(LineEquation l, LineEquation lf)
         {
-            return new LinearFunction(l.A + lf.A, l.B + lf.B, l.C + lf.C);
+            return new LineEquation(l.A + lf.A, l.B + lf.B, l.C + lf.C);
         }
 
-        public LinearFunction Subtract(LinearFunction lf)
+        public LineEquation Subtract(LineEquation lf)
         {
-            return new LinearFunction(A - lf.A, B - lf.B, C - lf.C);
+            return new LineEquation(A - lf.A, B - lf.B, C - lf.C);
         }
 
         public double Y(double x)
@@ -140,7 +140,7 @@ namespace Stuff.StuffMath
 
         public  IPolynomial Differentiate()
         {
-            return new Polynomial(new KeyValuePair<int, double>(0, A / B * -1));
+            return new Polynomial((0, A / B * -1));
         }
 
         public  IPolynomial Integrate()
@@ -168,17 +168,22 @@ namespace Stuff.StuffMath
 
         public  Polynomial AsPolynomial()
         {
-            return new Polynomial(new KeyValuePair<int, double>(1, A / B * -1), new KeyValuePair<int, double>(0, C/B*-1));
+            return new Polynomial((1, A / B * -1), (0, C/B*-1));
+        }
+
+        public Vector ToVector()
+        {
+            return new Vector(C / B * -1, A / B * -1);
         }
 
         public  IPolynomial MoveVertical(double k)
         {
-            return new LinearFunction(A, B, C + k * -B);
+            return new LineEquation(A, B, C + k * -B);
         }
 
         public  IPolynomial MoveHoriz(double k)
         {
-            return new LinearFunction(A, A * k + B);
+            return new LineEquation(A, A * k + B);
         }
 
         public  IPolynomial Transform(Vector2D v)
@@ -188,37 +193,37 @@ namespace Stuff.StuffMath
 
         public double ZeroIntersection()
         {
-            return Intersection(new LinearFunction(0, 0)).X;
+            return Intersection(new LineEquation(0, 0)).X;
         }
 
-        public Location2D Intersection(LinearFunction lf)
+        public Location2D Intersection(LineEquation lf)
         {
             if (this.IsSame(lf))
                 throw new Exception("The two functions are the same");
             else if (this.IsParallel(lf))
                 throw new Exception("The two functions are parallel");
 
-            LinearFunction tempThis = this * lf.A;
-            LinearFunction tempThat = lf * A;
+            LineEquation tempThis = this * lf.A;
+            LineEquation tempThat = lf * A;
 
-            LinearFunction subtraction = tempThis.Subtract(tempThat);
+            LineEquation subtraction = tempThis.Subtract(tempThat);
 
             double y = (-subtraction.C) / subtraction.B;
             double x = this.X(y);
             return new Location2D(x, y);
         }
 
-        public bool IsSame(LinearFunction lf)
+        public bool IsSame(LineEquation lf)
         {
             return Misc.DoubleEquals(A / B, lf.A / lf.B) && Misc.DoubleEquals(A / C, lf.A / lf.B);
         }
 
-        public bool IsParallel(LinearFunction lf)
+        public bool IsParallel(LineEquation lf)
         {
             return Misc.DoubleEquals(A / B, lf.A / lf.B);
         }
 
-        public bool IsOrthogonal(LinearFunction lf)
+        public bool IsOrthogonal(LineEquation lf)
         {
             return A / B == lf.A / lf.B;
         }
@@ -251,7 +256,7 @@ namespace Stuff.StuffMath
             return new LinearParameter2D(DirectionVector(), new Vector2D(x, Y(x)));
         }
 
-        public static implicit operator LinearParameter2D(LinearFunction lf)
+        public static implicit operator LinearParameter2D(LineEquation lf)
         {
             return lf.LinearParameter();
         }
@@ -315,12 +320,12 @@ namespace Stuff.StuffMath
 
         public IPolynomial AdditiveInverse()
         {
-            return new LinearFunction(-A, -B, -C);
+            return new LineEquation(-A, -B, -C);
         }
 
         public IPolynomial Multiply(Real s)
         {
-            return new LinearFunction(A * (double)s, B * (double)s, C * (double)s);
+            return new LineEquation(A * (double)s, B * (double)s, C * (double)s);
         }
 
         public bool EqualTo(IPolynomial t)
