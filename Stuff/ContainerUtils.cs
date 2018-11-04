@@ -230,7 +230,6 @@ namespace Stuff
             return result.TrimEnd(',') + "}";
         }
 
-
         public static T[] UniformArray<T>(T t, int length)
         {
             var result = new T[length];
