@@ -13,9 +13,9 @@ namespace Stuff.StuffMath.Structures
 
     public static class FieldExtensions
     {
-        public static T Divide<T>(this T t1, T t2) where T : IField<T>
+        public static F Divide<F>(this F f1, F f2) where F : IField<F>
         {
-            return t1.Multiply(t2.MultiplicativeInverse());
+            return f1.Multiply(f2.MultiplicativeInverse());
         }
     }
 }

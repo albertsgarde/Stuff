@@ -10,11 +10,11 @@ namespace Stuff.StuffMath
 {
     public class ParametricEquation
     {
-        public Vector Constant { get; }
+        public LEVector Constant { get; }
 
-        public IReadOnlyList<Vector> Coefficients { get; }
+        public IReadOnlyList<LEVector> Coefficients { get; }
         
-        public ParametricEquation(Vector constant, IReadOnlyList<Vector> coefs)
+        public ParametricEquation(LEVector constant, IReadOnlyList<LEVector> coefs)
         {
             Constant = constant;
             Coefficients = coefs.Copy();
@@ -25,7 +25,7 @@ namespace Stuff.StuffMath
             }
         }
 
-        public Vector Value(IReadOnlyList<double> values)
+        public LEVector Value(IReadOnlyList<double> values)
         {
             if (values.Count != Coefficients.Count)
                 throw new ArgumentException("Values must be provided for all variables.");

@@ -82,7 +82,7 @@ namespace Stuff.StuffMath
             coefficients[int.Parse(part.Substring(part.IndexOf('^') + 1))] = double.Parse(part.Substring(0, part.IndexOf('x')));
         }
 
-        public Polynomial(Vector v)
+        public Polynomial(Vector<FDouble> v)
         {
             coefficients = new Dictionary<int, double>();
             for (int i = 0; i < v.Size; ++i)
@@ -186,9 +186,9 @@ namespace Stuff.StuffMath
 
         public Polynomial AsPolynomial() => this;
 
-        public Vector ToVector()
+        public Vector<FDouble> ToVector()
         {
-            var result = new double[Degree + 1];
+            var result = new FDouble[Degree + 1];
             for (int i = 0; i <= Degree; ++i)
             {
                 if (coefficients.ContainsKey(i))
@@ -196,7 +196,7 @@ namespace Stuff.StuffMath
                 else
                     result[i] = 0;
             }
-            return new Vector(result);
+            return new Vector<FDouble>(result);
         }
 
         /// <summary>

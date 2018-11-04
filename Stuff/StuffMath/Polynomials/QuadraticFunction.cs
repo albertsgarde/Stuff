@@ -86,9 +86,9 @@ namespace Stuff.StuffMath
             return new Polynomial((2, A), (1, B), (0, C));
         }
 
-        public Vector ToVector()
+        public LEVector ToVector()
         {
-            return new Vector(C, B, A);
+            return new LEVector(C, B, A);
         }
 
         public IPolynomial MoveVertical(double k)

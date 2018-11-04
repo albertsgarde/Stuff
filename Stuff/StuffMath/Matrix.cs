@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class Matrix<F> : IVectorSpace<Matrix<F>, F> where F : IField<F>
+    public class Matrix<F> where F : IField<F>
     {
         public IReadOnlyList<MatrixRow<F>> Rows { get; }
 
@@ -28,11 +28,11 @@ namespace Stuff.StuffMath
             }
         }
 
-        public int M => Rows.Count;
+        public int M => Rows.Count();
 
         public int N { get; }
 
-        public Matrix(params MatrixRow[] rows)
+        public Matrix(params MatrixRow<F>[] rows)
         {
             N = rows.First().Length;
             for (int i = 1; i < rows.Length; ++i)
@@ -43,7 +43,7 @@ namespace Stuff.StuffMath
             Rows = rows.Copy();
         }
 
-        public Matrix(IEnumerable<MatrixRow> rows) : this(rows.ToArray())
+        public Matrix(IEnumerable<MatrixRow<F>> rows) : this(rows.ToArray())
         {
 
         }
@@ -59,13 +59,13 @@ namespace Stuff.StuffMath
                     throw new ArgumentException($"All columns must have the same length. The first column has length {height}, but column {i} has length {columns[i].Size}.");
             }
 
-            var result = new MatrixRow[columns.First().Size];
+            var result = new MatrixRow<F>[columns.First().Size];
             for (int j = 0; j < height; ++j)
             {
                 var row = new F[N];
                 for (int i = 0; i < N; ++i)
                     row[i] = columns[i][j];
-                result[j] = new MatrixRow(row);
+                result[j] = new MatrixRow<F>(row);
             }
             Rows = result;
         }
@@ -79,7 +79,7 @@ namespace Stuff.StuffMath
             if (values.Count() % rows != 0)
                 throw new ArgumentException($"The number of values({values.Count()}) must be divisible by the number of rows({rows}).");
             N = values.Count() / rows;
-            var result = new MatrixRow[rows];
+            var result = new MatrixRow<F>[rows];
 
             int j = -1;
             int i = 0;
@@ -90,13 +90,13 @@ namespace Stuff.StuffMath
                 if (++i >= N)
                 {
                     i -= N;
-                    result[++j] = new MatrixRow(row);
+                    result[++j] = new MatrixRow<F>(row);
                 }
             }
             Rows = result;
         }
 
-        public MatrixRow this[int row] => Rows[row];
+        public MatrixRow<F> this[int row] => Rows[row];
 
         public Vector<F> Column(int column)
         {
@@ -115,111 +115,103 @@ namespace Stuff.StuffMath
             }
         }
 
-        public static bool operator ==(Matrix m1, Matrix m2)
+        public static bool operator ==(Matrix<F> m1, Matrix<F> m2)
         {
             if (m1.N != m2.N || m1.M != m2.M)
                 return false;
             for (int j = 0; j < m1.M; ++j)
             {
                 for (int i = 0; i < m1.N; ++i)
-                    if (m1[j][i] != m2[j][i])
+                    if (!m1[j][i].EqualTo(m2[j][i]))
                         return false;
             }
             return true;
         }
 
-        public static bool operator !=(Matrix m1, Matrix m2)
+        public static bool operator !=(Matrix<F> m1, Matrix<F> m2)
         {
-            if (m1.N != m2.N || m1.M != m2.M)
-                return true;
-            for (int j = 0; j < m1.M; ++j)
-            {
-                for (int i = 0; i < m1.N; ++i)
-                    if (m1[j][i] != m2[j][i])
-                        return true;
-            }
-            return false;
+            return !(m1 == m2);
         }
 
-        public static Matrix operator+(Matrix m1, Matrix m2)
+        public static Matrix<F> operator+(Matrix<F> m1, Matrix<F> m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
                 throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
-            var result = new MatrixRow[m1.M];
+            var result = new MatrixRow<F>[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
                 var row = new F[m1.N];
                 for (int i = 0; i < m1.N; ++i)
-                    row[i] = m1[j][i] + m2[j][i];
-                result[j] = new MatrixRow(row);
+                    row[i] = m1[j][i].Add(m2[j][i]);
+                result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public static Matrix operator -(Matrix m1, Matrix m2)
+        public static Matrix<F> operator -(Matrix<F> m1, Matrix<F> m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
                 throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
-            var result = new MatrixRow[m1.M];
+            var result = new MatrixRow<F>[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
                 var row = new F[m1.N];
                 for (int i = 0; i < m1.N; ++i)
-                    row[i] = m1[j][i] - m2[j][i];
-                result[j] = new MatrixRow(row);
+                    row[i] = m1[j][i].Subtract(m2[j][i]);
+                result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public static Matrix operator *(Matrix m, F d)
+        public static Matrix<F> operator *(Matrix<F> m, F d)
         {
-            var result = new MatrixRow[m.M];
+            var result = new MatrixRow<F>[m.M];
             for (int j = 0; j < m.M; ++j)
             {
                 var row = new F[m.N];
                 for (int i = 0; i < m.N; ++i)
-                    row[i] = m[j][i] * d;
-                result[j] = new MatrixRow(row);
+                    row[i] = m[j][i].Multiply(d);
+                result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public static Matrix operator *(F d, Matrix m)
+        public static Matrix<F> operator *(F d, Matrix<F> m)
         {
-            var result = new MatrixRow[m.M];
+            var result = new MatrixRow<F>[m.M];
             for (int j = 0; j < m.M; ++j)
             {
                 var row = new F[m.N];
                 for (int i = 0; i < m.N; ++i)
-                    row[i] = m[j][i] * d;
-                result[j] = new MatrixRow(row);
+                    row[i] = m[j][i].Multiply(d);
+                result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public static Vector<F> operator *(Matrix m, Vector<F> v)
+        public static Vector<F> operator *(Matrix<F> m, Vector<F> v)
         {
             if (m.N != v.Count())
                 throw new ArgumentException("The vector must have m.N size.");
             var result = new F[m.M];
             for (int j = 0; j < m.M; ++j)
-                result[j] = m[j].ToVector<F>().DotSum(v);
+                result[j] = m[j].ToVector().DotSum(v);
             return new Vector<F>(result);
         }
 
-        public static Matrix operator*(Matrix m1, Matrix m2)
+        public static Matrix<F> operator*(Matrix<F> m1, Matrix<F> m2)
         {
             if (m1.N != m2.M)
                 throw new ArgumentException("m1.N must equal m2.N.");
-            var result = new MatrixRow[m1.M];
+            var result = new MatrixRow<F>[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
                 var row = new F[m2.N];
                 for (int i = 0; i < m2.N; ++i)
-                    row[i] = m1[j].ToVector<F>().DotSum(m2.Column(i));
-                result[j] = new MatrixRow(row);
+                    row[i] = m1[j].ToVector().DotSum(m2.Column(i));
+                result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
         public bool IsSquare()
@@ -227,22 +219,23 @@ namespace Stuff.StuffMath
             return N == M;
         }
 
-        public static Matrix UnitMatrix(int dim)
+        public static Matrix<F> UnitMatrix(int dim)
         {
-            var result = new MatrixRow[dim];
+            throw new NotImplementedException();
+            /*var result = new MatrixRow<F>[dim];
             for (int j = 0; j < dim; ++j)
             {
                 var row = new F[dim];
                 for (int i = 0; i < dim; ++i)
                     row[i] = i == j ? 1 : 0;
-                result[j] = new MatrixRow(row);
+                result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);*/
         }
 
-        public Matrix SwapRows(int row1, int row2)
+        public Matrix<F> SwapRows(int row1, int row2)
         {
-            var result = new List<MatrixRow>(M);
+            var result = new List<MatrixRow<F>>(M);
             for (int i = 0; i < M; ++i)
             {
                 if (i == row1)
@@ -252,12 +245,12 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public Matrix ScaleRow(int row, F scalar)
+        public Matrix<F> ScaleRow(int row, F scalar)
         {
-            var result = new List<MatrixRow>(M);
+            var result = new List<MatrixRow<F>>(M);
             for (int i = 0; i < M; ++i)
             {
                 if (i == row)
@@ -265,12 +258,12 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public Matrix AddScaledRow(int source, F scalar, int dest)
+        public Matrix<F> AddScaledRow(int source, F scalar, int dest)
         {
-            var result = new List<MatrixRow>(M);
+            var result = new List<MatrixRow<F>>(M);
             for (int i = 0; i < M; ++i)
             {
                 if (i == dest)
@@ -278,12 +271,12 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public Matrix Transpose()
+        public Matrix<F> Transpose()
         {
-            var result = new MatrixRow[N];
+            var result = new MatrixRow<F>[N];
             for (int i = 0; i < N; ++i)
             {
                 var row = new F[M];
@@ -291,13 +284,15 @@ namespace Stuff.StuffMath
                 {
                     row[j] = this[j][i];
                 }
-                result[i] = new MatrixRow(row);
+                result[i] = new MatrixRow<F>(row);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
         public bool IsTrap() // Optimize?
         {
+            throw new NotImplementedException();
+            /*
             var leadingOnes = new List<(int j, int i)>();
             {
                 var prevLoc = 0;
@@ -335,11 +330,13 @@ namespace Stuff.StuffMath
                         return false;
                 }
             }
-            return true;
+            return true;*/
         }
 
-        public Matrix ToTrap() // Optimize?
+        public Matrix<F> ToTrap() // Optimize?
         {
+            throw new NotImplementedException();
+            /*
             // TEST!
             var result = this;
             int m = 0;
@@ -376,36 +373,38 @@ namespace Stuff.StuffMath
                 }
                 ++m;
             }
-            return result;
+            return result;*/
         }
 
-        public Matrix RemoveRow(int m)
+        public Matrix<F> RemoveRow(int m)
         {
-            var result = new MatrixRow[M - 1];
+            var result = new MatrixRow<F>[M - 1];
             for (int j = 0; j < M - 1; ++j)
             {
                 result[j] = j < m ? this[j] : this[j + 1];
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public Matrix RemoveColumn(int n)
+        public Matrix<F> RemoveColumn(int n)
         {
             var result = new Vector<F>[N - 1];
             for (int i = 0; i < N - 1; ++i)
             {
                 result[i] = i < n ? Column(i) : Column(i+1);
             }
-            return new Matrix(result);
+            return new Matrix<F>(result);
         }
 
-        public Matrix MinorMatrix(int m, int n)
+        public Matrix<F> MinorMatrix(int m, int n)
         {
             return RemoveColumn(n).RemoveRow(m);
         }
 
         public F Determinant()
         {
+            throw new NotImplementedException();
+            /*
             var matrix = this;
             var result = 1d;
             if (!IsSquare())
@@ -417,21 +416,21 @@ namespace Stuff.StuffMath
                 result *= matrix[i][i];
             }
             Console.WriteLine(matrix);
-            return result;
+            return result;*/
         }
 
-        public Matrix Join(Matrix m)
+        public Matrix<F> Join(Matrix<F> m)
         {
-            return new Matrix(Columns.Concat(m.Columns));
+            return new Matrix<F>(Columns.Concat(m.Columns));
         }
 
-        public (Matrix left, Matrix right) Split(int column)
+        public (Matrix<F> left, Matrix<F> right) Split(int column)
         {
             var columns = Columns;
-            return (new Matrix(columns.Take(column)), new Matrix(columns.Skip(column)));
+            return (new Matrix<F>(columns.Take(column)), new Matrix<F>(columns.Skip(column)));
         }
 
-        public Matrix Inverse()
+        public Matrix<F> Inverse()
         {
             if (!IsSquare())
                 throw new ArgumentException("Only square matrices can be inverted.");
@@ -441,11 +440,6 @@ namespace Stuff.StuffMath
             if (left != UnitMatrix(N))
                 throw new ArgumentException("Only regular matrices can be inverted.");
             return right;
-        }
-
-        public LinearEquationSystem ToLinearEquationSystem()
-        {
-            return new LinearEquationSystem(Rows.Select(r => r.ToLinearEquation()));
         }
 
         public override string ToString()
@@ -466,17 +460,17 @@ namespace Stuff.StuffMath
 
         public override bool Equals(object obj)
         {
-            if (obj is Matrix m)
+            if (obj is Matrix<F> m)
             {
                 return this == m;
             }
             else if (obj is Vector<F> v)
             {
-                return Equals(new Matrix(v));
+                return Equals(new Matrix<F>(v));
             }
-            else if (obj is MatrixRow r)
+            else if (obj is MatrixRow<F> r)
             {
-                return Equals(new Matrix(r));
+                return Equals(new Matrix<F>(r));
             }
             else
                 return false;

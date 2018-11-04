@@ -273,5 +273,10 @@ namespace Stuff.StuffMath
         {
             return "(" + X + "," + Y + ")";
         }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, X, Y);
+        }
     }
 }

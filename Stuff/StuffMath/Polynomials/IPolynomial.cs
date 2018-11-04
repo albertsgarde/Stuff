@@ -8,7 +8,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public interface IPolynomial : IEnumerable<double>, IVectorSpace<IPolynomial, Real>
+    public interface IPolynomial : IEnumerable<double>
     {
         int Degree { get; }
 

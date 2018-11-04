@@ -77,8 +77,6 @@ namespace Stuff.StuffMath
 
         public Polynomial AsPolynomial() => new Polynomial(D, C, B, A);
 
-        public Vector ToVector() => new Vector(D, C, B, A);
-
         public IPolynomial MoveVertical(double k)
         {
             return new CubicFunction(A, B, C, D + k);

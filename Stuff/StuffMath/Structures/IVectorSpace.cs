@@ -33,7 +33,7 @@ namespace Stuff.StuffMath.Structures
             return t1.Add(t2.AdditiveInverse());
         }
 
-        public static T Divide<T, F>(this T t, F s) where F : IField<F> where T : IVectorSpace<T, F>
+        public static T Divide<T, F>(this IVectorSpace<T, F> t, F s) where T : IVectorSpace<T, F> where F : IField<F>
         {
             return t.Multiply(s.MultiplicativeInverse());
         }

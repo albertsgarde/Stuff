@@ -296,5 +296,10 @@ namespace Stuff.StuffMath.Complex
             else
                 return false;
         }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, Real, Imaginary);
+        }
     }
 }

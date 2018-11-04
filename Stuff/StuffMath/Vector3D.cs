@@ -115,9 +115,9 @@ namespace Stuff.StuffMath
             return vec1.DotSum(vec2);
         }
 
-        public static implicit operator Vector(Vector3D vec)
+        public static implicit operator LEVector(Vector3D vec)
         {
-            return new Vector(vec.X, vec.Y, vec.Z);
+            return new LEVector(vec.X, vec.Y, vec.Z);
         }
 
         public double DotSum(Vector3D vec)

@@ -54,7 +54,7 @@ namespace Stuff.Hamming
                 bits[i] = (b %= (byte)Math.Pow(2, 8 - i)) > Math.Pow(2, 8 - i - 1); 
         }
 
-        public Bits(Vector vec)
+        public Bits(LEVector vec)
         {
             if (vec.Count(x => x != 0 && x != 1) != 0)
                 throw new ArgumentException("Vector may only contain 0's and 1's.");
@@ -125,9 +125,9 @@ namespace Stuff.Hamming
             return result;
         }
 
-        public Vector ToVector()
+        public LEVector ToVector()
         {
-            return new Vector(bits.Select(x => x ? 1d : 0d).ToArray());
+            return new LEVector(bits.Select(x => x ? 1d : 0d).ToArray());
         }
 
         public Bits XOR(Bits b)

@@ -3,7 +3,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector2D : IVectorSpace<Vector2D, Real>
+    public class Vector2D
     {
         public double X { get; }
 
@@ -62,7 +62,7 @@ namespace Stuff.StuffMath
             Radians = Y < 0 ? 2 * Math.PI - Math.Acos(X / Length) : Math.Acos(X / Length);
         }
 
-        public Vector ToVector() => new Vector(X, Y);
+        public LEVector ToVector() => new LEVector(X, Y);
 
         public static Vector2D AngularVector(double radians, double length)
         {
@@ -135,9 +135,9 @@ namespace Stuff.StuffMath
             return !(a == b);
         }
 
-        public static implicit operator Vector(Vector2D v)
+        public static implicit operator LEVector(Vector2D v)
         {
-            return new Vector(v.X, v.Y);
+            return new LEVector(v.X, v.Y);
         }
 
         public static Vector2D UnitX { get; } = new Vector2D(1, 0);

@@ -171,9 +171,9 @@ namespace Stuff.StuffMath
             return new Polynomial((1, A / B * -1), (0, C/B*-1));
         }
 
-        public Vector ToVector()
+        public LEVector ToVector()
         {
-            return new Vector(C / B * -1, A / B * -1);
+            return new LEVector(C / B * -1, A / B * -1);
         }
 
         public  IPolynomial MoveVertical(double k)

@@ -12,6 +12,11 @@ namespace Stuff.StuffMath
     {
         private readonly F[] vector;
 
+        public Vector()
+        {
+            vector = new F[0];
+        }
+
         public Vector(params F[] vector)
         {
             this.vector = vector;
@@ -55,13 +60,13 @@ namespace Stuff.StuffMath
         {
             get
             {
-                return vector.Aggregate((total, x) => total.Add(x.Multiply(x));
+                return vector.Aggregate((total, x) => total.Add(x.Multiply(x)));
             }
         }
 
-        public Vector<F> ZERO => throw new NotImplementedException();
+        public Vector<F> ZERO => new Vector<F>();
 
-        public Real ONE => throw new NotImplementedException();
+        public F ONE => throw new NotImplementedException();
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
@@ -118,7 +123,10 @@ namespace Stuff.StuffMath
         {
             if (Size != vec.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            return this.Zip(vec, (x, y) => x.Multiply(y)).Sum();
+            var total = vector[0].Multiply(vec[0]);
+            for (int i = 1; i < Size; ++i)
+                total = total.Add(vector[i].Multiply(vec[i]));
+            return total;
         }
 
         /// <summary>
@@ -129,12 +137,12 @@ namespace Stuff.StuffMath
         public Vector<F> Project(Vector<F> vec)
         {
             throw new Exception("Doesn't work");
-            return vec * (DotSum(vec) / vec.LengthSquared);
+            //return vec * (DotSum(vec) / vec.LengthSquared);
         }
 
-        public F ProjectionLength(Vector<F> vec)
+        public F ProjectionLengthSquared(Vector<F> vec)
         {
-            return Basic.Norm(DotSum(vec) / vec.Length);
+            return DotSum(vec).Multiply(DotSum(vec)).Divide(vec.LengthSquared);
         }
 
         public IEnumerator<F> GetEnumerator()
@@ -148,14 +156,14 @@ namespace Stuff.StuffMath
             return GetEnumerator();
         }
 
-        public bool Equals(Vector<F><F> vec)
+        public bool Equals(Vector<F> vec)
         {
-            return this.Zip(vec, (x, y) => x == y).Count(x => !x) == 0;
+            return this.Zip(vec, (x, y) => x.EqualTo(y)).Count(x => !x) == 0;
         }
 
-        public Matrix.MatrixRow<F> ToMatrixRow<F>()
+        public MatrixRow<F> ToMatrixRow()
         {
-            return new Matrix.MatrixRow<F>(this);
+            return new MatrixRow<F>(this);
         }
 
         public override string ToString()
@@ -176,9 +184,9 @@ namespace Stuff.StuffMath
             return -this;
         }
 
-        public Vector<F> Multiply(Real s)
+        public Vector<F> Multiply(F s)
         {
-            return this * (F)s;
+            return this * s;
         }
 
         public bool EqualTo(Vector<F> t)

@@ -8,7 +8,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class LEVector : IEnumerable<double>, IVectorSpace<LEVector, FDouble>
+    public class LEVector : IEnumerable<double>
     {
         private readonly double[] vector;
 
@@ -146,7 +146,7 @@ namespace Stuff.StuffMath
         public LEVector Project(LEVector vec)
         {
             throw new Exception("Doesn't work");
-            return vec * (DotSum(vec) / vec.LengthSquared);
+            //return vec * (DotSum(vec) / vec.LengthSquared);
         }
 
         public double ProjectionLength(LEVector vec)
