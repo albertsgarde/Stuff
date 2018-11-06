@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class Matrix<F> where F : IField<F>
+    public class Matrix<F> where F : IField<F>, new()
     {
+        private readonly F ZERO = new F();
+
+        private readonly F ONE = new F().ONE;
+
         public IReadOnlyList<MatrixRow<F>> Rows { get; }
 
         public IReadOnlyList<Vector<F>> Columns
@@ -221,16 +225,15 @@ namespace Stuff.StuffMath
 
         public static Matrix<F> UnitMatrix(int dim)
         {
-            throw new NotImplementedException();
-            /*var result = new MatrixRow<F>[dim];
+            var result = new MatrixRow<F>[dim];
             for (int j = 0; j < dim; ++j)
             {
                 var row = new F[dim];
                 for (int i = 0; i < dim; ++i)
-                    row[i] = i == j ? 1 : 0;
+                    row[i] = i == j ? new F().ONE : new F();
                 result[j] = new MatrixRow<F>(row);
             }
-            return new Matrix<F>(result);*/
+            return new Matrix<F>(result);
         }
 
         public Matrix<F> SwapRows(int row1, int row2)
@@ -291,8 +294,6 @@ namespace Stuff.StuffMath
 
         public bool IsTrap() // Optimize?
         {
-            throw new NotImplementedException();
-            /*
             var leadingOnes = new List<(int j, int i)>();
             {
                 var prevLoc = 0;
@@ -302,9 +303,9 @@ namespace Stuff.StuffMath
                 {
                     for (int i = 0; i < mr.Length; ++i)
                     {
-                        if (mr[i] != 0)
+                        if (!(mr[i].IsZero()))
                         {
-                            if (mr[i] != 1)
+                            if (!(mr[i].IsOne()))
                                 return false;
                             else
                             {
@@ -326,17 +327,15 @@ namespace Stuff.StuffMath
             {
                 for (int j = 0; j < lead.j; ++j)
                 {
-                    if (this[j][lead.i] != 0)
+                    if (!this[j][lead.i].EqualTo(new F()))
                         return false;
                 }
             }
-            return true;*/
+            return true;
         }
 
         public Matrix<F> ToTrap() // Optimize?
         {
-            throw new NotImplementedException();
-            /*
             // TEST!
             var result = this;
             int m = 0;
@@ -344,36 +343,36 @@ namespace Stuff.StuffMath
             {
                 Console.WriteLine(n);
                 //Check for zero column
-                while (result.Column(n).Skip(m).All(d => d == 0))
+                while (result.Column(n).Skip(m).All(d => d.IsZero()))
                     continue;
                 //Put one in space (m,n) 
-                if (result[m][n] != 1)
+                if (!result[m][n].IsOne())
                 {
-                    if (result.Column(n).Skip(m).Contains(1))
+                    if (result.Column(n).Skip(m).Contains(ONE))
                     {
-                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(1) + m);
+                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(ONE) + m);
                     }
                     else
                     {
-                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(d => d != 0) + m);
-                        result = result.ScaleRow(m, 1 / result[m][n]);
+                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(d => !d.IsZero()) + m);
+                        result = result.ScaleRow(m, result[m][n].MultiplicativeInverse());
                     }
                 }
                 //Run through all rows above and set to zero.
                 for (int j = 0; j < m; ++j)
                 {
-                    if (result[j][n] != 0)
-                        result = result.AddScaledRow(m, -result[j][n], j);
+                    if (!result[j][n].IsZero())
+                        result = result.AddScaledRow(m, result[j][n].AdditiveInverse(), j);
                 }
                 //Run through all rows below and set to zero.
                 for (int j = m + 1; j < M; ++j)
                 {
-                    if (result[j][n] != 0)
-                        result = result.AddScaledRow(m, -result[j][n], j);
+                    if (!result[j][n].IsZero())
+                        result = result.AddScaledRow(m, result[j][n].AdditiveInverse(), j);
                 }
                 ++m;
             }
-            return result;*/
+            return result;
         }
 
         public Matrix<F> RemoveRow(int m)

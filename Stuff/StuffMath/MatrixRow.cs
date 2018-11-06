@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class MatrixRow<F> : IEnumerable<F> where F : IField<F>
+    public class MatrixRow<F> : IEnumerable<F> where F : IField<F>, new()
     {
         public IReadOnlyList<F> Data { get; }
 

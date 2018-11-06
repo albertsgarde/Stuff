@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath.Structures
 {
-    public interface IGroup<T>
+    public interface IGroup<G> where G : IGroup<G>
     {
-        T Add(T t);
+        G Add(G t);
 
-        T AdditiveInverse();
+        G AdditiveInverse();
 
         /// <summary>
         /// This ring's additive identity. Should be constant across all instances.
         /// </summary>
-        T ZERO
+        G ZERO
         {
             get;
         }
 
-        bool EqualTo(T t);
+        bool EqualTo(G t);
     }
 
     public static class GroupExtensions
     {
-        public static T Subtract<T>(this T t1, T t2) where T : IGroup<T>
+        public static G Subtract<G>(this G t1, G t2) where G : IGroup<G>
         {
             return t1.Add(t2.AdditiveInverse());
         }

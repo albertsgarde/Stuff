@@ -8,7 +8,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector<F> : IEnumerable<F>, IVectorSpace<Vector<F>, F> where F : IField<F>
+    public class Vector<F> : IEnumerable<F>, IVectorSpace<Vector<F>, F> where F : IField<F>, new()
     {
         private readonly F[] vector;
 
