@@ -9,7 +9,7 @@ namespace Stuff.StuffMath.Structures
     /// <summary>
     /// A rational number.
     /// </summary>
-    public struct Rational : IField<Rational>
+    public class Rational : IField<Rational>
     {
         public Integer Numerator { get; }
 
@@ -19,22 +19,43 @@ namespace Stuff.StuffMath.Structures
 
         public Rational ONE => one;
 
-        private static readonly Rational zero = new Rational(0, 1);
+        private static readonly Rational zero = new Rational();
 
         private static readonly Rational one = new Rational(1, 1);
 
+        public Rational()
+        {
+            Numerator = 0;
+            Denominator = 1;
+        }
+
         public Rational(Integer numerator, Integer denominator)
         {
-            Numerator = numerator;
+            var gcd = numerator == 0 ? denominator : new Integer(Basic.GCD((int)numerator, (int)denominator));
+            Numerator = numerator / gcd;
             if (denominator == 0)
                 throw new ArgumentException("Denominator cannot be 0.");
-            Denominator = denominator;
-            Reduce();
+            Denominator = denominator / gcd;
         }
 
         public static explicit operator double(Rational r)
         {
             return (double)r.Numerator / (double)r.Denominator;
+        }
+
+        public static implicit operator Rational((Integer numerator, Integer denominator) r)
+        {
+            return new Rational(r.numerator, r.denominator);
+        }
+
+        public static implicit operator Rational(Integer i)
+        {
+            return new Rational(i, 1);
+        }
+
+        public static implicit operator Rational(int i)
+        {
+            return new Rational(i, 1);
         }
 
         private Rational ScaleUp(Integer i)
@@ -52,15 +73,9 @@ namespace Stuff.StuffMath.Structures
                 return new Rational(Numerator.Value / i.Value, Denominator.Value / i.Value);
         }
 
-        private Rational Reduce()
-        {
-            var gcd = new Integer(Basic.GCD((int)Numerator, (int)Denominator));
-            return new Rational(Numerator / gcd, Denominator / gcd);
-        }
-
         public Rational Add(Rational r)
         {
-            return new Rational(Numerator * r.Denominator + r.Numerator * Denominator, Denominator*r.Denominator).Reduce();
+            return new Rational(Numerator * r.Denominator + r.Numerator * Denominator, Denominator*r.Denominator);
         }
 
         public Rational AdditiveInverse()
@@ -70,7 +85,7 @@ namespace Stuff.StuffMath.Structures
 
         public Rational Multiply(Rational r)
         {
-            return new Rational(Numerator * r.Numerator, Denominator * r.Denominator).Reduce();
+            return new Rational(Numerator * r.Numerator, Denominator * r.Denominator);
         }
 
         public Rational MultiplicativeInverse()
@@ -93,6 +108,11 @@ namespace Stuff.StuffMath.Structures
         public override int GetHashCode()
         {
             return Misc.HashCode(17, 23, Numerator, Denominator);
+        }
+
+        public override string ToString()
+        {
+            return $"{Numerator}/{Denominator}";
         }
     }
 }

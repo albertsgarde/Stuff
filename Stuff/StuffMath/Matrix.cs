@@ -236,6 +236,22 @@ namespace Stuff.StuffMath
             return new Matrix<F>(result);
         }
 
+        public bool IsUnitMatrix()
+        {
+            if (!IsSquare())
+                return false;
+            var result = true;
+            for (int j = 0; j < N; ++j)
+            {
+                for (int i = 0; i < N; ++i)
+                {
+                    if (!(i == j && this[j][i].IsOne() || i != j && this[j][i].IsZero()))
+                        return false;
+                }
+            }
+            return result;
+        }
+
         public Matrix<F> SwapRows(int row1, int row2)
         {
             var result = new List<MatrixRow<F>>(M);
@@ -341,7 +357,6 @@ namespace Stuff.StuffMath
             int m = 0;
             for (int n = 0; n < N && m < M; ++n)
             {
-                Console.WriteLine(n);
                 //Check for zero column
                 while (result.Column(n).Skip(m).All(d => d.IsZero()))
                     continue;
@@ -436,7 +451,7 @@ namespace Stuff.StuffMath
             var t1 = Join(UnitMatrix(N));
             var t2 = t1.ToTrap();
             var (left, right) = t2.Split(N);
-            if (left != UnitMatrix(N))
+            if (!left.IsUnitMatrix())
                 throw new ArgumentException("Only regular matrices can be inverted.");
             return right;
         }

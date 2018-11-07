@@ -69,5 +69,10 @@ namespace Stuff.StuffMath.Structures
         {
             return Value.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return "" + Value;
+        }
     }
 }

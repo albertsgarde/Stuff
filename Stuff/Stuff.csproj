@@ -105,6 +105,7 @@
     <Compile Include="StuffMath\Complex\CQuadraticFunction.cs" />
     <Compile Include="StuffMath\Complex\Extensions.cs" />
     <Compile Include="StuffMath\Complex\ICPolynomial.cs" />
+    <Compile Include="StuffMath\LinearFirstOrderDiffEq.cs" />
     <Compile Include="StuffMath\Matrix.cs" />
     <Compile Include="StuffMath\MatrixRow.cs" />
     <Compile Include="StuffMath\Polynomials\CubicFunction.cs" />
@@ -172,11 +173,10 @@
     <Compile Include="StuffMath\Sphere.cs" />
     <Compile Include="StuffMath\Structures\IField.cs" />
     <Compile Include="StuffMath\Structures\IGroup.cs" />
+    <Compile Include="StuffMath\Structures\IHilbertSpace.cs" />
     <Compile Include="StuffMath\Structures\Integer.cs" />
     <Compile Include="StuffMath\Structures\IRing.cs" />
     <Compile Include="StuffMath\Structures\IVectorSpace.cs" />
-    <Compile Include="StuffMath\Structures\ModInt.cs" />
-    <Compile Include="StuffMath\Structures\PModInt.cs" />
     <Compile Include="StuffMath\Structures\Rational.cs" />
     <Compile Include="StuffMath\Structures\FDouble.cs" />
     <Compile Include="StuffMath\Structures\Real.cs" />
