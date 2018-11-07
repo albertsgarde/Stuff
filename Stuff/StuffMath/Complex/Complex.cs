@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stuff.StuffMath.Structures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +10,19 @@ namespace Stuff.StuffMath.Complex
     /// <summary>
     /// A complex number.
     /// </summary>
-    public class Complex2D
+    public struct Complex2D :IField<Complex2D>
     {
         public double Real { get; private set; }
 
         public double Imaginary { get; private set; }
 
-        public static readonly Complex2D ONE = new Complex2D(1, 0);
-
         public static readonly Complex2D I = new Complex2D(0, 1);
 
         public static readonly Complex2D NULL = new Complex2D(0, 0);
+
+        public Complex2D ONE => new Complex2D(1, 0);
+
+        public Complex2D ZERO => new Complex2D();
 
         public Complex2D(double real, double imaginary)
         {
@@ -157,10 +160,18 @@ namespace Stuff.StuffMath.Complex
             return c1.Real != c2.Real || c1.Imaginary != c2.Imaginary;
         }
 
+        public Complex2D Add(Complex2D c) => this + c;
+
+        public Complex2D Multiply(Complex2D c) => this * c;
+
+        public Complex2D AdditiveInverse() => -this;
+
         public Complex2D Reciprocal()
         {
             return Angular(1 / Absolute, -Argument);
         }
+
+        public Complex2D MultiplicativeInverse() => Reciprocal();
 
         /// <summary>
         /// Takes the square root of a double.
@@ -283,11 +294,16 @@ namespace Stuff.StuffMath.Complex
             return $"({Absolute},{Argument/Math.PI}π)";
         }
 
+        public bool EqualTo(Complex2D c)
+        {
+            return Real == c.Real && Imaginary == c.Imaginary;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Complex2D c)
             {
-                return Real == c.Real && Imaginary == c.Imaginary;
+                return EqualTo(c);
             }
             else if (obj is double d)
             {

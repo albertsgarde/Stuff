@@ -10,9 +10,9 @@ namespace Stuff.StuffMath
 {
     public class Matrix<F> where F : IField<F>, new()
     {
-        private readonly F ZERO = new F();
+        private readonly F F0 = new F();
 
-        private readonly F ONE = new F().ONE;
+        private readonly F F1 = new F().ONE;
 
         public IReadOnlyList<MatrixRow<F>> Rows { get; }
 
@@ -363,9 +363,9 @@ namespace Stuff.StuffMath
                 //Put one in space (m,n) 
                 if (!result[m][n].IsOne())
                 {
-                    if (result.Column(n).Skip(m).Contains(ONE))
+                    if (result.Column(n).Skip(m).Contains(F1))
                     {
-                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(ONE) + m);
+                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(F1) + m);
                     }
                     else
                     {
