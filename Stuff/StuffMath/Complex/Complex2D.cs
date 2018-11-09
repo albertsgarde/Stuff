@@ -212,7 +212,7 @@ namespace Stuff.StuffMath.Complex
         /// <returns>The complex result of e^z where z is this complex number.</returns>
         public Complex2D Exp()
         {
-            return new Complex2D(Imaginary)*Math.Exp(Real);
+            return Exp(Imaginary)*Math.Exp(Real);
         }
         
         /// <returns>The natural logarithm where -pi < b < pi </returns>

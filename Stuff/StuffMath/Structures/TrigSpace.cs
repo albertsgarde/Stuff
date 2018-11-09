@@ -8,11 +8,11 @@ using Stuff;
 
 namespace Stuff.StuffMath.Structures
 {
-    public class TrigSpace : IVectorSpace<TrigSpace, FDouble>
+    public class TrigSpace : IVectorSpace<TrigSpace, Complex2D>
     {
         public IReadOnlyDictionary<double, Complex2D> Waves { get; }
 
-        public FDouble ONE => new FDouble().ONE;
+        public Complex2D ONE => new Complex2D().ONE;
 
         public TrigSpace ZERO => new TrigSpace();
 
@@ -39,9 +39,34 @@ namespace Stuff.StuffMath.Structures
             Waves = waves.Copy();
         }
 
+        public Complex2D this[double d] => Waves[d];
+
+        public Complex2D Value(double t)
+        {
+            var result = new Complex2D();
+            foreach (var (f, pa) in Waves.Select(kvp => (kvp.Key, kvp.Value)))
+                result += Complex2D.Exp(f * t + pa.Argument) * pa.Absolute;
+            return result;
+        }
+
         public TrigSpace Add(TrigSpace t)
         {
-            throw new NotImplementedException();
+            var result = new Dictionary<double, Complex2D>();
+            foreach (var (f, pa) in Waves.Select(kvp => (kvp.Key, kvp.Value)))
+            {
+                if (result.ContainsKey(f))
+                    result[f] += pa;
+                else
+                    result.Add(f, pa);
+            }
+            foreach (var (f, pa) in t.Waves.Select(kvp => (kvp.Key, kvp.Value)))
+            {
+                if (result.ContainsKey(f))
+                    result[f] += pa;
+                else
+                    result.Add(f, pa);
+            }
+            return new TrigSpace(result);
         }
 
         public TrigSpace AdditiveInverse()
@@ -52,19 +77,29 @@ namespace Stuff.StuffMath.Structures
             return new TrigSpace(result);
         }
 
-        public TrigSpace Multiply(FDouble s)
+        public TrigSpace Multiply(Complex2D s)
         {
-            throw new NotImplementedException();
+            var result = new Dictionary<double, Complex2D>();
+            foreach (var (f, pa) in Waves.Select(kvp => (kvp.Key, kvp.Value)))
+                result.Add(f, pa * s);
+            return new TrigSpace(result);
         }
 
-        public Vector<FDouble> ToVector()
+        public Vector<Complex2D> ToVector()
         {
-            throw new NotImplementedException();
+            return new Vector<Complex2D>(Waves.Values);
         }
 
         public bool EqualTo(TrigSpace t)
         {
-            throw new NotImplementedException();
+            if (Waves.Keys.Count() != Waves.Keys.Count() || !Waves.Keys.ContainsAll(t.Waves.Keys))
+                return false;
+            foreach (var f in Waves.Keys)
+            {
+                if (t.Waves[f] != Waves[f])
+                    return false;
+            }
+            return true;
         }
     }
 }

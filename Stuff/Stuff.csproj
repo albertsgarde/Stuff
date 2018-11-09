@@ -100,7 +100,7 @@
     <Compile Include="StuffMath\BasePhi4.cs" />
     <Compile Include="StuffMath\Basic.cs" />
     <Compile Include="StuffMath\Circle.cs" />
-    <Compile Include="StuffMath\Complex\Complex.cs" />
+    <Compile Include="StuffMath\Complex\Complex2D.cs" />
     <Compile Include="StuffMath\Complex\CPolynomial.cs" />
     <Compile Include="StuffMath\Complex\CQuadraticFunction.cs" />
     <Compile Include="StuffMath\Complex\Extensions.cs" />
