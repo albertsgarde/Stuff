@@ -60,13 +60,13 @@ namespace Stuff.StuffMath
         {
             get
             {
-                return vector.Aggregate((total, x) => total.Add(x.Multiply(x)));
+                return vector.Aggregate(new F().ZERO, (total, x) => total.Add(x.Multiply(x)));
             }
         }
 
         public Vector<F> ZERO => new Vector<F>();
 
-        public F ONE => throw new NotImplementedException();
+        public F ONE => new F().ONE;
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
@@ -105,16 +105,16 @@ namespace Stuff.StuffMath
             return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
         }
 
-        /// <returns>The vector divided by the F.</returns>
-        public static Vector<F> operator /(Vector<F> vec, F d)
-        {
-            return vec.Divide(d);
-        }
-
         /// <returns>The vector multiplied by the F.</returns>
         public static Vector<F> operator *(F d, Vector<F> vec)
         {
             return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
+        }
+
+        /// <returns>The vector divided by the F.</returns>
+        public static Vector<F> operator /(Vector<F> vec, F d)
+        {
+            return vec.Divide(d);
         }
 
         public Vector<F> ToVector() => this;
@@ -143,6 +143,11 @@ namespace Stuff.StuffMath
         public F ProjectionLengthSquared(Vector<F> vec)
         {
             return DotSum(vec).Multiply(DotSum(vec)).Divide(vec.LengthSquared);
+        }
+
+        public F Total()
+        {
+            return vector.Aggregate(new F().ZERO, (total, x) => total.Add(x));
         }
 
         public IEnumerator<F> GetEnumerator()

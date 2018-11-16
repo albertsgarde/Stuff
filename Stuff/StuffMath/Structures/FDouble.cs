@@ -33,6 +33,8 @@ namespace Stuff.StuffMath.Structures
             return r.Value;
         }
 
+        public static implicit operator FDouble(int i) => new FDouble(i);
+
         public FDouble Add(FDouble r)
         {
             return new FDouble(Value + r.Value);

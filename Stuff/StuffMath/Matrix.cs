@@ -357,10 +357,13 @@ namespace Stuff.StuffMath
             int m = 0;
             for (int n = 0; n < N && m < M; ++n)
             {
+                Console.WriteLine($"({m},{n})");
+
                 //Check for zero column
-                while (result.Column(n).Skip(m).All(d => d.IsZero()))
+                if (result.Column(n).Skip(m).All(d => d.IsZero()))
                     continue;
                 //Put one in space (m,n) 
+                Console.WriteLine($"({m},{n})");
                 if (!result[m][n].IsOne())
                 {
                     if (result.Column(n).Skip(m).Contains(F1))
@@ -417,20 +420,24 @@ namespace Stuff.StuffMath
 
         public F Determinant()
         {
-            throw new NotImplementedException();
-            /*
-            var matrix = this;
-            var result = 1d;
+            var result = new F();
             if (!IsSquare())
                 throw new InvalidOperationException("Can only find the determinant of square matrices.");
+            if (N == 2)
+                return this[0][0].Multiply(this[1][1]).Subtract(this[0][1].Multiply(this[1][0]));
             for (int i = 0; i < N; ++i)
-            {
-                for (int j = i + 1; j < M; ++j)
-                    matrix = matrix.AddScaledRow(i, -matrix[j][i] / (matrix[i][i]), j);
-                result *= matrix[i][i];
-            }
-            Console.WriteLine(matrix);
-            return result;*/
+                result = result.Add(MinorMatrix(0, i).Determinant());
+            return result;
+        }
+
+        public F Trace()
+        {
+            if (!IsSquare())
+                throw new InvalidOperationException("Only a square matrix has a trace.");
+            var result = new F();
+            for (int i = 0; i < N; ++i)
+                result.Add(this[i][i]);
+            return result;
         }
 
         public Matrix<F> Join(Matrix<F> m)

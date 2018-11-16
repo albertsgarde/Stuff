@@ -142,14 +142,21 @@ namespace Stuff.StuffMath
         {
             if (b == 0)
                 return a;
+            else if (a == 0)
+                return b;
             else
-                return GCD(b, Mod(a,b));
+                return GCD(b, Mod(a, b));
+        }
+
+        public static int Quo(int a, int b)
+        {
+            return (int)Math.Floor((double)a / b);
         }
 
         /// <returns>a mod b.</returns>
         public static int Mod(int a, int b)
         {
-            return a - b * (int)Math.Floor((double)a / b);
+            return a - b * Quo(a, b);
         }
     }
 }

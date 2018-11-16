@@ -3,7 +3,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector2D
+    public class Vector2D : IVectorSpace<Vector2D, FDouble>
     {
         public double X { get; }
 
@@ -12,6 +12,16 @@ namespace Stuff.StuffMath
         public double Radians { get; }
 
         public double Length { get;  }
+
+        public FDouble ONE => 1;
+
+        public Vector2D ZERO => new Vector2D();
+
+        public Vector2D()
+        {
+            X = 0;
+            Y = 0;
+        }
 
         public Vector2D(double radians)
         {
@@ -62,7 +72,7 @@ namespace Stuff.StuffMath
             Radians = Y < 0 ? 2 * Math.PI - Math.Acos(X / Length) : Math.Acos(X / Length);
         }
 
-        public LEVector ToVector() => new LEVector(X, Y);
+        public Vector<FDouble> ToVector() => new Vector<FDouble>(X, Y);
 
         public static Vector2D AngularVector(double radians, double length)
         {
@@ -143,10 +153,6 @@ namespace Stuff.StuffMath
         public static Vector2D UnitX { get; } = new Vector2D(1, 0);
 
         public static Vector2D UnitY { get; } = new Vector2D(0, 1);
-
-        public Vector2D ZERO => throw new NotImplementedException();
-
-        public Real ONE => throw new NotImplementedException();
 
         public bool IsParallel(Vector2D vec)
         {
@@ -290,7 +296,7 @@ namespace Stuff.StuffMath
             return -this;
         }
 
-        public Vector2D Multiply(Real s)
+        public Vector2D Multiply(FDouble s)
         {
             return this * (double)s;
         }

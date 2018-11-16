@@ -5,16 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Stuff;
+using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class ParametricEquation
+    public class ParametricEquation<F> where F : IField<F>, new()
     {
-        public LEVector Constant { get; }
+        public Vector<F> Constant { get; }
 
-        public IReadOnlyList<LEVector> Coefficients { get; }
+        public IReadOnlyList<Vector<F>> Coefficients { get; }
         
-        public ParametricEquation(LEVector constant, IReadOnlyList<LEVector> coefs)
+        public ParametricEquation(Vector<F> constant, IReadOnlyList<Vector<F>> coefs)
         {
             Constant = constant;
             Coefficients = coefs.Copy();
@@ -25,7 +26,7 @@ namespace Stuff.StuffMath
             }
         }
 
-        public LEVector Value(IReadOnlyList<double> values)
+        public Vector<F> Value(IReadOnlyList<F> values)
         {
             if (values.Count != Coefficients.Count)
                 throw new ArgumentException("Values must be provided for all variables.");
