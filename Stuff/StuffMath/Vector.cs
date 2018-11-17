@@ -117,6 +117,26 @@ namespace Stuff.StuffMath
             return vec.Divide(d);
         }
 
+        public static bool operator ==(Vector<F> vec1, Vector<F> vec2)
+        {
+            foreach(var (f1, f2) in vec1.Zip(vec2, (f1, f2) => (f1, f2)))
+            {
+                if (!f1.EqualTo(f2))
+                    return false;
+            }
+            return true;
+        }
+
+        public static bool operator !=(Vector<F> vec1, Vector<F> vec2)
+        {
+            foreach (var (f1, f2) in vec1.Zip(vec2, (f1, f2) => (f1, f2)))
+            {
+                if (!f1.EqualTo(f2))
+                    return true;
+            }
+            return false;
+        }
+
         public Vector<F> ToVector() => this;
         
         /// <param name="dim">The size of the vector.</param>

@@ -236,6 +236,13 @@ namespace Stuff.StuffMath
             return new Matrix<F>(result);
         }
 
+        public Matrix<F> UnitMatrix()
+        {
+            if (!IsSquare())
+                throw new InvalidOperationException("Unit matrices must be square.");
+            return UnitMatrix(N);
+        }
+
         public bool IsUnitMatrix()
         {
             if (!IsSquare())
@@ -463,6 +470,13 @@ namespace Stuff.StuffMath
                 }
             }
             return new ParametricEquation<F>(Vector<F>.NullVector(N), result);
+        }
+
+        public IEnumerable<Vector<F>> EigenVectors(F eigenValue)
+        {
+            if (!IsSquare())
+                throw new InvalidOperationException("Only a square matrix has eigen values or vectors.");
+            return (this - UnitMatrix() * eigenValue).Kernel().Coefficients;
         }
 
         public Matrix<F> Join(Matrix<F> m)
