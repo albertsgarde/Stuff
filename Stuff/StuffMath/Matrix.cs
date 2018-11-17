@@ -357,13 +357,11 @@ namespace Stuff.StuffMath
             int m = 0;
             for (int n = 0; n < N && m < M; ++n)
             {
-                Console.WriteLine($"({m},{n})");
 
                 //Check for zero column
                 if (result.Column(n).Skip(m).All(d => d.IsZero()))
                     continue;
                 //Put one in space (m,n) 
-                Console.WriteLine($"({m},{n})");
                 if (!result[m][n].IsOne())
                 {
                     if (result.Column(n).Skip(m).Contains(F1))
@@ -438,6 +436,33 @@ namespace Stuff.StuffMath
             for (int i = 0; i < N; ++i)
                 result.Add(this[i][i]);
             return result;
+        }
+
+        public ParametricEquation<F> Kernel()
+        {
+            var result = new List<Vector<F>>();
+            var trap = ToTrap();
+            var rows = new List<int>();
+            int m = 0;
+            for (int n = 0; n < N; ++n)
+            {
+                if (trap.Column(n).IsNull())
+                    result.Add(Vector<F>.UnitVector(N, n));
+                else if (m < trap.M && trap[m][n].IsOne())
+                {
+                    rows.Add(n);
+                    ++m;
+                }
+                else
+                {
+                    var vector = ContainerUtils.UniformArray(new F(), N);
+                    vector[n] = new F().ONE;
+                    for (int i = 0; i < rows.Count; ++i)
+                        vector[rows[i]] = trap[i][n].AdditiveInverse();
+                    result.Add(new Vector<F>(vector));
+                }
+            }
+            return new ParametricEquation<F>(Vector<F>.NullVector(N), result);
         }
 
         public Matrix<F> Join(Matrix<F> m)

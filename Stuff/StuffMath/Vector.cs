@@ -118,6 +118,34 @@ namespace Stuff.StuffMath
         }
 
         public Vector<F> ToVector() => this;
+        
+        /// <param name="dim">The size of the vector.</param>
+        /// <param name="axis">Which axis this is the unit vector of.</param>
+        public static Vector<F> UnitVector(int dim, int axis)
+        {
+            var result = new List<F>();
+            for (int i = 0; i < axis; ++i)
+                result.Add(new F());
+            result.Add(new F().ONE);
+            for (int i = axis + 1; i < dim; ++i)
+                result.Add(new F());
+            return new Vector<F>(result);
+        }
+
+        public bool IsUnitVector()
+        {
+            return vector.Count(f => f.IsOne()) == 1 && vector.Count(f => f.IsZero()) == vector.Count() - 1;
+        }
+
+        public static Vector<F> NullVector(int dim)
+        {
+            return new Vector<F>(ContainerUtils.UniformArray(new F(), dim));
+        }
+
+        public bool IsNull()
+        {
+            return vector.Count(f => !f.IsZero()) == 0;
+        }
 
         public F DotSum(Vector<F> vec)
         {

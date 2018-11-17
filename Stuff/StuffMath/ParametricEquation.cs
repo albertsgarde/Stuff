@@ -35,5 +35,13 @@ namespace Stuff.StuffMath
                 total += values[i] * Coefficients[i];
             return total;
         }
+
+        public override string ToString()
+        {
+            var result = Constant.IsNull() ? "" : Constant.ToString();
+            foreach (var coef in Coefficients)
+                result += " + s" + coef;
+            return result.TrimStart(' ', '+');
+        }
     }
 }
