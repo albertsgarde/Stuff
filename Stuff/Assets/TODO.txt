@@ -3,7 +3,7 @@
 	Solve equation -> parametric equation
 	Determinant
 	Eigen vectors from eigen values and vice versa.
-	Kernel
 Other:
 	Expand data handling capabilities.
 	Stop throwing Exception. Find better stuff to throw.
+	Move Test project into GitHub project.
