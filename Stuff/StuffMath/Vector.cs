@@ -64,7 +64,7 @@ namespace Stuff.StuffMath
             }
         }
 
-        public double Length => LengthSquared.AbsSqrt();
+        public F Length => LengthSquared.AbsSqrt();
 
         public Vector<F> ZERO => new Vector<F>();
 
@@ -157,6 +157,11 @@ namespace Stuff.StuffMath
         public bool IsUnitVector()
         {
             return vector.Count(f => f.IsOne()) == 1 && vector.Count(f => f.IsZero()) == vector.Count() - 1;
+        }
+
+        public Vector<F> Normalize()
+        {
+            return this * Length.MultiplicativeInverse(); 
         }
 
         public static Vector<F> NullVector(int dim)

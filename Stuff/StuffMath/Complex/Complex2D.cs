@@ -193,7 +193,7 @@ namespace Stuff.StuffMath.Complex
             return (result1, result2);
         }
 
-        public double AbsSqrt()
+        public Complex2D AbsSqrt()
         {
             return Math.Sqrt(Absolute);
         }

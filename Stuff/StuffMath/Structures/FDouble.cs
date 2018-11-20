@@ -62,7 +62,7 @@ namespace Stuff.StuffMath.Structures
             return new FDouble(Math.Sqrt(Value));
         }
 
-        public double AbsSqrt()
+        public FDouble AbsSqrt()
         {
             return Math.Sqrt(Value);
         }
