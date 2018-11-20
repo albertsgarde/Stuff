@@ -186,16 +186,16 @@ namespace Stuff.StuffMath.Complex
             return this * this;
         }
 
-        public (Complex2D, Complex2D) CSqrt()
+        public (Complex2D, Complex2D) Sqrt()
         {
             var result1 = new Complex2D(Argument / 2) * Math.Sqrt(Absolute);
             var result2 = new Complex2D(Argument / 2 + Math.PI) * Math.Sqrt(Absolute);
             return (result1, result2);
         }
 
-        public Complex2D Sqrt()
+        public double AbsSqrt()
         {
-            return new Complex2D(Argument / 2) * Math.Sqrt(Absolute);
+            return Math.Sqrt(Absolute);
         }
 
         /// <summary>

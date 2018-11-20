@@ -8,6 +8,6 @@ namespace Stuff.StuffMath.Structures
 {
     public interface IHilbertField<T> : IField<T> where T : IHilbertField<T>, new()
     {
-        T Sqrt();
+        double AbsSqrt();
     }
 }

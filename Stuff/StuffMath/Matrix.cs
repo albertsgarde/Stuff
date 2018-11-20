@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class Matrix<F> where F : IField<F>, new()
+    public class Matrix<F> where F : IHilbertField<F>, new()
     {
         private readonly F F0 = new F();
 

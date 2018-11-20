@@ -62,6 +62,11 @@ namespace Stuff.StuffMath.Structures
             return new FDouble(Math.Sqrt(Value));
         }
 
+        public double AbsSqrt()
+        {
+            return Math.Sqrt(Value);
+        }
+
         public bool EqualTo(FDouble r)
         {
             return Value == r.Value;

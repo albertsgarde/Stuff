@@ -9,7 +9,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class ParametricEquation<F> where F : IField<F>, new()
+    public class ParametricEquation<F> where F : IHilbertField<F>, new()
     {
         public Vector<F> Constant { get; }
 
@@ -39,8 +39,9 @@ namespace Stuff.StuffMath
         public override string ToString()
         {
             var result = Constant.IsNull() ? "" : Constant.ToString();
+            int coefNum = 0;
             foreach (var coef in Coefficients)
-                result += " + s" + coef;
+                result += $" + s{++coefNum}{coef}";
             return result.TrimStart(' ', '+');
         }
     }

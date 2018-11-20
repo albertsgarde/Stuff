@@ -8,7 +8,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector<F> : IEnumerable<F>, IHilbertSpace<Vector<F>, F> where F : IField<F>, new()
+    public class Vector<F> : IEnumerable<F>, IHilbertSpace<Vector<F>, F> where F : IHilbertField<F>, new()
     {
         private readonly F[] vector;
 
@@ -60,9 +60,11 @@ namespace Stuff.StuffMath
         {
             get
             {
-                return vector.Aggregate(new F().ZERO, (total, x) => total.Add(x.Multiply(x)));
+                return DotSum(this);
             }
         }
+
+        public double Length => LengthSquared.AbsSqrt();
 
         public Vector<F> ZERO => new Vector<F>();
 
