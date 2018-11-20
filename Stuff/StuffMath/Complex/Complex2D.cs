@@ -10,7 +10,7 @@ namespace Stuff.StuffMath.Complex
     /// <summary>
     /// A complex number.
     /// </summary>
-    public struct Complex2D : IField<Complex2D>
+    public struct Complex2D : IHilbertField<Complex2D>
     {
         public double Real { get; private set; }
 
@@ -186,11 +186,16 @@ namespace Stuff.StuffMath.Complex
             return this * this;
         }
 
-        public (Complex2D, Complex2D) Sqrt()
+        public (Complex2D, Complex2D) CSqrt()
         {
             var result1 = new Complex2D(Argument / 2) * Math.Sqrt(Absolute);
             var result2 = new Complex2D(Argument / 2 + Math.PI) * Math.Sqrt(Absolute);
             return (result1, result2);
+        }
+
+        public Complex2D Sqrt()
+        {
+            return new Complex2D(Argument / 2) * Math.Sqrt(Absolute);
         }
 
         /// <summary>

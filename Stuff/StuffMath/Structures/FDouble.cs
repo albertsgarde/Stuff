@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath.Structures
 {
-    public struct FDouble : IField<FDouble>
+    public struct FDouble : IHilbertField<FDouble>
     {
         public double Value { get; }
 
@@ -55,6 +55,11 @@ namespace Stuff.StuffMath.Structures
             if (Value == 0)
                 throw new InvalidOperationException("0 has no mulitplicative inverse");
             return new FDouble(1d / Value);
+        }
+
+        public FDouble Sqrt()
+        {
+            return new FDouble(Math.Sqrt(Value));
         }
 
         public bool EqualTo(FDouble r)
