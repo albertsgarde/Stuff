@@ -148,6 +148,11 @@ namespace Stuff.StuffMath
                 return GCD(b, Mod(a, b));
         }
 
+        public static int LCM(int a, int b)
+        {
+            return a * b / GCD(a, b);
+        }
+
         public static int Quo(int a, int b)
         {
             return (int)Math.Floor((double)a / b);
