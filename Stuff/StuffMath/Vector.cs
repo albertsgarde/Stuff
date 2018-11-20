@@ -227,6 +227,19 @@ namespace Stuff.StuffMath
             return this.Zip(vec, (x, y) => x.EqualTo(y)).Count(x => !x) == 0;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector<F> v)
+                return v.Equals(this);
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Misc.HashCode(17, 23, vector);
+        }
+
         public MatrixRow<F> ToMatrixRow()
         {
             return new MatrixRow<F>(this);

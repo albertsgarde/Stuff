@@ -2,6 +2,8 @@
 	Characteristic polynomial.
 	Solve equation -> parametric equation
 	Determinant
+	Diagonalisation
+	Orthonormal basis
 Other:
 	Expand data handling capabilities.
 	Stop throwing Exception. Find better stuff to throw.
