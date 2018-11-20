@@ -2,8 +2,8 @@
 	Characteristic polynomial.
 	Solve equation -> parametric equation
 	Determinant
-	Eigen vectors from eigen values and vice versa.
 Other:
+	Angle between Vectors
 	Expand data handling capabilities.
 	Stop throwing Exception. Find better stuff to throw.
 	Move Test project into GitHub project.

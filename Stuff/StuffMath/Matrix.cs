@@ -479,6 +479,20 @@ namespace Stuff.StuffMath
             return (this - UnitMatrix() * eigenValue).Kernel().Coefficients;
         }
 
+        public F EigenValue(Vector<F> eigenVector)
+        {
+            if (!IsSquare())
+                throw new InvalidOperationException("Only a square matrix has eigen values or vectors.");
+            if (eigenVector.Size != N)
+                throw new ArgumentException("An eigen vector always has the same dimensions as its matrix.");
+            if (eigenVector.IsNull())
+                throw new ArgumentException("Null vectors cannot be eigenvectors.");
+            var result = this * eigenVector;
+            if (!eigenVector.LinearlyDependent(result))
+                throw new ArgumentException("Non-eigenvectors don't have eigenvalues.");
+            return result[0].Divide(eigenVector[0]);
+        }
+
         public Matrix<F> Join(Matrix<F> m)
         {
             return new Matrix<F>(Columns.Concat(m.Columns));
