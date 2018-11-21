@@ -67,6 +67,8 @@ namespace Stuff.StuffMath.Structures
             return Math.Sqrt(Value);
         }
 
+        public FDouble Conjugate() => Value;
+
         public bool EqualTo(FDouble r)
         {
             return Value == r.Value;

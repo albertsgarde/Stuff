@@ -60,7 +60,7 @@ namespace Stuff.StuffMath
         {
             get
             {
-                return DotSum(this);
+                return DotSum(Conjugate());
             }
         }
 
@@ -174,13 +174,18 @@ namespace Stuff.StuffMath
             return vector.Count(f => !f.IsZero()) == 0;
         }
 
+        public Vector<F> Conjugate()
+        {
+            return new Vector<F>(this.Select(f => f.Conjugate()));
+        }
+
         public F DotSum(Vector<F> vec)
         {
             if (Size != vec.Size)
-                throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            var total = vector[0].Multiply(vec[0]);
+                throw new ArgumentException("The vectors must have the same number of dimensions.");
+            var total = vector[0].Multiply(vec[0].Conjugate());
             for (int i = 1; i < Size; ++i)
-                total = total.Add(vector[i].Multiply(vec[i]));
+                total = total.Add(vector[i].Multiply(vec[i].Conjugate()));
             return total;
         }
 
@@ -191,13 +196,12 @@ namespace Stuff.StuffMath
         /// <returns></returns>
         public Vector<F> Project(Vector<F> vec)
         {
-            throw new Exception("Doesn't work");
-            //return vec * (DotSum(vec) / vec.LengthSquared);
+            return vec * DotSum(vec).Divide(Length.Multiply(vec.Length));
         }
 
         public F ProjectionLengthSquared(Vector<F> vec)
         {
-            return DotSum(vec).Multiply(DotSum(vec)).Divide(vec.LengthSquared);
+            return DotSum(vec).Square().Divide(vec.LengthSquared);
         }
 
         public F Total()

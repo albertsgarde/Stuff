@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath.Structures
 {
-    public struct Real : IField<Real>
+    public struct Real : IHilbertField<Real>
     {
         public double Value { get; }
 
@@ -54,6 +54,10 @@ namespace Stuff.StuffMath.Structures
                 throw new InvalidOperationException("0 has no mulitplicative inverse");
             return new Real(1d / Value);
         }
+
+        public Real AbsSqrt() => Math.Sqrt(Value);
+
+        public Real Conjugate() => Value;
 
         public bool EqualTo(Real r)
         {

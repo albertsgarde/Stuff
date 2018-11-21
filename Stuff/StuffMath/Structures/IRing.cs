@@ -30,5 +30,10 @@ namespace Stuff.StuffMath.Structures
         {
             return r.EqualTo(new R().ONE);
         }
+
+        public static R Square<R>(this R r) where R : IRing<R>, new()
+        {
+            return r.Multiply(r);
+        }
     }
 }
