@@ -4,37 +4,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff.StuffMath.Complex;
 using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector<F> : IEnumerable<F>, IHilbertSpace<Vector<F>, F> where F : IHilbertField<F>, new()
+    public class Vector : IEnumerable<Complex2D>, IHilbertSpace<Vector, Complex2D>
     {
-        private readonly F[] vector;
+        private readonly Complex2D[] vector;
 
         public Vector()
         {
-            vector = new F[0];
+            vector = new Complex2D[0];
         }
 
-        public Vector(params F[] vector)
+        public Vector(params Complex2D[] vector)
         {
             this.vector = vector;
         }
 
-        public Vector(IEnumerable<F> vector) : this(vector.ToArray())
+        public Vector(IEnumerable<Complex2D> vector) : this(vector.ToArray())
         {
 
         }
 
-        public Vector(MatrixRow<F> mr)
+        public Vector(MatrixRow mr)
         {
-            vector = new F[mr.Length];
+            vector = new Complex2D[mr.Length];
             for (int i = 0; i < mr.Length; ++i)
                 vector[i] = mr[i];
         }
 
-        public F this[int i]
+        public Complex2D this[int i]
         {
             get
             {
@@ -56,7 +57,7 @@ namespace Stuff.StuffMath
         /// <summary>
         /// The squared geometric length of the vector.
         /// </summary>
-        public F LengthSquared
+        public Complex2D LengthSquared
         {
             get
             {
@@ -64,62 +65,62 @@ namespace Stuff.StuffMath
             }
         }
 
-        public F Length => LengthSquared.AbsSqrt();
+        public Complex2D Length => LengthSquared.AbsSqrt();
 
-        public Vector<F> ZERO => new Vector<F>();
+        public Vector ZERO => new Vector();
 
-        public F ONE => new F().ONE;
+        public Complex2D ONE => new Complex2D().ONE;
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
         /// <returns>The total of the two vectors.</returns>
-        public static Vector<F> operator +(Vector<F> vecA, Vector<F> vecB)
+        public static Vector operator +(Vector vecA, Vector vecB)
         {
             if (vecA.Size != vecB.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            return new Vector<F>(vecA.Zip(vecB, (x, y) => x.Add(y)).ToArray());
+            return new Vector(vecA.Zip(vecB, (x, y) => x.Add(y)).ToArray());
         }
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
         /// <returns>The right hand subtracted from the left hand.</returns>
-        public static Vector<F> operator -(Vector<F> vecA, Vector<F> vecB)
+        public static Vector operator -(Vector vecA, Vector vecB)
         {
             if (vecA.Size != vecB.Size)
                 throw new ArgumentException("The vectors must be have the same number of dimensions.");
-            return new Vector<F>(vecA.Zip(vecB, (x, y) => x.Subtract(y)).ToArray());
+            return new Vector(vecA.Zip(vecB, (x, y) => x.Subtract(y)).ToArray());
         }
 
         /// <summary>
         /// The vectors must have the same number of dimensions.
         /// </summary>
         /// <returns>The right hand subtracted from the left hand.</returns>
-        public static Vector<F> operator -(Vector<F> vec)
+        public static Vector operator -(Vector vec)
         {
-            return new Vector<F>(vec.Select(d => d.AdditiveInverse()).ToArray());
+            return new Vector(vec.Select(d => d.AdditiveInverse()).ToArray());
         }
 
-        /// <returns>The vector multiplied by the F.</returns>
-        public static Vector<F> operator *(Vector<F> vec, F d)
+        /// <returns>The vector multiplied by the Complex2D.</returns>
+        public static Vector operator *(Vector vec, Complex2D d)
         {
-            return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
+            return new Vector(vec.Select(x => x.Multiply(d)).ToArray());
         }
 
-        /// <returns>The vector multiplied by the F.</returns>
-        public static Vector<F> operator *(F d, Vector<F> vec)
+        /// <returns>The vector multiplied by the Complex2D.</returns>
+        public static Vector operator *(Complex2D d, Vector vec)
         {
-            return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
+            return new Vector(vec.Select(x => x.Multiply(d)).ToArray());
         }
 
-        /// <returns>The vector divided by the F.</returns>
-        public static Vector<F> operator /(Vector<F> vec, F d)
+        /// <returns>The vector divided by the Complex2D.</returns>
+        public static Vector operator /(Vector vec, Complex2D d)
         {
             return vec.Divide(d);
         }
 
-        public static bool operator ==(Vector<F> vec1, Vector<F> vec2)
+        public static bool operator ==(Vector vec1, Vector vec2)
         {
             foreach(var (f1, f2) in vec1.Zip(vec2, (f1, f2) => (f1, f2)))
             {
@@ -129,7 +130,7 @@ namespace Stuff.StuffMath
             return true;
         }
 
-        public static bool operator !=(Vector<F> vec1, Vector<F> vec2)
+        public static bool operator !=(Vector vec1, Vector vec2)
         {
             foreach (var (f1, f2) in vec1.Zip(vec2, (f1, f2) => (f1, f2)))
             {
@@ -139,19 +140,19 @@ namespace Stuff.StuffMath
             return false;
         }
 
-        public Vector<F> ToVector() => this;
+        public Vector ToVector() => this;
         
         /// <param name="dim">The size of the vector.</param>
         /// <param name="axis">Which axis this is the unit vector of.</param>
-        public static Vector<F> UnitVector(int dim, int axis)
+        public static Vector UnitVector(int dim, int axis)
         {
-            var result = new List<F>();
+            var result = new List<Complex2D>();
             for (int i = 0; i < axis; ++i)
-                result.Add(new F());
-            result.Add(new F().ONE);
+                result.Add(new Complex2D());
+            result.Add(new Complex2D().ONE);
             for (int i = axis + 1; i < dim; ++i)
-                result.Add(new F());
-            return new Vector<F>(result);
+                result.Add(new Complex2D());
+            return new Vector(result);
         }
 
         public bool IsUnitVector()
@@ -159,14 +160,14 @@ namespace Stuff.StuffMath
             return vector.Count(f => f.IsOne()) == 1 && vector.Count(f => f.IsZero()) == vector.Count() - 1;
         }
 
-        public Vector<F> Normalize()
+        public Vector Normalize()
         {
             return this * Length.MultiplicativeInverse(); 
         }
 
-        public static Vector<F> NullVector(int dim)
+        public static Vector NullVector(int dim)
         {
-            return new Vector<F>(ContainerUtils.UniformArray(new F(), dim));
+            return new Vector(ContainerUtils.UniformArray(new Complex2D(), dim));
         }
 
         public bool IsNull()
@@ -174,12 +175,12 @@ namespace Stuff.StuffMath
             return vector.Count(f => !f.IsZero()) == 0;
         }
 
-        public Vector<F> Conjugate()
+        public Vector Conjugate()
         {
-            return new Vector<F>(this.Select(f => f.Conjugate()));
+            return new Vector(this.Select(f => f.Conjugate()));
         }
 
-        public F DotSum(Vector<F> vec)
+        public Complex2D DotSum(Vector vec)
         {
             if (Size != vec.Size)
                 throw new ArgumentException("The vectors must have the same number of dimensions.");
@@ -194,22 +195,22 @@ namespace Stuff.StuffMath
         /// </summary>
         /// <param name="vec"></param>
         /// <returns></returns>
-        public Vector<F> Project(Vector<F> vec)
+        public Vector Project(Vector vec)
         {
             return vec * DotSum(vec).Divide(Length.Multiply(vec.Length));
         }
 
-        public F ProjectionLengthSquared(Vector<F> vec)
+        public Complex2D ProjectionLengthSquared(Vector vec)
         {
             return DotSum(vec).Square().Divide(vec.LengthSquared);
         }
 
-        public F Total()
+        public Complex2D Total()
         {
-            return vector.Aggregate(new F().ZERO, (total, x) => total.Add(x));
+            return vector.Aggregate(new Complex2D().ZERO, (total, x) => total.Add(x));
         }
 
-        public bool LinearlyDependent(Vector<F> v)
+        public bool LinearlyDependent(Vector v)
         {
             if (v.Size != Size)
                 throw new ArgumentException("A vector must be the same size as another to be linearly dependent with it.");
@@ -222,9 +223,9 @@ namespace Stuff.StuffMath
             return true;
         }
 
-        public IEnumerator<F> GetEnumerator()
+        public IEnumerator<Complex2D> GetEnumerator()
         {
-            foreach (F d in vector)
+            foreach (Complex2D d in vector)
                 yield return d;
         }
 
@@ -233,14 +234,14 @@ namespace Stuff.StuffMath
             return GetEnumerator();
         }
 
-        public bool Equals(Vector<F> vec)
+        public bool Equals(Vector vec)
         {
             return this.Zip(vec, (x, y) => x.EqualTo(y)).Count(x => !x) == 0;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is Vector<F> v)
+            if (obj is Vector v)
                 return v.Equals(this);
             else
                 return false;
@@ -251,9 +252,9 @@ namespace Stuff.StuffMath
             return Misc.HashCode(17, 23, vector);
         }
 
-        public MatrixRow<F> ToMatrixRow()
+        public MatrixRow ToMatrixRow()
         {
-            return new MatrixRow<F>(this);
+            return new MatrixRow(this);
         }
 
         public override string ToString()
@@ -264,22 +265,22 @@ namespace Stuff.StuffMath
             return result.Substring(0, result.Length - 2) + ")";
         }
 
-        public Vector<F> Add(Vector<F> t)
+        public Vector Add(Vector t)
         {
             return this + t;
         }
 
-        public Vector<F> AdditiveInverse()
+        public Vector AdditiveInverse()
         {
             return -this;
         }
 
-        public Vector<F> Multiply(F s)
+        public Vector Multiply(Complex2D s)
         {
             return this * s;
         }
 
-        public bool EqualTo(Vector<F> t)
+        public bool EqualTo(Vector t)
         {
             return this == t;
         }

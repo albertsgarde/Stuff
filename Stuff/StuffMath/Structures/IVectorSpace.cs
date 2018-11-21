@@ -22,8 +22,6 @@ namespace Stuff.StuffMath.Structures
         {
             get;
         }
-
-        Vector<F> ToVector();
     }
 
     public static class VectorSpaceExtensions

@@ -1,4 +1,5 @@
-﻿using Stuff.StuffMath.Structures;
+﻿using Stuff.StuffMath.Complex;
+using Stuff.StuffMath.Structures;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class Matrix<F> where F : IHilbertField<F>, new()
+    public class Matrix
     {
-        private readonly F F0 = new F();
+        private readonly Complex2D Complex2D0 = new Complex2D();
 
-        private readonly F F1 = new F().ONE;
+        private readonly Complex2D Complex2D1 = new Complex2D().ONE;
 
-        public IReadOnlyList<MatrixRow<F>> Rows { get; }
+        public IReadOnlyList<MatrixRow> Rows { get; }
 
-        public IReadOnlyList<Vector<F>> Columns
+        public IReadOnlyList<Vector> Columns
         {
             get
             {
-                var result = new F[N][];
+                var result = new Complex2D[N][];
                 for (int i = 0; i < N; ++i)
-                    result[i] = new F[M];
+                    result[i] = new Complex2D[M];
                 for (int j = 0; j < M; ++j)
                 {
                     for (int i = 0; i < N; ++i)
                         result[i][j] = Rows[j][i];
                 }
-                return result.Select(v => new Vector<F>(v)).ToList();
+                return result.Select(v => new Vector(v)).ToList();
             }
         }
 
@@ -36,9 +37,9 @@ namespace Stuff.StuffMath
 
         public int N { get; }
 
-        public Matrix(params MatrixRow<F>[] rows)
+        public Matrix(params MatrixRow[] rows)
         {
-            N = rows.First().Length;
+            N = rows.Complex2Dirst().Length;
             for (int i = 1; i < rows.Length; ++i)
             {
                 if (rows[i].Length != N)
@@ -47,70 +48,70 @@ namespace Stuff.StuffMath
             Rows = rows.Copy();
         }
 
-        public Matrix(IEnumerable<MatrixRow<F>> rows) : this(rows.ToArray())
+        public Matrix(IEnumerable<MatrixRow> rows) : this(rows.ToArray())
         {
 
         }
 
-        public Matrix(params Vector<F>[] columns)
+        public Matrix(params Vector[] columns)
         {
             N = columns.Length;
 
-            var height = columns.First().Size;
+            var height = columns.Complex2Dirst().Size;
             for (int i = 1; i < N; ++i)
             {
                 if (columns[i].Size != height)
                     throw new ArgumentException($"All columns must have the same length. The first column has length {height}, but column {i} has length {columns[i].Size}.");
             }
 
-            var result = new MatrixRow<F>[columns.First().Size];
+            var result = new MatrixRow[columns.Complex2Dirst().Size];
             for (int j = 0; j < height; ++j)
             {
-                var row = new F[N];
+                var row = new Complex2D[N];
                 for (int i = 0; i < N; ++i)
                     row[i] = columns[i][j];
-                result[j] = new MatrixRow<F>(row);
+                result[j] = new MatrixRow(row);
             }
             Rows = result;
         }
 
-        public Matrix(IEnumerable<Vector<F>> columns) : this(columns.ToArray())
+        public Matrix(IEnumerable<Vector> columns) : this(columns.ToArray())
         {
         }
 
-        public Matrix(IEnumerable<F> values, int rows)
+        public Matrix(IEnumerable<Complex2D> values, int rows)
         {
             if (values.Count() % rows != 0)
                 throw new ArgumentException($"The number of values({values.Count()}) must be divisible by the number of rows({rows}).");
             N = values.Count() / rows;
-            var result = new MatrixRow<F>[rows];
+            var result = new MatrixRow[rows];
 
             int j = -1;
             int i = 0;
-            var row = new F[N];
+            var row = new Complex2D[N];
             foreach (var value in values)
             {
                 row[i] = value;
                 if (++i >= N)
                 {
                     i -= N;
-                    result[++j] = new MatrixRow<F>(row);
+                    result[++j] = new MatrixRow(row);
                 }
             }
             Rows = result;
         }
 
-        public MatrixRow<F> this[int row] => Rows[row];
+        public MatrixRow this[int row] => Rows[row];
 
-        public Vector<F> Column(int column)
+        public Vector Column(int column)
         {
-            var result = new F[M];
+            var result = new Complex2D[M];
             for (int j = 0; j < M; ++j)
                 result[j] = Rows[j][column];
-            return new Vector<F>(result);
+            return new Vector(result);
         }
 
-        public IEnumerable<F> Values()
+        public IEnumerable<Complex2D> Values()
         {
             for (int j = 0; j < M; ++j)
             {
@@ -119,7 +120,7 @@ namespace Stuff.StuffMath
             }
         }
 
-        public static bool operator ==(Matrix<F> m1, Matrix<F> m2)
+        public static bool operator ==(Matrix m1, Matrix m2)
         {
             if (m1.N != m2.N || m1.M != m2.M)
                 return false;
@@ -132,90 +133,90 @@ namespace Stuff.StuffMath
             return true;
         }
 
-        public static bool operator !=(Matrix<F> m1, Matrix<F> m2)
+        public static bool operator !=(Matrix m1, Matrix m2)
         {
             return !(m1 == m2);
         }
 
-        public static Matrix<F> operator+(Matrix<F> m1, Matrix<F> m2)
+        public static Matrix operator+(Matrix m1, Matrix m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
                 throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
-            var result = new MatrixRow<F>[m1.M];
+            var result = new MatrixRow[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
-                var row = new F[m1.N];
+                var row = new Complex2D[m1.N];
                 for (int i = 0; i < m1.N; ++i)
                     row[i] = m1[j][i].Add(m2[j][i]);
-                result[j] = new MatrixRow<F>(row);
+                result[j] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public static Matrix<F> operator -(Matrix<F> m1, Matrix<F> m2)
+        public static Matrix operator -(Matrix m1, Matrix m2)
         {
             if (m1.M != m2.M || m1.N != m2.N)
                 throw new ArgumentException("In order to add to matrixes, they must have the same dimensions.");
-            var result = new MatrixRow<F>[m1.M];
+            var result = new MatrixRow[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
-                var row = new F[m1.N];
+                var row = new Complex2D[m1.N];
                 for (int i = 0; i < m1.N; ++i)
                     row[i] = m1[j][i].Subtract(m2[j][i]);
-                result[j] = new MatrixRow<F>(row);
+                result[j] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public static Matrix<F> operator *(Matrix<F> m, F d)
+        public static Matrix operator *(Matrix m, Complex2D d)
         {
-            var result = new MatrixRow<F>[m.M];
+            var result = new MatrixRow[m.M];
             for (int j = 0; j < m.M; ++j)
             {
-                var row = new F[m.N];
+                var row = new Complex2D[m.N];
                 for (int i = 0; i < m.N; ++i)
                     row[i] = m[j][i].Multiply(d);
-                result[j] = new MatrixRow<F>(row);
+                result[j] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public static Matrix<F> operator *(F d, Matrix<F> m)
+        public static Matrix operator *(Complex2D d, Matrix m)
         {
-            var result = new MatrixRow<F>[m.M];
+            var result = new MatrixRow[m.M];
             for (int j = 0; j < m.M; ++j)
             {
-                var row = new F[m.N];
+                var row = new Complex2D[m.N];
                 for (int i = 0; i < m.N; ++i)
                     row[i] = m[j][i].Multiply(d);
-                result[j] = new MatrixRow<F>(row);
+                result[j] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public static Vector<F> operator *(Matrix<F> m, Vector<F> v)
+        public static Vector operator *(Matrix m, Vector v)
         {
             if (m.N != v.Count())
                 throw new ArgumentException("The vector must have m.N size.");
-            var result = new F[m.M];
+            var result = new Complex2D[m.M];
             for (int j = 0; j < m.M; ++j)
                 result[j] = m[j].ToVector().DotSum(v);
-            return new Vector<F>(result);
+            return new Vector(result);
         }
 
-        public static Matrix<F> operator*(Matrix<F> m1, Matrix<F> m2)
+        public static Matrix operator*(Matrix m1, Matrix m2)
         {
             if (m1.N != m2.M)
                 throw new ArgumentException("m1.N must equal m2.N.");
-            var result = new MatrixRow<F>[m1.M];
+            var result = new MatrixRow[m1.M];
             for (int j = 0; j < m1.M; ++j)
             {
-                var row = new F[m2.N];
+                var row = new Complex2D[m2.N];
                 for (int i = 0; i < m2.N; ++i)
                     row[i] = m1[j].ToVector().DotSum(m2.Column(i));
-                result[j] = new MatrixRow<F>(row);
+                result[j] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
         public bool IsSquare()
@@ -223,20 +224,20 @@ namespace Stuff.StuffMath
             return N == M;
         }
 
-        public static Matrix<F> UnitMatrix(int dim)
+        public static Matrix UnitMatrix(int dim)
         {
-            var result = new MatrixRow<F>[dim];
+            var result = new MatrixRow[dim];
             for (int j = 0; j < dim; ++j)
             {
-                var row = new F[dim];
+                var row = new Complex2D[dim];
                 for (int i = 0; i < dim; ++i)
-                    row[i] = i == j ? new F().ONE : new F();
-                result[j] = new MatrixRow<F>(row);
+                    row[i] = i == j ? new Complex2D().ONE : new Complex2D();
+                result[j] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public Matrix<F> UnitMatrix()
+        public Matrix UnitMatrix()
         {
             if (!IsSquare())
                 throw new InvalidOperationException("Unit matrices must be square.");
@@ -259,9 +260,9 @@ namespace Stuff.StuffMath
             return result;
         }
 
-        public Matrix<F> SwapRows(int row1, int row2)
+        public Matrix SwapRows(int row1, int row2)
         {
-            var result = new List<MatrixRow<F>>(M);
+            var result = new List<MatrixRow>(M);
             for (int i = 0; i < M; ++i)
             {
                 if (i == row1)
@@ -271,12 +272,12 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public Matrix<F> ScaleRow(int row, F scalar)
+        public Matrix ScaleRow(int row, Complex2D scalar)
         {
-            var result = new List<MatrixRow<F>>(M);
+            var result = new List<MatrixRow>(M);
             for (int i = 0; i < M; ++i)
             {
                 if (i == row)
@@ -284,12 +285,12 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public Matrix<F> AddScaledRow(int source, F scalar, int dest)
+        public Matrix AddScaledRow(int source, Complex2D scalar, int dest)
         {
-            var result = new List<MatrixRow<F>>(M);
+            var result = new List<MatrixRow>(M);
             for (int i = 0; i < M; ++i)
             {
                 if (i == dest)
@@ -297,22 +298,22 @@ namespace Stuff.StuffMath
                 else
                     result.Add(Rows[i]);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public Matrix<F> Transpose()
+        public Matrix Transpose()
         {
-            var result = new MatrixRow<F>[N];
+            var result = new MatrixRow[N];
             for (int i = 0; i < N; ++i)
             {
-                var row = new F[M];
+                var row = new Complex2D[M];
                 for (int j = 0; j < M; ++j)
                 {
                     row[j] = this[j][i];
                 }
-                result[i] = new MatrixRow<F>(row);
+                result[i] = new MatrixRow(row);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
         public bool IsTrap() // Optimize?
@@ -350,14 +351,14 @@ namespace Stuff.StuffMath
             {
                 for (int j = 0; j < lead.j; ++j)
                 {
-                    if (!this[j][lead.i].EqualTo(new F()))
+                    if (!this[j][lead.i].EqualTo(new Complex2D()))
                         return false;
                 }
             }
             return true;
         }
 
-        public Matrix<F> ToTrap() // Optimize?
+        public Matrix ToTrap() // Optimize?
         {
             // TEST!
             var result = this;
@@ -371,13 +372,13 @@ namespace Stuff.StuffMath
                 //Put one in space (m,n) 
                 if (!result[m][n].IsOne())
                 {
-                    if (result.Column(n).Skip(m).Contains(F1))
+                    if (result.Column(n).Skip(m).Contains(Complex2D1))
                     {
-                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(F1) + m);
+                        result = result.SwapRows(m, result.Column(n).Skip(m).Complex2DirstIndexOf(Complex2D1) + m);
                     }
                     else
                     {
-                        result = result.SwapRows(m, result.Column(n).Skip(m).FirstIndexOf(d => !d.IsZero()) + m);
+                        result = result.SwapRows(m, result.Column(n).Skip(m).Complex2DirstIndexOf(d => !d.IsZero()) + m);
                         result = result.ScaleRow(m, result[m][n].MultiplicativeInverse());
                     }
                 }
@@ -398,34 +399,34 @@ namespace Stuff.StuffMath
             return result;
         }
 
-        public Matrix<F> RemoveRow(int m)
+        public Matrix RemoveRow(int m)
         {
-            var result = new MatrixRow<F>[M - 1];
+            var result = new MatrixRow[M - 1];
             for (int j = 0; j < M - 1; ++j)
             {
                 result[j] = j < m ? this[j] : this[j + 1];
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public Matrix<F> RemoveColumn(int n)
+        public Matrix RemoveColumn(int n)
         {
-            var result = new Vector<F>[N - 1];
+            var result = new Vector[N - 1];
             for (int i = 0; i < N - 1; ++i)
             {
                 result[i] = i < n ? Column(i) : Column(i+1);
             }
-            return new Matrix<F>(result);
+            return new Matrix(result);
         }
 
-        public Matrix<F> MinorMatrix(int m, int n)
+        public Matrix MinorMatrix(int m, int n)
         {
             return RemoveColumn(n).RemoveRow(m);
         }
 
-        public F Determinant()
+        public Complex2D Determinant()
         {
-            var result = new F();
+            var result = new Complex2D();
             if (!IsSquare())
                 throw new InvalidOperationException("Can only find the determinant of square matrices.");
             if (N == 2)
@@ -435,26 +436,26 @@ namespace Stuff.StuffMath
             return result;
         }
 
-        public F Trace()
+        public Complex2D Trace()
         {
             if (!IsSquare())
                 throw new InvalidOperationException("Only a square matrix has a trace.");
-            var result = new F();
+            var result = new Complex2D();
             for (int i = 0; i < N; ++i)
                 result.Add(this[i][i]);
             return result;
         }
 
-        public ParametricEquation<F> Kernel()
+        public ParametricEquation<Complex2D> Kernel()
         {
-            var result = new List<Vector<F>>();
+            var result = new List<Vector>();
             var trap = ToTrap();
             var rows = new List<int>();
             int m = 0;
             for (int n = 0; n < N; ++n)
             {
                 if (trap.Column(n).IsNull())
-                    result.Add(Vector<F>.UnitVector(N, n));
+                    result.Add(Vector.UnitVector(N, n));
                 else if (m < trap.M && trap[m][n].IsOne())
                 {
                     rows.Add(n);
@@ -462,24 +463,24 @@ namespace Stuff.StuffMath
                 }
                 else
                 {
-                    var vector = ContainerUtils.UniformArray(new F(), N);
-                    vector[n] = new F().ONE;
+                    var vector = ContainerUtils.UniformArray(new Complex2D(), N);
+                    vector[n] = new Complex2D().ONE;
                     for (int i = 0; i < rows.Count; ++i)
                         vector[rows[i]] = trap[i][n].AdditiveInverse();
-                    result.Add(new Vector<F>(vector));
+                    result.Add(new Vector(vector));
                 }
             }
-            return new ParametricEquation<F>(Vector<F>.NullVector(N), result);
+            return new ParametricEquation<Complex2D>(Vector.NullVector(N), result);
         }
 
-        public IEnumerable<Vector<F>> EigenVectors(F eigenValue)
+        public IEnumerable<Vector> EigenVectors(Complex2D eigenValue)
         {
             if (!IsSquare())
                 throw new InvalidOperationException("Only a square matrix has eigen values or vectors.");
             return (this - UnitMatrix() * eigenValue).Kernel().Coefficients;
         }
 
-        public F EigenValue(Vector<F> eigenVector)
+        public Complex2D EigenValue(Vector eigenVector)
         {
             if (!IsSquare())
                 throw new InvalidOperationException("Only a square matrix has eigen values or vectors.");
@@ -493,18 +494,18 @@ namespace Stuff.StuffMath
             return result[0].Divide(eigenVector[0]);
         }
 
-        public Matrix<F> Join(Matrix<F> m)
+        public Matrix Join(Matrix m)
         {
-            return new Matrix<F>(Columns.Concat(m.Columns));
+            return new Matrix(Columns.Concat(m.Columns));
         }
 
-        public (Matrix<F> left, Matrix<F> right) Split(int column)
+        public (Matrix left, Matrix right) Split(int column)
         {
             var columns = Columns;
-            return (new Matrix<F>(columns.Take(column)), new Matrix<F>(columns.Skip(column)));
+            return (new Matrix(columns.Take(column)), new Matrix(columns.Skip(column)));
         }
 
-        public Matrix<F> Inverse()
+        public Matrix Inverse()
         {
             if (!IsSquare())
                 throw new ArgumentException("Only square matrices can be inverted.");
@@ -534,17 +535,17 @@ namespace Stuff.StuffMath
 
         public override bool Equals(object obj)
         {
-            if (obj is Matrix<F> m)
+            if (obj is Matrix m)
             {
                 return this == m;
             }
-            else if (obj is Vector<F> v)
+            else if (obj is Vector v)
             {
-                return Equals(new Matrix<F>(v));
+                return Equals(new Matrix(v));
             }
-            else if (obj is MatrixRow<F> r)
+            else if (obj is MatrixRow r)
             {
-                return Equals(new Matrix<F>(r));
+                return Equals(new Matrix(r));
             }
             else
                 return false;
