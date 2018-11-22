@@ -391,7 +391,7 @@ namespace Stuff
                 {
                     element = Elements.Single((Element e) => { return e.Symbol == elementSymbol; });
                 }
-                catch (Exception e)
+                catch
                 {
                     throw new Exception("Element " + elementSymbol + " does not exist.");
                 }
