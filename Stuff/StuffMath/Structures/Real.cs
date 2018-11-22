@@ -59,6 +59,8 @@ namespace Stuff.StuffMath.Structures
 
         public Real Conjugate() => Value;
 
+        public FDouble RealPart() => Value;
+
         public bool EqualTo(Real r)
         {
             return Value == r.Value;

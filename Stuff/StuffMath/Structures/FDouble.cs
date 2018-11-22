@@ -69,6 +69,8 @@ namespace Stuff.StuffMath.Structures
 
         public FDouble Conjugate() => Value;
 
+        public FDouble RealPart() => Value;
+
         public bool EqualTo(FDouble r)
         {
             return Value == r.Value;

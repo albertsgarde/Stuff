@@ -299,6 +299,11 @@ namespace Stuff.StuffMath.Complex
             return $"({Absolute},{Argument/Math.PI}π)";
         }
 
+        public FDouble RealPart()
+        {
+            return Real;
+        }
+
         public bool EqualTo(Complex2D c)
         {
             return Real == c.Real && Imaginary == c.Imaginary;
