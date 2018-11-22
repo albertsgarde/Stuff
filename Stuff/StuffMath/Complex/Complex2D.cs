@@ -164,6 +164,8 @@ namespace Stuff.StuffMath.Complex
 
         public Complex2D Multiply(Complex2D c) => this * c;
 
+        public Complex2D Multiply(FDouble d) => this * d;
+
         public Complex2D AdditiveInverse() => -this;
 
         public Complex2D Reciprocal()

@@ -48,6 +48,8 @@ namespace Stuff.StuffMath.Structures
             return new Real(Value * r.Value);
         }
 
+        public Real Multiply(FDouble d) => new Real(Value * d);
+
         public Real MultiplicativeInverse()
         {
             if (Value == 0)

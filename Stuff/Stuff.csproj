@@ -83,6 +83,7 @@
     <Compile Include="PathList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rand.cs" />
+    <Compile Include="Recommendation\Extensions.cs" />
     <Compile Include="Recommendation\User.cs" />
     <Compile Include="Recommendation\UserData.cs" />
     <Compile Include="SettingsLoader.cs" />
