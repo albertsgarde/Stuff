@@ -214,7 +214,9 @@ namespace Stuff.StuffMath
                 throw new ArgumentException("The vector must have m.N size.");
             var result = new F[m.M];
             for (int j = 0; j < m.M; ++j)
-                result[j] = m[j].ToVector().DotSum(v);
+            {
+                result[j] = m[j].ToVector().Zip(v, (a, b) => (a, b)).Aggregate(new F(), (a, f) => a.Add(f.a.Multiply(f.b)));
+            }
             return new Vector<F>(result);
         }
 
@@ -227,7 +229,7 @@ namespace Stuff.StuffMath
             {
                 var row = new F[m2.N];
                 for (int i = 0; i < m2.N; ++i)
-                    row[i] = m1[j].ToVector().DotSum(m2.Column(i));
+                    row[i] = m1[j].ToVector().Zip(m2.Column(i), (a, b) => (a, b)).Aggregate(new F(), (a, f) => a.Add(f.a.Multiply(f.b)));
                 result[j] = new MatrixRow<F>(row);
             }
             return new Matrix<F>(result);
