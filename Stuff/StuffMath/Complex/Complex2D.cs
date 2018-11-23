@@ -103,7 +103,7 @@ namespace Stuff.StuffMath.Complex
 
         public static Complex2D operator -(double d, Complex2D c)
         {
-            return new Complex2D(c.Real - d, c.Imaginary);
+            return new Complex2D(d - c.Real, -c.Imaginary);
         }
 
         public static Complex2D operator -(Complex2D c)
@@ -198,6 +198,11 @@ namespace Stuff.StuffMath.Complex
         public Complex2D AbsSqrt()
         {
             return Math.Sqrt(Absolute);
+        }
+
+        public double AbsoluteDistance(Complex2D c1, Complex2D c2)
+        {
+            return (c2 - c1).Absolute;
         }
 
         /// <summary>

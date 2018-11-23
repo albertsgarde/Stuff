@@ -222,6 +222,18 @@ namespace Stuff.StuffMath
             return true;
         }
 
+        public static IEnumerable<Vector<F>> Orthogonalize(IEnumerable<Vector<F>> vectors)
+        {
+            if (vectors.Count() == 1)
+                return vectors;
+            var result = Orthogonalize(vectors.Take(vectors.Count() - 1)).ToList();
+            var v = vectors.Last();
+            foreach (var vec in result)
+                v -= v.Project(vec);
+            result.Add(v);
+            return result;
+        }
+
         public IEnumerator<F> GetEnumerator()
         {
             foreach (F d in vector)

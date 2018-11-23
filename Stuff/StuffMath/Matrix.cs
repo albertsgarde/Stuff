@@ -36,6 +36,21 @@ namespace Stuff.StuffMath
 
         public int N { get; }
 
+        public Matrix(F[][] rows)
+        {
+            if (rows.Length == 0)
+                throw new ArgumentException("Matrices cannot have 0 dimensions.");
+            N = rows[0].Length;
+            if (N == 0)
+                throw new ArgumentException("Matrices cannot have 0 dimensions.");
+            for (int i = 1; i < rows.Length; ++i)
+            {
+                if (rows[i].Length != N)
+                    throw new ArgumentException($"All rows must have the same length. The first row has length {N}, but row {i} has length {rows[i].Length}.");
+            }
+            Rows = rows.Select(r => new MatrixRow<F>(r)).ToList();
+        }
+
         public Matrix(params MatrixRow<F>[] rows)
         {
             N = rows.First().Length;
@@ -259,6 +274,21 @@ namespace Stuff.StuffMath
             return result;
         }
 
+        public static Matrix<F> DiagonalMatrix(IEnumerable<F> values)
+        {
+            var dim = values.Count();
+            var result = ContainerUtils.UniformArray(ContainerUtils.UniformArray(new F(), dim), dim);
+            int i = 0;
+            foreach (var f in values)
+            {
+                result[i][i] = f;
+                ++i;
+            }
+            return new Matrix<F>(result);
+        }
+
+        public static Matrix<F> DiagonalMatrix(params F[] values) => DiagonalMatrix(values.AsEnumerable());
+
         public Matrix<F> SwapRows(int row1, int row2)
         {
             var result = new List<MatrixRow<F>>(M);
@@ -431,7 +461,15 @@ namespace Stuff.StuffMath
             if (N == 2)
                 return this[0][0].Multiply(this[1][1]).Subtract(this[0][1].Multiply(this[1][0]));
             for (int i = 0; i < N; ++i)
-                result = result.Add(MinorMatrix(0, i).Determinant());
+            {
+                if (!this[0][i].IsZero())
+                {
+                    if (i % 2 == 0)
+                        result = result.Add(MinorMatrix(0, i).Determinant().Multiply(this[0][i]));
+                    else
+                        result = result.Add(MinorMatrix(0, i).Determinant().Multiply(this[0][i]).AdditiveInverse());
+                }
+            }
             return result;
         }
 

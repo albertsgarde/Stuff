@@ -42,6 +42,12 @@ namespace Stuff.Recommendation
             return result / intersection.Count();
         }
 
+        public double Mean(params string[] withoutFilms)
+        {
+            var films = Ratings.Keys.Except(withoutFilms);
+            return films.Select(f => Ratings[f]).Sum() / films.Count();
+        }
+
         public double Variance()
         {
             return Math.Sqrt(Ratings.Values.Sum(d => Math.Pow(d - Mean(), 2)) / Ratings.Count);
@@ -73,12 +79,12 @@ namespace Stuff.Recommendation
             return result;
         }
 
-        public double ESimilarity(User u)
+        public double ESimilarity(User u, string film = "")
         {
             var d = 0d;
-            var films = Ratings.Keys.Intersect(u.Ratings.Keys);
-            foreach(var film in films)
-                d += Math.Pow(Ratings[film] - u.Ratings[film], 2);
+            var films = Ratings.Keys.Where(k => k != film).Intersect(u.Ratings.Keys);
+            foreach(var f in films)
+                d += Math.Pow(Ratings[f] - u.Ratings[f], 2);
             return 1 / (1 + Math.Sqrt(d));
         }
 
