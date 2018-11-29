@@ -117,6 +117,20 @@ namespace Stuff.StuffMath
             return new Polynomial(pol.coefficients.Select(kv => (kv.Key, kv.Value * d)).ToArray());
         }
 
+        public static Polynomial operator *(Polynomial p1, Polynomial p2)
+        {
+            var resultDegree = p1.Degree + p2.Degree;
+            var result = new double[resultDegree];
+            for (int i = 0; i < resultDegree; ++i)
+            {
+                var coef = 0d;
+                for (int j = 0; j < p1.Degree; ++j)
+                    coef += p1[j] * p2[i - j];
+                result[i] = coef;
+            }
+            return new Polynomial(result);
+        }
+
         public static bool operator ==(Polynomial pol1, IPolynomial pol2)
         {
             return pol1.Equals(pol2);
@@ -183,6 +197,11 @@ namespace Stuff.StuffMath
         }
 
         public double this[int exponent] => Coefficient(exponent);
+
+        public double GreatestCoef()
+        {
+            return Coefficient(Degree);
+        }
 
         public Polynomial AsPolynomial() => this;
 

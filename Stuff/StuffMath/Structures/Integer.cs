@@ -95,6 +95,23 @@ namespace Stuff.StuffMath.Structures
             return new Integer(Value * t.Value);
         }
 
+        public static int Quo(int a, int b)
+        {
+            return (int)Math.Floor((double)a / b);
+        }
+
+        /// <returns>a mod b.</returns>
+        public static int Mod(int a, int b)
+        {
+            return a - b * Quo(a, b);
+        }
+
+        public (Integer quo, Integer mod) Divide(Integer i)
+        {
+            var quo = (long)Math.Floor((double)Value / i.Value);
+            return (quo, this - i*quo);
+        }
+
         public bool EqualTo(Integer t)
         {
             return Value == t.Value;

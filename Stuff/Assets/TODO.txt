@@ -8,3 +8,6 @@ Other:
 	Expand data handling capabilities.
 	Stop throwing Exception. Find better stuff to throw.
 	Move Test project into GitHub project.
+	Polynomial division
+	Polynomial GCD
+		Extended Polynomial GCD

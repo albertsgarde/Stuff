@@ -64,6 +64,11 @@ namespace Stuff.StuffMath
             return new ModInt(a.Value * b, a.N);
         }
 
+        public static ModInt operator *(int b, ModInt a)
+        {
+            return new ModInt(a.Value * b, a.N);
+        }
+
         public static ModInt operator /(ModInt a, ModInt b)
         {
             return a * b.MultiplicativeInverse();
@@ -76,7 +81,7 @@ namespace Stuff.StuffMath
 
         public ModInt MultiplicativeInverse()
         {
-            if (Basic.GCD(Value, N) != 0)
+            if (Basic.GCD(Value, N) != 1)
                 throw new InvalidOperationException("Numbers that aren't coprime with N don't have a multiplicative inverse.");
             for (int i = 0; i < N; ++i)
             {
@@ -84,6 +89,11 @@ namespace Stuff.StuffMath
                     return new ModInt(i, N);
             }
             throw new Exception("Should never get here.");
+        }
+
+        public override string ToString()
+        {
+            return "" + Value;
         }
     }
 

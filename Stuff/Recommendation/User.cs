@@ -28,6 +28,13 @@ namespace Stuff.Recommendation
             Ratings = ratings;
         }
 
+        public double this[string item]
+        {
+            get => Ratings[item];
+
+            set => Ratings[item] = value;
+        }
+
         public double Mean()
         {
             return Ratings.Values.Sum(d => d) / Ratings.Count;
@@ -66,16 +73,22 @@ namespace Stuff.Recommendation
         public Dictionary<string, double> Standardize()
         {
             var result = new Dictionary<string, double>();
+            var vari = Variance();
+            if (vari == 0)
+                vari = 1;
             foreach (var r in Ratings)
-                result.Add(r.Key, (r.Value - Mean()) / Variance());
+                result.Add(r.Key, (r.Value - Mean()) / vari);
             return result;
         }
 
         public Dictionary<string, double> Standardize(IEnumerable<string> films)
         {
             var result = new Dictionary<string, double>();
+            var vari = Variance(films);
+            if (vari == 0)
+                vari = 1;
             foreach (var film in Ratings.Keys.Intersect(films))
-                result.Add(film, (Ratings[film] - Mean(films)) / Variance(films));
+                result.Add(film, (Ratings[film] - Mean(films)) / vari);
             return result;
         }
 
@@ -103,6 +116,14 @@ namespace Stuff.Recommendation
             foreach (var f in films)
                 d += u1[f] * u2[f];
             return d / films.Count();
+        }
+
+        public string AsString()
+        {
+            var result = Name + ": ";
+            foreach (var item in Ratings)
+                result += $"({item.Key}: {item.Value}), ";
+            return result.Substring(0, result.Length - 2);
         }
     }
 }

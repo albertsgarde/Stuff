@@ -148,6 +148,19 @@ namespace Stuff.StuffMath
                 return GCD(b, Mod(a, b));
         }
 
+        public static (int gcd, int s, int t) ExtGCD(int a, int b)
+        {
+            var r1 = (r: a, s: 1, t: 0);
+            var r2 = (r: b, s: 0, t: 1);
+            while (r2.r != 0)
+            {
+                var next = (r: Mod(r1.r, r2.r), s: r1.s - r2.s * Quo(r1.r, r2.r), t: r1.t - r2.t * Quo(r1.r, r2.r));
+                r1 = r2;
+                r2 = next;
+            }
+            return r1;
+        }
+
         public static int LCM(int a, int b)
         {
             return a * b / GCD(a, b);
