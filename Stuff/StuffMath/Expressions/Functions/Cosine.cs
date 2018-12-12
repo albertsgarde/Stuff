@@ -74,7 +74,7 @@ namespace Stuff.StuffMath.Expressions.Functions
 
         public override string ToTec()
         {
-            throw new NotImplementedException();
+            return "cos(" + arg.ToTec() + ")";
         }
     }
 }

@@ -86,7 +86,7 @@ namespace Stuff.StuffMath.Expressions.Operators
 
         public override string ToTec()
         {
-            return (left.Priority > Priority ? "(" + left.ToTec() + ")" : left.ToTec()) + "*"  + (right.Priority > Priority ? "(" + right.ToTec() + ")" : right.ToTec());
+            return (left.Priority > Priority ? "(" + left.ToTec() + ")" : left.ToTec()) + "\\cdot "  + (right.Priority > Priority ? "(" + right.ToTec() + ")" : right.ToTec());
         }
     }
 }

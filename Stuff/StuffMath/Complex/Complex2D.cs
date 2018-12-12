@@ -71,6 +71,12 @@ namespace Stuff.StuffMath.Complex
             return new Complex2D(i, 0);
         }
 
+        public void Deconstruct(out double a, out double b)
+        {
+            a = Real;
+            b = Imaginary;
+        }
+
         public static Complex2D operator+(Complex2D c1, Complex2D c2)
         {
             return new Complex2D(c1.Real + c2.Real, c1.Imaginary + c2.Imaginary);

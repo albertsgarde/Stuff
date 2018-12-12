@@ -69,7 +69,7 @@ namespace Stuff.StuffMath.Expressions.Functions
 
         public override string ToTec()
         {
-            throw new NotImplementedException();
+            return "sin(" + arg.ToTec() + ")";
         }
     }
 }

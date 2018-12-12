@@ -43,7 +43,22 @@ namespace Stuff
         {
             return ThisThreadsRandom.NextDouble();
         }
-        
+
+        /// <param name="exclusiveMaxValue">Maximum value of the randomly generated result.</param>
+        /// <returns>A randomly generated double from 0 inclusively to exclusiveMaxValue exclusively</returns>
+        public static double NextDouble(double exclusiveMaxValue)
+        {
+            return ThisThreadsRandom.NextDouble() * exclusiveMaxValue;
+        }
+
+        /// <param name="inclusiveMinValue">Minimum value of the randomly generated result.</param>
+        /// <param name="exclusiveMaxValue">Maximum value of the randomly generated result.</param>
+        /// <returns>A randomly generated integer from inclusiveMinValue inclusively to exclusiveMaxValue exclusively</returns>
+        public static double NextDouble(double inclusiveMinValue, double exclusiveMaxValue)
+        {
+            return ThisThreadsRandom.NextDouble() * (exclusiveMaxValue - inclusiveMinValue) + inclusiveMinValue;
+        }
+
         /// <returns>A randomly generated boolean.</returns>
         public static bool NextBool()
         {

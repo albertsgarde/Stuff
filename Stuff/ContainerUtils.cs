@@ -237,5 +237,13 @@ namespace Stuff
                 result[i] = t;
             return result;
         }
+
+        public static void Deconstruct<K, V>(this KeyValuePair<K, V> kvp, out K k, out V v)
+        {
+            k = kvp.Key;
+            v = kvp.Value;
+        }
+
+        public static IEnumerable<(T1, T2)> Zip<T1, T2>(this IEnumerable<T1> list1, IEnumerable<T2> list2) => list1.Zip(list2, (t1, t2) => (t1, t2));
     }
 }

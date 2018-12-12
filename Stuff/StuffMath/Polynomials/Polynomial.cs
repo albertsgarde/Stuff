@@ -18,7 +18,7 @@ namespace Stuff.StuffMath
 
         public Real ONE => 1;
 
-        public int Degree => coefficients.Keys.Max();
+        public int Degree => coefficients.Keys.Where(k => coefficients[k] != 0).Max();
 
         /// <summary>
         /// Creates a new Polynomial with all coefficients set to 0.
@@ -31,11 +31,12 @@ namespace Stuff.StuffMath
         public Polynomial(params (int exponent, double coef)[] coefs)
         {
             coefficients = new Dictionary<int, double>();
-            foreach (var coef in coefs)
+            foreach (var (exp, coef) in coefs)
             {
-                if (coef.exponent < 0)
+                if (exp < 0)
                     throw new Exception("Polynomials cannot contain exponents below 0.");
-                coefficients[coef.exponent] = coef.coef;
+                if (coef != 0)
+                    coefficients[exp] = coef;
             }
         }
 
@@ -43,17 +44,21 @@ namespace Stuff.StuffMath
         {
             coefficients = new Dictionary<int, double>();
             for (int i = 0; i < coefs.Length; ++i)
-                coefficients[i] = coefs[i];
+            {
+                if (coefs[i] != 0)
+                    coefficients[i] = coefs[i];
+            }
         }
 
         public Polynomial(Dictionary<int, double> coefs)
         {
             coefficients = new Dictionary<int, double>();
-            foreach (var coef in coefs)
+            foreach (var (exp, coef) in coefs)
             {
-                if (coef.Key < 0)
+                if (exp < 0)
                     throw new Exception("Polynomials cannot contain exponents below 0.");
-                coefficients[coef.Key] = coef.Value;
+                if (coef != 0)
+                    coefficients[exp] = coef;
             }
         }
 
@@ -107,6 +112,24 @@ namespace Stuff.StuffMath
             return new Polynomial(result);
         }
 
+        public static Polynomial operator-(Polynomial pol1, Polynomial pol2)
+        {
+            var result = new Dictionary<int, double>();
+
+            foreach (var coef in pol1.coefficients)
+                result[coef.Key] = coef.Value;
+
+            foreach (var coef in pol2.coefficients)
+            {
+                if (result.ContainsKey(coef.Key))
+                    result[coef.Key] -= coef.Value;
+                else
+                    result[coef.Key] = -coef.Value;
+            }
+
+            return new Polynomial(result);
+        }
+
         public static Polynomial operator -(Polynomial pol)
         {
             return new Polynomial(pol.coefficients.Select(kv => (kv.Key, -kv.Value)).ToArray());
@@ -120,11 +143,11 @@ namespace Stuff.StuffMath
         public static Polynomial operator *(Polynomial p1, Polynomial p2)
         {
             var resultDegree = p1.Degree + p2.Degree;
-            var result = new double[resultDegree];
-            for (int i = 0; i < resultDegree; ++i)
+            var result = new double[resultDegree + 1];
+            for (int i = 0; i < resultDegree + 1; ++i)
             {
                 var coef = 0d;
-                for (int j = 0; j < p1.Degree; ++j)
+                for (int j = 0; j < p1.Degree + 1; ++j)
                     coef += p1[j] * p2[i - j];
                 result[i] = coef;
             }
@@ -144,6 +167,19 @@ namespace Stuff.StuffMath
         public double Y(double x)
         {
             return coefficients.Sum(coef => Math.Pow(x, coef.Key) * coef.Value);
+        }
+
+        public (Polynomial quo, Polynomial mod) Divide(Polynomial p)
+        {
+            var quo = new Polynomial();
+            var pol = this;
+            while (pol.Degree >= p.Degree)
+            {
+                var factor = new Polynomial((pol.Degree - p.Degree, pol.GreatestCoef() / p.GreatestCoef()));
+                pol -= p * factor;
+                quo += factor;
+            }
+            return (quo, pol);
         }
 
         public IPolynomial Differentiate()
@@ -274,20 +310,22 @@ namespace Stuff.StuffMath
         public override string ToString()
         {
             string result = "";
-            foreach (var coef in coefficients.OrderByDescending(coef => coef.Key))
+            foreach (var (exp, coef) in coefficients.OrderBy(coef => coef.Key))
             {
-                if (coef.Value != 0)
+                if (coef != 0)
                 {
-                    if (coef.Key == 0)
-                        result += " + " + coef.Value;
-                    else if (coef.Key == 1)
-                        result += " + " + (coef.Value == 1 ? "" : "" + coef.Value) + "x";
+                    bool neg = coef < 0;
+                    var newCoef = neg ? -coef : coef;
+                    if (exp == 0)
+                        result += (neg ? " - " : " + ") + newCoef;
+                    else if (exp == 1)
+                        result += (neg ? " - " : " + ") + (coef == 1 ? "" : "" + newCoef) + "x";
                     else
-                        result += " + " + (coef.Value == 1 ? "" : "" + coef.Value) + "x^" + coef.Key;
+                        result += (neg ? " - " : " + ") + (coef == 1 ? "" : "" + newCoef) + "x^" + exp;
                 }
             }
 
-            return (result.Length > 0 ? result.Substring(3) : " 0");
+            return (result.Length > 0 ? (result.StartsWith(" - ") ? result.Substring(1) : result.Substring(3)) : " 0");
         }
 
         public override bool Equals(object obj)

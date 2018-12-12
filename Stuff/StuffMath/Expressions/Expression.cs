@@ -89,6 +89,16 @@ namespace Stuff.StuffMath.Expressions
 
         public abstract Expression Differentiate(string variable);
 
+        public Expression Differentiate(string variable, int degree)
+        {
+            if (degree <= 0)
+                throw new ArgumentException("Degree must be at least 1.");
+            if (degree == 1)
+                return Differentiate(variable);
+            else
+                return Differentiate(variable, --degree).Differentiate(variable);
+        }
+
         /// <summary>
         /// Reduces the expression as much as possible, checking for various special cases. 
         /// Does not guarantee that the expression is in its most reduced form.

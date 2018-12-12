@@ -236,7 +236,7 @@ namespace Stuff.StuffMath
             if (v.Size != Size)
                 throw new ArgumentException("A vector must be the same size as another to be linearly dependent with it.");
             var factor = v[0].Divide(this[0]);
-            foreach(var (f1, f2) in this.Zip(v, (f1, f2) => (f1, f2)))
+            foreach(var (f1, f2) in this.Zip(v))
             {
                 if (!f2.Divide(f1).EqualTo(factor))
                     return false;
