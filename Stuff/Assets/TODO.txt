@@ -12,3 +12,4 @@ Other:
 	Polynomial GCD
 		Extended Polynomial GCD
     Expressions as IFields
+    Types in expressions
