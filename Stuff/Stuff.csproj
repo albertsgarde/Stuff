@@ -187,7 +187,6 @@
     <Compile Include="StuffMath\Structures\FDouble.cs" />
     <Compile Include="StuffMath\Structures\Real.cs" />
     <Compile Include="StuffMath\Structures\TrigSpace.cs" />
-    <Compile Include="StuffMath\Sandbox\Differential.cs" />
     <Compile Include="StuffMath\Turing\Instance.cs" />
     <Compile Include="StuffMath\Turing\TuringMachine.cs" />
     <Compile Include="StuffMath\LEVector.cs" />
