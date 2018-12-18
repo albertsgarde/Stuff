@@ -10,7 +10,7 @@ namespace Stuff.StuffMath.Complex
     /// <summary>
     /// A complex number.
     /// </summary>
-    public struct Complex2D : IHilbertField<Complex2D>
+    public struct Complex2D : IRealHilbertField<Complex2D>
     {
         public double Real { get; private set; }
 

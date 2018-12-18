@@ -10,26 +10,26 @@ namespace Stuff.Recommendation
 {
     static class Extensions
     {
-        public static double ESimilarity<F>(this Vector<F> vec1, Vector<F> vec2) where F : IHilbertField<F>, new()
+        public static double ESimilarity<F>(this Vector<F> vec1, Vector<F> vec2) where F : IRealHilbertField<F>, new()
         {
             if (vec1.Size != vec2.Size)
                 throw new ArgumentException("Only vectors of equal length can be correlated.");
-            return 1d / (1 + new Vector<F>(vec1.Zip(vec2, (a, b) => (a.IsZero() || b.IsZero()) ? new F() : a.Subtract(b))).Length);
+            return 1d / (new Vector<F>(vec1.Zip(vec2, (a, b) => (a.IsZero() || b.IsZero()) ? new F() : a.Subtract(b))).Length.RealPart() + 1d);
         }
 
-        public static F Mean<F>(this Vector<F> vec) where F : IHilbertField<F>, new()
+        public static F Mean<F>(this Vector<F> vec) where F : IRealHilbertField<F>, new()
         {
             return vec.Total().Divide(vec.Count(f => !f.IsZero()));
         }
 
-        public static double Variance<F>(this Vector<F> vec) where F : IHilbertField<F>, new()
+        public static double Variance<F>(this Vector<F> vec) where F : IRealHilbertField<F>, new()
         {
             var mean = vec.Mean();
             var zeroed = new Vector<F>(vec.Select(f => f.IsZero() ? f : f.Subtract(mean)));
             return zeroed.Aggregate(new F(), (a, f) => a.Add(f.Square())).Divide(vec.Count(f => !f.IsZero())).AbsSqrt().RealPart();
         }
 
-        public static Vector<F> Standardize<F>(this Vector<F> vec) where F : IHilbertField<F>, new()
+        public static Vector<F> Standardize<F>(this Vector<F> vec) where F : IRealHilbertField<F>, new()
         {
             var mean = vec.Mean();
             var vari = vec.Variance();
@@ -38,7 +38,7 @@ namespace Stuff.Recommendation
             return new Vector<F>(vec.Select(f => f.IsZero() ? f : f.Subtract(mean).Divide(vari)));
         }
 
-        public static double PCorrelation<F>(this Vector<F> vec1, Vector<F> vec2) where F : IHilbertField<F>, new()
+        public static double PCorrelation<F>(this Vector<F> vec1, Vector<F> vec2) where F : IRealHilbertField<F>, new()
         {
             if (vec1.Size != vec2.Size)
                 throw new ArgumentException("Only vectors of equal length can be correlated.");

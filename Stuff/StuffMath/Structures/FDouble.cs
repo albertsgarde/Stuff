@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath.Structures
 {
-    public struct FDouble : IHilbertField<FDouble>
+    public struct FDouble : IRealHilbertField<FDouble>
     {
         public double Value { get; }
 

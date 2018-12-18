@@ -56,15 +56,15 @@ namespace Stuff.StuffMath
         /// <summary>
         /// The squared geometric length of the vector.
         /// </summary>
-        public FDouble LengthSquared
+        public F LengthSquared
         {
             get
             {
-                return DotSum(this).RealPart();
+                return DotSum(this);
             }
         }
 
-        public FDouble Length => LengthSquared.AbsSqrt();
+        public F Length => LengthSquared.AbsSqrt();
 
         public Vector<F> ZERO => new Vector<F>();
 
@@ -109,16 +109,6 @@ namespace Stuff.StuffMath
 
         /// <returns>The vector multiplied by the F.</returns>
         public static Vector<F> operator *(F d, Vector<F> vec)
-        {
-            return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
-        }
-
-        public static Vector<F> operator *(Vector<F> vec, FDouble d)
-        {
-            return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
-        }
-
-        public static Vector<F> operator *(FDouble d, Vector<F> vec)
         {
             return new Vector<F>(vec.Select(x => x.Multiply(d)).ToArray());
         }
@@ -199,11 +189,11 @@ namespace Stuff.StuffMath
             return total;
         }
 
-        public FDouble Angle(Vector<F> vec)
+        public F Angle(Vector<F> vec)
         {
             if (Size != vec.Size)
                 throw new ArgumentException("The vectors must have the same number of dimensions.");
-            return DotSum(vec).RealPart().Divide(Length.Multiply(vec.Length));
+            return DotSum(vec).Divide(Length.Multiply(vec.Length));
         }
 
         /// <summary>
@@ -213,17 +203,17 @@ namespace Stuff.StuffMath
         /// <returns></returns>
         public Vector<F> Project(Vector<F> vec)
         {
-            return vec * DotSum(vec).RealPart().Divide(vec.LengthSquared);
+            return vec * DotSum(vec).Divide(vec.LengthSquared);
         }
 
-        public FDouble ProjectionLength(Vector<F> vec)
+        public F ProjectionLength(Vector<F> vec)
         {
-            return DotSum(vec).RealPart().Divide(vec.Length);
+            return DotSum(vec).Divide(vec.Length);
         }
 
-        public FDouble ProjectionLengthSquared(Vector<F> vec)
+        public F ProjectionLengthSquared(Vector<F> vec)
         {
-            return DotSum(vec).RealPart().Square().Divide(vec.LengthSquared);
+            return DotSum(vec).Square().Divide(vec.LengthSquared);
         }
 
         public F Total()

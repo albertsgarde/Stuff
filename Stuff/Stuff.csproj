@@ -181,6 +181,7 @@
     <Compile Include="StuffMath\Structures\IGroup.cs" />
     <Compile Include="StuffMath\Structures\IHilbertSpace.cs" />
     <Compile Include="StuffMath\Structures\Integer.cs" />
+    <Compile Include="StuffMath\Structures\IRealHilbertField.cs" />
     <Compile Include="StuffMath\Structures\IRing.cs" />
     <Compile Include="StuffMath\Structures\IVectorSpace.cs" />
     <Compile Include="StuffMath\Structures\Rational.cs" />
