@@ -82,7 +82,7 @@ namespace Stuff.StuffMath.Expressions.Operators
 
         public override string ToLatex()
         {
-            return left.ToLatex() + " - " + right.ToLatex();
+            return left.ToLatex() + "-" + right.ToLatex();
         }
     }
 }
