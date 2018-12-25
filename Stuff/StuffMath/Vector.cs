@@ -288,6 +288,14 @@ namespace Stuff.StuffMath
             return result.Substring(0, result.Length - 2) + ")";
         }
 
+        public string ToLatex()
+        {
+            string result = "\\left[\\begin{array}{c}";
+            foreach (var d in vector)
+                result += d + "\\\\";
+            return result.Substring(0, result.Length - 2) + "\\end{array}\\right]";
+        }
+
         public Vector<F> Add(Vector<F> t)
         {
             return this + t;

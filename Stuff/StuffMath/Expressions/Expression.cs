@@ -75,6 +75,8 @@ namespace Stuff.StuffMath.Expressions
             return new Divide(new ValueExpression(left), right);
         }
 
+        public static Expression operator -(Expression exp) => 0 - exp;
+
         public static implicit operator Expression(double d)
         {
             return new ValueExpression(d);
