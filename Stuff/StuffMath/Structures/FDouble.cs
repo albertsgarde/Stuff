@@ -86,9 +86,8 @@ namespace Stuff.StuffMath.Structures
             return Value.GetHashCode();
         }
 
-        public override string ToString()
-        {
-            return "" + Value;
-        }
+        public override string ToString() => Value.ToString();
+
+        public string ToLatex() => ToString();
     }
 }

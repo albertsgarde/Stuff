@@ -109,6 +109,8 @@
     <Compile Include="StuffMath\Complex\CQuadraticFunction.cs" />
     <Compile Include="StuffMath\Complex\Extensions.cs" />
     <Compile Include="StuffMath\Complex\ICPolynomial.cs" />
+    <Compile Include="StuffMath\Expressions\Exceptions\NotDifferentiableException.cs" />
+    <Compile Include="StuffMath\Expressions\Functions\Conjugate.cs" />
     <Compile Include="StuffMath\LinearFirstOrderDiffEq.cs" />
     <Compile Include="StuffMath\Matrix.cs" />
     <Compile Include="StuffMath\MatrixRow.cs" />
@@ -137,8 +139,6 @@
     <Compile Include="StuffMath\Expressions\Operators\Multiply.cs" />
     <Compile Include="StuffMath\Expressions\Operators\Power.cs" />
     <Compile Include="StuffMath\Expressions\Operators\Subtract.cs" />
-    <Compile Include="StuffMath\Expressions\Unit.cs" />
-    <Compile Include="StuffMath\Expressions\Value.cs" />
     <Compile Include="StuffMath\Expressions\ValueExpression.cs" />
     <Compile Include="StuffMath\Expressions\Variable.cs" />
     <Compile Include="StuffMath\Extensions.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="StuffMath\Regression.cs" />
     <Compile Include="DSP\Signal.cs" />
     <Compile Include="StuffMath\Sphere.cs" />
+    <Compile Include="StuffMath\Structures\ExpressionField.cs" />
     <Compile Include="StuffMath\Structures\IHilbertField.cs" />
     <Compile Include="StuffMath\Structures\IField.cs" />
     <Compile Include="StuffMath\Structures\IGroup.cs" />

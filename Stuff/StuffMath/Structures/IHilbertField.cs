@@ -11,5 +11,7 @@ namespace Stuff.StuffMath.Structures
         T AbsSqrt();
 
         T Conjugate();
+
+        string ToLatex();
     }
 }

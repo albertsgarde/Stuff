@@ -307,6 +307,8 @@ namespace Stuff.StuffMath.Complex
                 return "" + Real;
         }
 
+        public string ToLatex() => ToString();
+
         public string RadialToString()
         {
             return $"({Absolute},{Argument/Math.PI}π)";
