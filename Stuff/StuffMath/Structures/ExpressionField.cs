@@ -45,6 +45,8 @@ namespace Stuff.StuffMath.Structures
 
         public ExpressionField Multiply(ExpressionField t) => Exp * t;
 
+        public override string ToString() => Exp.ToString();
+
         public string ToLatex() => Exp.ToTec();
     }
 }
