@@ -70,9 +70,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "sqrt(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "\\sqrt{" + arg.ToTec() + "}";
+            return "\\sqrt{" + arg.ToLatex() + "}";
         }
     }
 }

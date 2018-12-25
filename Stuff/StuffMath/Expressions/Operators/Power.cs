@@ -102,12 +102,12 @@ namespace Stuff.StuffMath.Expressions.Operators
             return "(" + left.ToString() + " ^ " + right.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
             if (left.Priority > Priority)
-                return "(" + left.ToTec() + ")" + "^{" + right.ToTec() + "}";
+                return "(" + left.ToLatex() + ")" + "^{" + right.ToLatex() + "}";
             else
-                return left.ToTec() + "^{" + right.ToTec() + "}";
+                return left.ToLatex() + "^{" + right.ToLatex() + "}";
         }
     }
 }

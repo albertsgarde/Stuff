@@ -71,9 +71,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "cosh(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "cosh(" + arg.ToTec() + ")";
+            return "cosh(" + arg.ToLatex() + ")";
         }
     }
 }

@@ -111,9 +111,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "sum(" + body + ", " + min + ", " + max + ", " + iterator + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "\\displaystyle\\sum_{" + iterator + " = " + min.ToTec() + "}^{" + max.ToTec() + "}" + body.ToTec();
+            return "\\displaystyle\\sum_{" + iterator + " = " + min.ToLatex() + "}^{" + max.ToLatex() + "}" + body.ToLatex();
         }
     }
 }

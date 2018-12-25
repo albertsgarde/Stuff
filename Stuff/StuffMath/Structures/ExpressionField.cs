@@ -47,6 +47,6 @@ namespace Stuff.StuffMath.Structures
 
         public override string ToString() => Exp.ToString();
 
-        public string ToLatex() => Exp.ToTec();
+        public string ToLatex() => Exp.ToLatex();
     }
 }

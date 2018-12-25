@@ -80,9 +80,9 @@ namespace Stuff.StuffMath.Expressions.Operators
             return "(" + left.ToString() + " + " + right.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return left.ToTec() + " + " + right.ToTec();
+            return left.ToLatex() + " + " + right.ToLatex();
         }
     }
 }

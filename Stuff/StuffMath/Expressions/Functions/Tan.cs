@@ -65,7 +65,7 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "tan(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
             throw new NotImplementedException();
         }

@@ -83,7 +83,7 @@ namespace Stuff.StuffMath.Expressions
             return "" + value;
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
             return "" + value;
         }

@@ -75,7 +75,7 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "factorial(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
             return arg.ToString() + "!";
         }

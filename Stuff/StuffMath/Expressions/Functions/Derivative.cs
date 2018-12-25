@@ -85,9 +85,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "derivative(" + exp + ", " + var + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "\\frac{d}{d" + var + "}(" + exp.ToTec() + ")";
+            return "\\frac{d}{d" + var + "}(" + exp.ToLatex() + ")";
         }
     }
 }

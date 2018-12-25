@@ -129,6 +129,6 @@ namespace Stuff.StuffMath.Expressions
 
         public abstract override string ToString();
 
-        public abstract string ToTec();
+        public abstract string ToLatex();
     }
 }

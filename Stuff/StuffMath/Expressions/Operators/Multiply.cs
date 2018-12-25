@@ -84,9 +84,9 @@ namespace Stuff.StuffMath.Expressions.Operators
             return "(" + left.ToString() + " * " + right.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return (left.Priority > Priority ? "(" + left.ToTec() + ")" : left.ToTec()) + "\\cdot "  + (right.Priority > Priority ? "(" + right.ToTec() + ")" : right.ToTec());
+            return (left.Priority > Priority ? "(" + left.ToLatex() + ")" : left.ToLatex()) + "\\cdot "  + (right.Priority > Priority ? "(" + right.ToLatex() + ")" : right.ToLatex());
         }
     }
 }

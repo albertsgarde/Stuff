@@ -68,7 +68,7 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "ln(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
             throw new NotImplementedException();
         }

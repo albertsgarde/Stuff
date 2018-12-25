@@ -72,9 +72,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "cos(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "cos(" + arg.ToTec() + ")";
+            return "cos(" + arg.ToLatex() + ")";
         }
     }
 }

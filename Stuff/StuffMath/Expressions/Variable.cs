@@ -70,7 +70,7 @@ namespace Stuff.StuffMath.Expressions
             return name;
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
             return name;
         }

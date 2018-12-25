@@ -68,9 +68,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "e^" + arg.ToString();
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "e^{" + arg.ToTec() + "}";
+            return "e^{" + arg.ToLatex() + "}";
         }
     }
 }

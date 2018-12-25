@@ -67,9 +67,9 @@ namespace Stuff.StuffMath.Expressions.Functions
             return "sin(" + arg.ToString() + ")";
         }
 
-        public override string ToTec()
+        public override string ToLatex()
         {
-            return "sin(" + arg.ToTec() + ")";
+            return "sin(" + arg.ToLatex() + ")";
         }
     }
 }
