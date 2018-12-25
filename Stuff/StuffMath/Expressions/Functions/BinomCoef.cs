@@ -44,7 +44,7 @@ namespace Stuff.StuffMath.Expressions.Functions
 
         public override Expression Differentiate(string variable)
         {
-            throw new Exception("Cannot differentiate binomCoef");
+            throw new NotDifferentiableException();
         }
 
         public override Expression Reduce(Dictionary<string, double> values = null)
