@@ -81,5 +81,15 @@ namespace Stuff.StuffMath
             }
             return result + Data[Length - 1] + "]";
         }
+
+        public string ToLatex()
+        {
+            var result = "";
+            for (int i = 0; i < Length - 1; ++i)
+            {
+                result += Data[i] + "&";
+            }
+            return result + Data[Length - 1];
+        }
     }
 }

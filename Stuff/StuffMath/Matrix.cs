@@ -572,6 +572,14 @@ namespace Stuff.StuffMath
             return result;
         }
 
+        public string ToLatex()
+        {
+            string result = "\\left[\\begin{array}{" + Misc.UniformString(N, 'c') + "}";
+            foreach (var mr in Rows)
+                result += mr.ToLatex() + "\\\\";
+            return result.Substring(0, result.Length - 2) + "\\end{array}\\right]";
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Matrix<F> m)
