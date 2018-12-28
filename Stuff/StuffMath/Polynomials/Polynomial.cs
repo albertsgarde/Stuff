@@ -91,7 +91,10 @@ namespace Stuff.StuffMath
         {
             coefficients = new Dictionary<int, double>();
             for (int i = 0; i < v.Size; ++i)
-                coefficients[i] = v[i];
+            {
+                if (v[i] != 0)
+                    coefficients[i] = v[i];
+            }
         }
 
         public static Polynomial operator+(Polynomial pol1, Polynomial pol2)
