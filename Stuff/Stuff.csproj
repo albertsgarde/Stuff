@@ -111,6 +111,7 @@
     <Compile Include="StuffMath\Complex\ICPolynomial.cs" />
     <Compile Include="StuffMath\Expressions\Exceptions\NotDifferentiableException.cs" />
     <Compile Include="StuffMath\Expressions\Functions\Conjugate.cs" />
+    <Compile Include="StuffMath\ILatexable.cs" />
     <Compile Include="StuffMath\LinearFirstOrderDiffEq.cs" />
     <Compile Include="StuffMath\Matrix.cs" />
     <Compile Include="StuffMath\MatrixRow.cs" />

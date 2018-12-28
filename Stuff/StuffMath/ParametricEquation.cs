@@ -9,7 +9,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class ParametricEquation<F> where F : IHilbertField<F>, new()
+    public class ParametricEquation<F> : ILatexable where F : IHilbertField<F>, new()
     {
         public Vector<F> Constant { get; }
 
@@ -42,6 +42,15 @@ namespace Stuff.StuffMath
             int coefNum = 0;
             foreach (var coef in Coefficients)
                 result += $" + s{++coefNum}{coef}";
+            return result.TrimStart(' ', '+');
+        }
+
+        public string ToLatex()
+        {
+            var result = Constant.IsNull() ? "" : Constant.ToLatex();
+            int coefNum = 0;
+            foreach (var coef in Coefficients)
+                result += $"+s_{++coefNum}{coef.ToLatex()}";
             return result.TrimStart(' ', '+');
         }
     }

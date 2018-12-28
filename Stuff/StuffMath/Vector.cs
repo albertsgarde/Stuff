@@ -8,7 +8,7 @@ using Stuff.StuffMath.Structures;
 
 namespace Stuff.StuffMath
 {
-    public class Vector<F> : IEnumerable<F>, IHilbertSpace<Vector<F>, F> where F : IHilbertField<F>, new()
+    public class Vector<F> : IEnumerable<F>, IHilbertSpace<Vector<F>, F>, ILatexable where F : IHilbertField<F>, new()
     {
         private readonly F[] vector;
 

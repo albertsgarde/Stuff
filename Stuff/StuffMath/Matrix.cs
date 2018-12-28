@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stuff.StuffMath
 {
-    public class Matrix<F> where F : IHilbertField<F>, new()
+    public class Matrix<F> : ILatexable where F : IHilbertField<F>, new()
     {
         private readonly F F0 = new F();
 
@@ -554,6 +554,11 @@ namespace Stuff.StuffMath
             if (!left.IsUnitMatrix())
                 throw new ArgumentException("Only regular matrices can be inverted.");
             return right;
+        }
+
+        public Matrix<F2> Apply<F2>(Func<F, F2> func) where F2 : IHilbertField<F2>, new()
+        {
+            return new Matrix<F2>(Rows.Select(row => new MatrixRow<F2>(row.Select(element => func.Invoke(element)).ToArray())));
         }
 
         public override string ToString()
