@@ -12,7 +12,7 @@ namespace Stuff.StuffMath
 {
     public class Polynomial : IPolynomial
     {
-        private readonly Dictionary<int, double> coefficients;
+        private readonly IReadOnlyDictionary<int, double> coefficients;
 
         public IPolynomial ZERO => new Polynomial();
 
@@ -30,71 +30,50 @@ namespace Stuff.StuffMath
 
         public Polynomial(params (int exponent, double coef)[] coefs)
         {
-            coefficients = new Dictionary<int, double>();
+            var tempCoefs = new Dictionary<int, double>();
             foreach (var (exp, coef) in coefs)
             {
                 if (exp < 0)
                     throw new Exception("Polynomials cannot contain exponents below 0.");
                 if (coef != 0)
-                    coefficients[exp] = coef;
+                    tempCoefs[exp] = coef;
             }
+            coefficients = tempCoefs;
         }
 
         public Polynomial(params double[] coefs)
         {
-            coefficients = new Dictionary<int, double>();
+            var tempCoefs = new Dictionary<int, double>();
             for (int i = 0; i < coefs.Length; ++i)
             {
                 if (coefs[i] != 0)
-                    coefficients[i] = coefs[i];
+                    tempCoefs[i] = coefs[i];
             }
+            coefficients = tempCoefs;
         }
 
         public Polynomial(Dictionary<int, double> coefs)
         {
-            coefficients = new Dictionary<int, double>();
+            var tempCoefs = new Dictionary<int, double>();
             foreach (var (exp, coef) in coefs)
             {
                 if (exp < 0)
                     throw new Exception("Polynomials cannot contain exponents below 0.");
                 if (coef != 0)
-                    coefficients[exp] = coef;
+                    tempCoefs[exp] = coef;
             }
-        }
-
-        /// <summary>
-        /// Creates a new Polynomial from a string.
-        /// If the string isn't perfect, bad things might happen.
-        /// Sorry.
-        /// Format: bx^a
-        /// Where b is the coefficient, "x^" is fixed, and a is the exponent.
-        /// Parts are seperated by either '+' or '-' and no spaces.
-        /// </summary>
-        /// <param name="s">The string from which to create the Polynomial.</param>
-        public Polynomial(string s)
-        {
-            coefficients = new Dictionary<int, double>();
-            string part = "";
-            foreach (char c in s)
-            {
-                if (c == '+' || c == '-')
-                {
-                    coefficients[int.Parse(part.Substring(part.IndexOf('^') + 1))] = double.Parse(part.Substring(0, part.IndexOf('x')));
-                    part = "";
-                }
-                part += c;
-            }
-            coefficients[int.Parse(part.Substring(part.IndexOf('^') + 1))] = double.Parse(part.Substring(0, part.IndexOf('x')));
+            coefficients = tempCoefs;
         }
 
         public Polynomial(Vector<FDouble> v)
         {
-            coefficients = new Dictionary<int, double>();
+            var tempCoefs = new Dictionary<int, double>();
             for (int i = 0; i < v.Size; ++i)
             {
                 if (v[i] != 0)
-                    coefficients[i] = v[i];
+                    tempCoefs[i] = v[i];
             }
+            coefficients = tempCoefs;
         }
 
         public static Polynomial operator+(Polynomial pol1, Polynomial pol2)
