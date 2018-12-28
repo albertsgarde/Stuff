@@ -1,5 +1,4 @@
 ﻿Matrix:
-	Characteristic polynomial.
 	Solve equation -> parametric equation
 	Determinant
 	Diagonalisation
